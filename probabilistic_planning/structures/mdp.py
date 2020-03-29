@@ -12,8 +12,8 @@ class EnumerativeMDP(object):
         self.states = states
         self.reward_function = reward_function
         self.transition_function = transition_function
-        self.initial_states = initial_states
-        self.goal_states = goal_states
+        self.initial_states = initial_states or []
+        self.goal_states = goal_states or []
 
     def __validate_defined_argument(self, argument_value, argument_name):
         if argument_value is None: raise ValueError("The %s should be defined"%argument_name)
@@ -36,13 +36,15 @@ class EnumerativeMDP(object):
         for action_name in actions:
             for from_state in transition_function[action_name].keys():
                 for to_state in states:
-                    if not transition_function[action_name][from_state].has_key(to_state):
+                    if to_state not in transition_function[action_name][from_state].keys():
                         transition_function[action_name][from_state][to_state] = 0.0
 
         return transition_function
 
     def __validate_transition_function(self, transition_function, states):
         self.__validate_defined_argument(transition_function, "transition function")
+
+        if len(transition_function.keys()) == 0: raise ValueError("The transition function must have at least one defined action")
 
         # invalid state transition definition in transition_function
         for action_name in transition_function.keys():
@@ -66,14 +68,14 @@ class EnumerativeMDP(object):
                         raise ValueError("Invalid probability distribution on [%s] transition in action [%s]. The sum of all transitions in this state must be 1 (one)"%(from_state, action_name))
 
     def __validate_initial_states(self, initial_states, states):
-        self.__validate_defined_argument(initial_states, "initial states")
+        if initial_states is None: return
 
         for initial_state in initial_states:
             if initial_state not in states:
                 raise ValueError("Unrecognized state [%s] in initial states."%initial_state)
 
     def __validate_goal_states(self, goal_states, states):
-        self.__validate_defined_argument(goal_states, "goal states")
+        if goal_states is None: return
 
         for goal_state in goal_states:
             if goal_state not in states:

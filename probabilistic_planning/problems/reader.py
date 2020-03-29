@@ -1,22 +1,21 @@
 from probabilistic_planning.structures.mdp import EnumerativeMDP
 
-def clean_tabs(value):
-    return value.replace("\t", "")
+def clean_string(value, remove_tabs = False, remove_spaces = False, remove_line_breaks = False):
+    if remove_tabs:
+        value = value.replace("\t", "")
 
+    if remove_spaces:
+        value = value.replace(" ", "")
 
-def clean_spaces(value):
-    return value.replace(" ", "")
+    if remove_line_breaks:
+        value = value.replace("\r", "").replace("\n", "")
 
-
-def clean_line_breaks(value):
-    return value.replace("\r", "").replace("\n", "")
+    return value
 
 
 def read_state_section(file):
     line = file.readline()
-    line = clean_spaces(line)
-    line = clean_tabs(line)
-    line = clean_line_breaks(line)
+    line = clean_string(line, remove_tabs = True, remove_spaces = True, remove_line_breaks = True)
 
     states = line.split(",")
 
@@ -34,7 +33,7 @@ def read_action_section(file, line):
     transition_probabilities = {}
 
     data = line.split(" ")
-    action_name = clean_line_breaks(data[1])
+    action_name = clean_string(data[1], remove_line_breaks = True)
 
     while True:
         line = file.readline()
@@ -45,14 +44,14 @@ def read_action_section(file, line):
         if line.startswith("endaction"):
             return action_name, transition_probabilities
 
-        line = clean_tabs(line)
+        line = clean_string(line, remove_tabs = True)
         data = line.split(" ")
 
         from_state = data[0]
         to_state = data[1]
         probability = float(data[2])
 
-        if not transition_probabilities.has_key(from_state):
+        if from_state not in transition_probabilities.keys():
             transition_probabilities[from_state] = {}
 
         transition_probabilities[from_state][to_state] = probability
@@ -70,11 +69,11 @@ def read_reward_section(file):
         if line.startswith("endreward"):
             return reward
 
-        line = clean_tabs(line)
+        line = clean_string(line, remove_tabs = True, remove_line_breaks = True)
         data = line.split(" ")
 
         state = data[0]
-        value = int(data[1])
+        value = float(data[1])
 
         reward[state] = value
 
@@ -91,7 +90,7 @@ def read_initial_state_section(file):
         if line.startswith("endinitialstate"):
             return initial_states
 
-        state = clean_tabs(line)
+        state = clean_string(line, remove_tabs = True)
         initial_states.append(state)
 
 
@@ -107,7 +106,7 @@ def read_goal_state_section(file):
         if line.startswith("endgoalstate"):
             return goal_states
 
-        state = clean_tabs(line)
+        state = clean_string(line, remove_tabs = True)
         goal_states.append(state)
 
 
