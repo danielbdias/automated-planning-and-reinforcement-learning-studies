@@ -75,6 +75,3 @@ with such.A("Problem Reader function") as it:
             it.assertDictEqual(mdp.transition_function["first-action"], { "state01": { "state01": 1.0 } })
 
     it.createTests(globals())
-
-if __name__ == '__main__':
-    unittest.main()
