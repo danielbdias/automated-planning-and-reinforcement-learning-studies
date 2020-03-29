@@ -1,4 +1,4 @@
-from probabilistic_planning.structures import EnumerativeMDP
+from probabilistic_planning.structures.mdp import EnumerativeMDP
 
 def clean_tabs(value):
     return value.replace("\t", "")
@@ -126,35 +126,15 @@ def read_problem_file(problem_file):
             if line == "":
                 continue #empty line
             if line.startswith("states"):
-                print "Loading 'states' section..."
-
                 states = read_state_section(file)
-
-                print "'states' section loaded."
             elif line.startswith("action"):
-                print "Loading 'action' section..."
-
                 action_name, transition_probabilities = read_action_section(file, line)
                 transition_function[action_name] = transition_probabilities
-
-                print "'action' section loaded."
             elif line.startswith("reward"):
-                print "Loading 'reward' section..."
-
                 reward_function = read_reward_section(file)
-
-                print "'reward' section loaded."
             elif line.startswith("initialstate"):
-                print "Loading 'initialstate' section..."
-
                 initial_states = read_initial_state_section(file)
-
-                print "'initialstate' section loaded."
             elif line.startswith("goalstate"):
-                print "Loading 'goalstate' section..."
-
                 goal_states = read_goal_state_section(file)
-
-                print "'goalstate' section loaded."
 
     return EnumerativeMDP(states, reward_function, transition_function, initial_states, goal_states)
