@@ -1,2 +1,7 @@
+argh
 nose2
 nose2[coverage_plugin]
+pylint
+pyyaml
+watchdog
+watchdog[watchmedo]

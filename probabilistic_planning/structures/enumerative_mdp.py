@@ -1,5 +1,6 @@
 class EnumerativeMDP(object):
-    def __init__(self, states, reward_function, transition_function, initial_states, goal_states):
+    def __init__(self, states, reward_function, transition_function,
+                 initial_states=None, goal_states=None):
         self.__validate_states(states)
         self.__validate_reward_function(reward_function, states)
 

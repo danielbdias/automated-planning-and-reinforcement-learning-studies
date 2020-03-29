@@ -1,4 +1,4 @@
-from probabilistic_planning.structures.mdp import EnumerativeMDP
+from probabilistic_planning.structures import EnumerativeMDP
 
 def clean_string(value, remove_tabs = False, remove_spaces = False, remove_line_breaks = False):
     if remove_tabs:
