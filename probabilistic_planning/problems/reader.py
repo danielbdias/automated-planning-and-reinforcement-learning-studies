@@ -12,7 +12,6 @@ def clean_string(value, remove_tabs = False, remove_spaces = False, remove_line_
 
     return value
 
-
 def read_state_section(file):
     line = file.readline()
     line = clean_string(line, remove_tabs = True, remove_spaces = True, remove_line_breaks = True)
@@ -23,11 +22,10 @@ def read_state_section(file):
         line = file.readline()
 
         if not line:
-            raise Exception("endstates token not found !")
+            raise Exception("endstates token not found")
 
         if line.startswith("endstates"):
             return states
-
 
 def read_action_section(file, line):
     transition_probabilities = {}
@@ -39,7 +37,7 @@ def read_action_section(file, line):
         line = file.readline()
 
         if not line:
-            raise Exception("endaction token not found !")
+            raise Exception("endaction token not found")
 
         if line.startswith("endaction"):
             return action_name, transition_probabilities
@@ -51,11 +49,7 @@ def read_action_section(file, line):
         to_state = data[1]
         probability = float(data[2])
 
-        if from_state not in transition_probabilities.keys():
-            transition_probabilities[from_state] = {}
-
-        transition_probabilities[from_state][to_state] = probability
-
+        transition_probabilities[(from_state, to_state)] = probability
 
 def read_reward_section(file):
     reward = {}
@@ -64,7 +58,7 @@ def read_reward_section(file):
         line = file.readline()
 
         if not line:
-            raise Exception("endreward token not found !")
+            raise Exception("endreward token not found")
 
         if line.startswith("endreward"):
             return reward
@@ -76,7 +70,6 @@ def read_reward_section(file):
         value = float(data[1])
 
         reward[state] = value
-
 
 def read_initial_state_section(file):
     initial_states = []
@@ -90,9 +83,8 @@ def read_initial_state_section(file):
         if line.startswith("endinitialstate"):
             return initial_states
 
-        state = clean_string(line, remove_tabs = True)
+        state = clean_string(line, remove_tabs = True, remove_spaces = True, remove_line_breaks = True)
         initial_states.append(state)
-
 
 def read_goal_state_section(file):
     goal_states = []
@@ -106,9 +98,8 @@ def read_goal_state_section(file):
         if line.startswith("endgoalstate"):
             return goal_states
 
-        state = clean_string(line, remove_tabs = True)
+        state = clean_string(line, remove_tabs = True, remove_spaces = True, remove_line_breaks = True)
         goal_states.append(state)
-
 
 def read_problem_file(problem_file):
     states = None
@@ -122,8 +113,6 @@ def read_problem_file(problem_file):
             line = file.readline()
             if not line: break # end of file
 
-            if line == "":
-                continue #empty line
             if line.startswith("states"):
                 states = read_state_section(file)
             elif line.startswith("action"):
