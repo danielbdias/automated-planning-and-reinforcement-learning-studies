@@ -4,5 +4,6 @@ EnumerativeMDP: represents a MDP with enumerable states
 """
 
 from .enumerative_mdp import EnumerativeMDP
+from .transition_function import TransitionFunction
 
-__all__ = ["EnumerativeMDP"]
+__all__ = ["EnumerativeMDP", "TransitionFunction"]

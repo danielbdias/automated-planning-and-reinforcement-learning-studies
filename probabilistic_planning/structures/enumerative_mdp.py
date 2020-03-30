@@ -1,83 +1,61 @@
-class EnumerativeMDP(object):
+"""Module with classes to support a structure that represents
+   a Markov Decision Process in Probabilistic Planning."""
+
+from .transition_function import TransitionFunction
+
+def validate_defined_argument(argument_value, argument_name):
+    """Validates if a given argument has a defined value (is not None)."""
+    if argument_value is None:
+        raise ValueError("The %s should be defined"%argument_name)
+
+def build_state_set(state_indentifiers, state_set_name, base_state_set=None):
+    """Build and validate a state set."""
+
+    validate_defined_argument(state_indentifiers, state_set_name)
+
+    if len(state_indentifiers) == 0:
+        raise ValueError("The %s should have at least one state"%state_set_name)
+
+    state_as_set = set(state_indentifiers)
+    if len(state_as_set) != len(state_indentifiers):
+        raise ValueError("There is a repeated state identifier in the %s"%state_set_name)
+
+    if base_state_set is not None:
+        for state in state_indentifiers:
+            if state not in base_state_set:
+                raise ValueError("Unrecognized state [%s] in %s."%(state, state_set_name))
+
+    return state_as_set
+
+def build_reward_function(reward_function, states):
+    """Build and validate a reward function."""
+
+    validate_defined_argument(reward_function, "reward function")
+
+    if len(reward_function) != len(states):
+        raise ValueError("The reward function must be have a value for each state")
+
+    for state in reward_function.keys():
+        if state not in states:
+            raise ValueError("Invalid state [%s] defined in reward function"%state)
+
+    return reward_function
+
+class EnumerativeMDP:
+    """Represents a enumerative Markov Decision Process."""
+
     def __init__(self, states, reward_function, transition_function,
                  initial_states=None, goal_states=None):
-        self.__validate_states(states)
-        self.__validate_reward_function(reward_function, states)
+        self.states = build_state_set(states, "states")
+        self.reward_function = build_reward_function(reward_function, self.states)
+        self.transition_function = TransitionFunction(transition_function, self.states)
 
-        transition_function = self.__fix_missings_in_transition_function(transition_function, states)
-        self.__validate_transition_function(transition_function, states)
+        if initial_states:
+            self.initial_states = build_state_set(initial_states, "initial states", self.states)
+        else:
+            self.initial_states = set()
 
-        self.__validate_initial_states(initial_states, states)
-        self.__validate_goal_states(goal_states, states)
-
-        self.states = states
-        self.reward_function = reward_function
-        self.transition_function = transition_function
-        self.initial_states = initial_states or []
-        self.goal_states = goal_states or []
-
-    def __validate_defined_argument(self, argument_value, argument_name):
-        if argument_value is None: raise ValueError("The %s should be defined"%argument_name)
-
-    def __validate_states(self, states):
-        self.__validate_defined_argument(states, "states")
-        if len(states) == 0: raise ValueError("The states should have at least one state")
-
-
-    def __validate_reward_function(self, reward_function, states):
-        self.__validate_defined_argument(reward_function, "reward function")
-        if len(reward_function) != len(states): raise ValueError("The reward function must be have a value for each state")
-
-        for state in reward_function.keys():
-            if state not in states: raise ValueError("Invalid state [%s] defined in reward function"%state)
-
-    def __fix_missings_in_transition_function(self, transition_function, states):
-        actions = transition_function.keys()
-
-        for action_name in actions:
-            for from_state in transition_function[action_name].keys():
-                for to_state in states:
-                    if to_state not in transition_function[action_name][from_state].keys():
-                        transition_function[action_name][from_state][to_state] = 0.0
-
-        return transition_function
-
-    def __validate_transition_function(self, transition_function, states):
-        self.__validate_defined_argument(transition_function, "transition function")
-
-        if len(transition_function.keys()) == 0: raise ValueError("The transition function must have at least one defined action")
-
-        # invalid state transition definition in transition_function
-        for action_name in transition_function.keys():
-            if len(states) != len(transition_function[action_name]):
-                raise ValueError("Action [%s] must define the transition probabilities for all states in transition function"%action_name)
-
-            for from_state in transition_function[action_name].keys():
-                if from_state not in states:
-                    raise ValueError("Unrecognized origin state [%s] for action [%s] in transition function"%(from_state, action_name))
-
-                for to_state in transition_function[action_name][from_state].keys():
-                    if to_state not in states:
-                        raise ValueError("Unrecognized destination state [%s] from [%s] transition for action [%s] in transition function"%(to_state, from_state, action_name))
-
-            # invalid transition probability in action_probabilities
-            for action_name in transition_function.keys():
-                for from_state in transition_function[action_name].keys():
-                    probability = sum(transition_function[action_name][from_state].values())
-
-                    if probability != 1.0:
-                        raise ValueError("Invalid probability distribution on [%s] transition in action [%s]. The sum of all transitions in this state must be 1 (one)"%(from_state, action_name))
-
-    def __validate_initial_states(self, initial_states, states):
-        if initial_states is None: return
-
-        for initial_state in initial_states:
-            if initial_state not in states:
-                raise ValueError("Unrecognized state [%s] in initial states."%initial_state)
-
-    def __validate_goal_states(self, goal_states, states):
-        if goal_states is None: return
-
-        for goal_state in goal_states:
-            if goal_state not in states:
-                raise ValueError("Unrecognized state [%s] in goal states."%goal_state)
+        if goal_states:
+            self.goal_states = build_state_set(goal_states, "goal states", self.states)
+        else:
+            self.goal_states = set()
