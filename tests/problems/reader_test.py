@@ -168,7 +168,7 @@ with such.A("Problem Reader function") as it:
 
             it.assertEqual(mdp.transition_function.get_transition_probability("state01", "first-action", "state01"), 1.0)
 
-    @it.should("returns a parsed mdp when the problem file has all sections")
+    @it.should("returns a parsed MDP when the problem file has all sections")
     def test_file_with_all_sections(self):
         file_content = [
             "states",
