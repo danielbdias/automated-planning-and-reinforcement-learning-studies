@@ -7,7 +7,7 @@ import numpy as np
 from nose2.tools import such
 
 with such.A("Transition function representation") as it:
-    with it.having("its constructor called"):
+    with it.having("constructor called"):
         @it.should("raise error when all parameters are None")
         def test_all_constructor_parameters_are_none(self):
             with it.assertRaisesRegex(ValueError, "The states should be defined"):
@@ -105,7 +105,7 @@ with such.A("Transition function representation") as it:
 
             TransitionFunction(transition_function=transition_function_as_dict, states=states)
 
-    with it.having("the get_transition_probability method called"):
+    with it.having("get_transition_probability method called"):
         @it.should("raise error when an invalid state is informed")
         def test_invalid_state_informed_to_get_transition_probability(self):
             transition_function_as_dict = {
@@ -158,7 +158,7 @@ with such.A("Transition function representation") as it:
             it.assertEqual(transition_function.get_transition_probability("state01", "some-action", "state02"), 0.1)
             it.assertEqual(transition_function.get_transition_probability("state02", "some-action", "state02"), 1.0)
 
-    with it.having("the get_transition_matrix method called"):
+    with it.having("get_transition_matrix method called"):
         @it.should("raise error when an invalid action is informed")
         def test_invalid_action_informed_to_get_transition_matrix(self):
             transition_function_as_dict = {

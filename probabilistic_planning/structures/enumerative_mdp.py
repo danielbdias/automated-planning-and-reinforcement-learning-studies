@@ -6,7 +6,7 @@ from .transition_function import TransitionFunction
 def validate_defined_argument(argument_value, argument_name):
     """Validates if a given argument has a defined value (is not None)."""
     if argument_value is None:
-        raise ValueError("The %s should be defined"%argument_name)
+        raise ValueError(f"The {argument_name} should be defined")
 
 def build_state_set(state_indentifiers, state_set_name, base_state_set=None):
     """Build and validate a state set."""
@@ -14,16 +14,16 @@ def build_state_set(state_indentifiers, state_set_name, base_state_set=None):
     validate_defined_argument(state_indentifiers, state_set_name)
 
     if len(state_indentifiers) == 0:
-        raise ValueError("The %s should have at least one state"%state_set_name)
+        raise ValueError(f"The {state_set_name} should have at least one state")
 
     state_as_set = set(state_indentifiers)
     if len(state_as_set) != len(state_indentifiers):
-        raise ValueError("There is a repeated state identifier in the %s"%state_set_name)
+        raise ValueError(f"There is a repeated state identifier in the {state_set_name}")
 
     if base_state_set is not None:
         for state in state_indentifiers:
             if state not in base_state_set:
-                raise ValueError("Unrecognized state [%s] in %s."%(state, state_set_name))
+                raise ValueError(f"Unrecognized state [{state}] in {state_set_name}")
 
     return state_as_set
 
@@ -37,7 +37,7 @@ def build_reward_function(reward_function, states):
 
     for state in reward_function.keys():
         if state not in states:
-            raise ValueError("Invalid state [%s] defined in reward function"%state)
+            raise ValueError(f"Invalid state [{state}] defined in reward function")
 
     return reward_function
 
