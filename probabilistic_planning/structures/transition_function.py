@@ -45,38 +45,45 @@ def validate_state_transition_probability_distribution(transition_matrix, state_
              " from this state to others must be 1 (one)")
         )
 
-def build_transition_matrix_per_action(transition_function, states):
+def build_transition_matrix_per_action(transition_function, actions, states):
     """Build and validate a transition function."""
 
     if transition_function is None:
         raise ValueError("The transition function should be defined")
 
-    actions = transition_function.keys()
+    transition_function_actions = transition_function.keys()
 
-    if len(actions) == 0:
+    if len(transition_function_actions) == 0:
         raise ValueError("The transition function must have at least one action transition matrix")
+
+    if len(transition_function_actions) != len(actions):
+        raise ValueError("The transition function must have one transition matrix per action")
 
     transition_matrix_per_action = {}
 
-    for action in actions:
+    for action in transition_function_actions:
+        if action not in actions:
+            raise ValueError(f"The {action} action is not defined in action list")
+
         transition_matrix = build_transition_matrix(states, transition_function, action)
         transition_matrix_per_action[action] = transition_matrix
 
     return transition_matrix_per_action
 
-def build_states(states):
-    if states is None:
-        raise ValueError("The states should be defined")
+def build_sorted_list(list_value, list_name):
+    if list_value is None:
+        raise ValueError(f"The {list_name} should be defined")
 
-    return list(sorted(states))
+    return list(sorted(list_value))
 
 class TransitionFunction:
-    def __init__(self, transition_function, states):
-        self.states = build_states(states)
-        self.transition_matrix_per_action = build_transition_matrix_per_action(transition_function, self.states)
+    def __init__(self, transition_function, actions, states):
+        self.states = build_sorted_list(states, "states")
+        self.actions = build_sorted_list(actions, "actions")
+        self.transition_matrix_per_action = build_transition_matrix_per_action(transition_function, self.actions, self.states)
 
     def get_transition_probability(self, from_state, action, to_state):
-        if action not in self.transition_matrix_per_action.keys():
+        if action not in self.actions:
             raise ValueError(f"Action [{action}] not found")
 
         transition_matrix = self.transition_matrix_per_action[action]
@@ -87,7 +94,7 @@ class TransitionFunction:
         return transition_matrix[from_state_index][to_state_index]
 
     def get_transition_matrix(self, action):
-        if action not in self.transition_matrix_per_action.keys():
+        if action not in self.actions:
             raise ValueError(f"Action [{action}] not found")
 
         transition_matrix = self.transition_matrix_per_action[action]

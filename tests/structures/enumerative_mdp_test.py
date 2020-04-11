@@ -2,6 +2,7 @@ from ..context import probabilistic_planning
 from probabilistic_planning.structures import EnumerativeMDP
 
 import unittest
+
 from nose2.tools import such
 
 with such.A("Enumerative MDP class representation") as it:
@@ -293,7 +294,7 @@ with such.A("Enumerative MDP class representation") as it:
 
     with it.having("reward_function attribute called"):
         @it.should("return a valid dict")
-        def test_state_attribute(self):
+        def test_reward_function_attribute(self):
             states = [ "state01", "state02" ]
             reward_function = {
                 "state01": 1,
@@ -316,7 +317,7 @@ with such.A("Enumerative MDP class representation") as it:
 
     with it.having("transition_function attribute called"):
         @it.should("return a valid object")
-        def test_state_attribute(self):
+        def test_transition_function_attribute(self):
             states = [ "state01", "state02" ]
             reward_function = {
                 "state01": 1,
@@ -342,7 +343,7 @@ with such.A("Enumerative MDP class representation") as it:
 
     with it.having("initial_states attribute called"):
         @it.should("return a valid set")
-        def test_state_attribute(self):
+        def test_initial_states_attribute(self):
             states = [ "state01", "state02" ]
             reward_function = {
                 "state01": 1,
@@ -365,7 +366,7 @@ with such.A("Enumerative MDP class representation") as it:
 
     with it.having("goal_states attribute called"):
         @it.should("return a valid set")
-        def test_state_attribute(self):
+        def test_goal_states_attribute(self):
             states = [ "state01", "state02" ]
             reward_function = {
                 "state01": 1,
@@ -385,5 +386,54 @@ with such.A("Enumerative MDP class representation") as it:
                                  initial_states=initial_states, goal_states=goal_states)
 
             it.assertSetEqual(mdp.goal_states, { "state02" })
+
+    with it.having("reward method called"):
+        @it.should("call the internal reward function")
+        def test_reward_method_attribute(self):
+            states = [ "state01", "state02" ]
+            reward_function = {
+                "state01": 1,
+                "state02": 1
+            }
+            transition_function = {
+                "some-action": {
+                    ("state01", "state01"): 0.9,
+                    ("state01", "state02"): 0.1,
+                    ("state02", "state02"): 1.0
+                }
+            }
+            initial_states = ["state01"]
+            goal_states = ["state02"]
+
+            mdp = EnumerativeMDP(states=states, reward_function=reward_function, transition_function=transition_function,
+                                 initial_states=initial_states, goal_states=goal_states)
+
+            it.assertEqual(mdp.reward("state01"), 1)
+            it.assertEqual(mdp.reward("state02"), 1)
+
+    with it.having("transition method called"):
+        @it.should("call the internal transition function")
+        def test_transition_method_attribute(self):
+            states = [ "state01", "state02" ]
+            reward_function = {
+                "state01": 1,
+                "state02": 1
+            }
+            transition_function = {
+                "some-action": {
+                    ("state01", "state01"): 0.9,
+                    ("state01", "state02"): 0.1,
+                    ("state02", "state02"): 1.0
+                }
+            }
+            initial_states = ["state01"]
+            goal_states = ["state02"]
+
+            mdp = EnumerativeMDP(states=states, reward_function=reward_function, transition_function=transition_function,
+                                 initial_states=initial_states, goal_states=goal_states)
+
+            it.assertEqual(mdp.transition("state01", "some-action", "state01"), 0.9)
+            it.assertEqual(mdp.transition("state01", "some-action", "state02"), 0.1)
+            it.assertEqual(mdp.transition("state02", "some-action", "state02"), 1.0)
 
     it.createTests(globals())
