@@ -16,8 +16,9 @@ def compute_expected_reward_for_action(state, action, mdp, gamma, value_function
     pondered_expected_values = []
 
     for next_state in mdp.states:
-        pondered_expected_value = mdp.transition(state, action, next_state) * value_function[next_state]
-        pondered_expected_values.append(pondered_expected_value)
+        pondered_expected_values.append(
+            mdp.transition(state, action, next_state) * value_function[next_state]
+        )
 
     return mdp.reward(state) + gamma * sum(pondered_expected_values)
 
@@ -25,10 +26,11 @@ def compute_bellman_backup(state, mdp, gamma, value_function):
     expected_rewards = []
 
     for action in mdp.actions:
-        expected_reward = compute_expected_reward_for_action(state, action, mdp, gamma, value_function)
-        expected_rewards.append(expected_reward)
+        expected_rewards.append(
+            compute_expected_reward_for_action(state, action, mdp, gamma, value_function)
+        )
 
-    return max(expected_reward)
+    return max(expected_rewards)
 
 def compute_policy(mdp, gamma, value_function):
     policy = {}
