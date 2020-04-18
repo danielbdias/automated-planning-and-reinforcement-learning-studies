@@ -1,0 +1,14 @@
+state_variables
+    c1
+endstate_variables
+
+action noreboot
+    c1 (c1 (c1 ([1]) ([0.5]) ) (c1 ([1]) ([0.5]) ) )
+endaction
+
+action reboot1
+	c1 ([1.00])
+endaction
+
+reward
+   (c1 (1) (0) )

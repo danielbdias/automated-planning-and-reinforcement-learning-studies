@@ -2,7 +2,7 @@ install.dependencies:
 	pip install -r requirements.txt
 
 run.tests:
-	nose2 --config .nose2.cfg --verbose
+	nose2 --config .nose2.cfg
 
 run.tests.watch:
 	watchmedo shell-command \
@@ -20,3 +20,6 @@ run.lint.watch:
 		--recursive \
 		--command='clear && make run.lint' \
 		.
+
+build.docs:
+	sphinx-build -b html probabilistic_planning docs

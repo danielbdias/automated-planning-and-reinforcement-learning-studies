@@ -2,7 +2,9 @@ argh
 nose2
 nose2[coverage_plugin]
 numpy
+pyddlib
 pylint
 pyyaml
+Sphinx
 watchdog
 watchdog[watchmedo]

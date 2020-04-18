@@ -2,11 +2,7 @@
    a Markov Decision Process in Probabilistic Planning."""
 
 from .transition_function import TransitionFunction
-
-def validate_defined_argument(argument_value, argument_name):
-    """Validates if a given argument has a defined value (is not None)."""
-    if argument_value is None:
-        raise ValueError(f"The {argument_name} should be defined")
+from ..helpers import validate_defined_argument
 
 def build_state_set(state_indentifiers, state_set_name, base_state_set=None):
     """Build and validate a state set."""
