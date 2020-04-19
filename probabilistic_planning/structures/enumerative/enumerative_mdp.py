@@ -1,8 +1,8 @@
 """Module with classes to support a structure that represents
    a Markov Decision Process in Probabilistic Planning."""
 
-from .transition_function import TransitionFunction
-from ..helpers import validate_defined_argument
+from .enumerative_transition_function import EnumerativeTransitionFunction
+from ...helpers import validate_defined_argument
 
 def build_state_set(state_indentifiers, state_set_name, base_state_set=None):
     """Build and validate a state set."""
@@ -42,7 +42,7 @@ def build_transition_funtion(transition_function, states):
 
     validate_defined_argument(transition_function, "transition function")
 
-    return TransitionFunction(transition_function, transition_function.keys(), states)
+    return EnumerativeTransitionFunction(transition_function, transition_function.keys(), states)
 
 def build_action_set(actions):
     """Build and validate an action set."""

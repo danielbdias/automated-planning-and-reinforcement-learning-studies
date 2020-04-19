@@ -2,7 +2,10 @@ install.dependencies:
 	pip install -r requirements.txt
 
 run.tests:
-	nose2 --config .nose2.cfg
+	nose2 --start-dir ./tests --project-directory ./probabilistic_planning --coverage ./probabilistic_planning
+
+run.tests.coverage:
+	nose2 --start-dir ./tests --project-directory ./probabilistic_planning --coverage ./probabilistic_planning --coverage-report html --coverage-report term --with-coverage
 
 run.tests.watch:
 	watchmedo shell-command \

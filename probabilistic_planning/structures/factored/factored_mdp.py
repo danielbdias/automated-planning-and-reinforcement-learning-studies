@@ -1,7 +1,7 @@
 """Module with classes to support a structure that represents
    a factored Markov Decision Process in Probabilistic Planning."""
 
-from ..helpers import validate_defined_argument
+from ...helpers import validate_defined_argument
 
 def build_state_variables_set(state_variable_indentifiers, state_variables_set_name, base_state_variables_set=None):
     """Build and validate a state set."""
@@ -41,7 +41,7 @@ class FactoredMDP:
 
         Parameters:
             state_variables (list): named state variables for this MDP
-            reward_function (pyddlib.add.ADD): ADD that maps a state variable configuration to the respective numeric reward
+            reward_function (ADD): ADD that maps a state variable configuration to the respective numeric reward
             transition_function (dict): maps an action string to another dict that maps a state variable to an ADD defining
                                         transition probabilities with respect to other state variables
             initial_states (list): list of initial factored states for this MDP

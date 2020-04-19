@@ -76,7 +76,7 @@ def build_sorted_list(list_value, list_name):
 
     return list(sorted(list_value))
 
-class TransitionFunction:
+class EnumerativeTransitionFunction:
     def __init__(self, transition_function, actions, states):
         self.states = build_sorted_list(states, "states")
         self.actions = build_sorted_list(actions, "actions")

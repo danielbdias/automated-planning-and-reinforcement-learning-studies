@@ -1,10 +1,10 @@
 """Structures to represent different types of MDP.
 
 EnumerativeMDP: represents a MDP with enumerable states
+FactoredMDP: represents a MDP factored by state variables
 """
 
-from .enumerative_mdp import EnumerativeMDP
-from .factored_mdp import FactoredMDP
-from .transition_function import TransitionFunction
+from .enumerative.enumerative_mdp import EnumerativeMDP
+from .factored.factored_mdp import FactoredMDP
 
-__all__ = ["EnumerativeMDP", "TransitionFunction", "FactoredMDP"]
+__all__ = ["EnumerativeMDP", "FactoredMDP"]

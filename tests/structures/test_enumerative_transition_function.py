@@ -1,16 +1,16 @@
 from ..context import probabilistic_planning
-from probabilistic_planning.structures import TransitionFunction
+from probabilistic_planning.structures.enumerative.enumerative_transition_function import EnumerativeTransitionFunction
 
 import unittest
 import numpy as np
 
-class TransitionFunctionTests(unittest.TestCase):
+class EnumerativeTransitionFunctionTests(unittest.TestCase):
 
     # Constructor tests
 
     def test_constructor_call_with_all_parameters_none(self):
         with self.assertRaisesRegex(ValueError, "The states should be defined"):
-            TransitionFunction(transition_function=None, actions=None, states=None)
+            EnumerativeTransitionFunction(transition_function=None, actions=None, states=None)
 
     def test_constructor_call_with_state_set_ommited(self):
         transition_function = {
@@ -21,14 +21,14 @@ class TransitionFunctionTests(unittest.TestCase):
         actions = {"some-action"}
 
         with self.assertRaisesRegex(ValueError, "The states should be defined"):
-            TransitionFunction(transition_function=transition_function, actions=actions, states=None)
+            EnumerativeTransitionFunction(transition_function=transition_function, actions=actions, states=None)
 
     def test_constructor_call_with_transition_function_ommited(self):
         actions = {"some-action"}
         states = {"state01"}
 
         with self.assertRaisesRegex(ValueError, "The transition function should be defined"):
-            TransitionFunction(transition_function=None, actions=actions, states=states)
+            EnumerativeTransitionFunction(transition_function=None, actions=actions, states=states)
 
     def test_constructor_call_with_transition_function_without_actions(self):
         transition_function = {}
@@ -36,7 +36,7 @@ class TransitionFunctionTests(unittest.TestCase):
         states = {"state01"}
 
         with self.assertRaisesRegex(ValueError, "The transition function must have at least one action transition matrix"):
-            TransitionFunction(transition_function=transition_function, actions=actions, states=states)
+            EnumerativeTransitionFunction(transition_function=transition_function, actions=actions, states=states)
 
     def test_constructor_call_with_transition_function_having_incorrect_number_of_actions(self):
         transition_function = {
@@ -46,7 +46,7 @@ class TransitionFunctionTests(unittest.TestCase):
         states = {"state01"}
 
         with self.assertRaisesRegex(ValueError, "The transition function must have one transition matrix per action"):
-            TransitionFunction(transition_function=transition_function, actions=actions, states=states)
+            EnumerativeTransitionFunction(transition_function=transition_function, actions=actions, states=states)
 
     def test_constructor_call_with_transition_function_having_undefined_action(self):
         transition_function = {
@@ -56,7 +56,7 @@ class TransitionFunctionTests(unittest.TestCase):
         states = {"state01"}
 
         with self.assertRaisesRegex(ValueError, "The some-weird-action action is not defined in action list"):
-            TransitionFunction(transition_function=transition_function, actions=actions, states=states)
+            EnumerativeTransitionFunction(transition_function=transition_function, actions=actions, states=states)
 
     def test_constructor_call_with_transition_function_having_action_with_no_transitions(self):
         transition_function = {
@@ -66,7 +66,7 @@ class TransitionFunctionTests(unittest.TestCase):
         states = {"state01"}
 
         with self.assertRaisesRegex(ValueError, "The action \[some-action\] should have at least one transition defined"):
-            TransitionFunction(transition_function=transition_function, actions=actions, states=states)
+            EnumerativeTransitionFunction(transition_function=transition_function, actions=actions, states=states)
 
     def test_constructor_call_with_transition_function_having_action_with_transition_to_an_invalid_state(self):
         transition_function_with_invalid_to_state = {
@@ -83,10 +83,10 @@ class TransitionFunctionTests(unittest.TestCase):
         states = {"state01"}
 
         with self.assertRaisesRegex(ValueError, "State \[invalid-state01\] not found in state set"):
-            TransitionFunction(transition_function=transition_function_with_invalid_to_state, actions=actions, states=states)
+            EnumerativeTransitionFunction(transition_function=transition_function_with_invalid_to_state, actions=actions, states=states)
 
         with self.assertRaisesRegex(ValueError, "State \[invalid-state01\] not found in state set"):
-            TransitionFunction(transition_function=transition_function_with_invalid_to_state, actions=actions, states=states)
+            EnumerativeTransitionFunction(transition_function=transition_function_with_invalid_to_state, actions=actions, states=states)
 
     def test_constructor_call_with_transition_function_having_action_with_invalid_transition_distributions(self):
         transition_function_with_transition_greater_than_one = {
@@ -106,10 +106,10 @@ class TransitionFunctionTests(unittest.TestCase):
         states = {"state01","state02"}
 
         with self.assertRaisesRegex(ValueError, "Invalid probability distribution on \[state01\] transition in action \[some-action\]. The sum of all transitions probabilities from this state to others must be 1 \(one\)"):
-            TransitionFunction(transition_function=transition_function_with_transition_greater_than_one, actions=actions, states=states)
+            EnumerativeTransitionFunction(transition_function=transition_function_with_transition_greater_than_one, actions=actions, states=states)
 
         with self.assertRaisesRegex(ValueError, "Invalid probability distribution on \[state02\] transition in action \[some-action\]. The sum of all transitions probabilities from this state to others must be 1 \(one\)"):
-            TransitionFunction(transition_function=transition_function_with_transition_lesser_than_one, actions=actions, states=states)
+            EnumerativeTransitionFunction(transition_function=transition_function_with_transition_lesser_than_one, actions=actions, states=states)
 
     def test_constructor_call_with_transition_function_having_action_with_invalid_transition_distributions(self):
         transition_function_as_dict = {
@@ -122,7 +122,7 @@ class TransitionFunctionTests(unittest.TestCase):
         actions = {"some-action"}
         states = {"state01","state02"}
 
-        TransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
+        EnumerativeTransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
 
     # get_transition_probability method tests
 
@@ -137,7 +137,7 @@ class TransitionFunctionTests(unittest.TestCase):
         actions = {"some-action"}
         states = {"state01","state02"}
 
-        transition_function = TransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
+        transition_function = EnumerativeTransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
 
         with self.assertRaisesRegex(ValueError, "State \[invalid-state01\] not found in state set"):
             transition_function.get_transition_probability("invalid-state01", "some-action", "state01")
@@ -156,7 +156,7 @@ class TransitionFunctionTests(unittest.TestCase):
         actions = {"some-action"}
         states = {"state01","state02"}
 
-        transition_function = TransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
+        transition_function = EnumerativeTransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
 
         with self.assertRaisesRegex(ValueError, "Action \[some\-invalid\-action\] not found"):
             transition_function.get_transition_probability("state01", "some-invalid-action", "state01")
@@ -172,7 +172,7 @@ class TransitionFunctionTests(unittest.TestCase):
         actions = {"some-action"}
         states = {"state01","state02"}
 
-        transition_function = TransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
+        transition_function = EnumerativeTransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
 
         self.assertEqual(transition_function.get_transition_probability("state01", "some-action", "state01"), 0.9)
         self.assertEqual(transition_function.get_transition_probability("state01", "some-action", "state02"), 0.1)
@@ -191,7 +191,7 @@ class TransitionFunctionTests(unittest.TestCase):
         actions = {"some-action"}
         states = {"state01","state02"}
 
-        transition_function = TransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
+        transition_function = EnumerativeTransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
 
         with self.assertRaisesRegex(ValueError, "Action \[some\-invalid\-action\] not found"):
             transition_function.get_transition_matrix("some-invalid-action")
@@ -207,7 +207,7 @@ class TransitionFunctionTests(unittest.TestCase):
         actions = {"some-action"}
         states = {"state01","state02"}
 
-        transition_function = TransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
+        transition_function = EnumerativeTransitionFunction(transition_function=transition_function_as_dict, actions=actions, states=states)
 
         expected_matrix = np.matrix([[0.9, 0.1], [0.0, 1.0]])
         obtained_matrix = transition_function.get_transition_matrix("some-action")
