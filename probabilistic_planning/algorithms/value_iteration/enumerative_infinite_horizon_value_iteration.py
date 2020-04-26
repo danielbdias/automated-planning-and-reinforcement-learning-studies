@@ -50,13 +50,17 @@ def enumerative_infinite_horizon_value_iteration(mdp, gamma, epsilon, initial_va
     mdp (EnumerativeMDP): enumerative Markov Decison Problem to be solved
     gamma (float): discount factor applied to solve this MDP (assumes infinite on indefinite horizon)
     epsilon (float): maximum residual allowed between V_k and V_{k+1}
-    initial_value_function (EnumerativeValueFunction): initial admissible value function
+    initial_value_function (EnumerativeValueFunction): initial value function to start the algorithm. If this value
+                                                       is ommited, the algorithm will consider a initial value function that
+                                                       that returns 0 (zero) for all states.
 
     Returns:
     policy (dict): resulting policy computed for a mdp, represented as a dict that maps a state to an action
-    value_function (dict): values function found by this algorithm, represented as a dict that maps a state to a float
-    iterations (int): number of iterations needed until convergence
-    maximum_residuals (list): list of residuals found until convergence
+    value_function (dict): value function found by this algorithm, represented as a dict that maps a state to a float
+    statistics (dict): dictionary containing some statistics about the algorithm execution. We have three statistics here:
+                      "iterations" that is equal to the horizon parameter, "bellman_backups_done" that is the overall
+                      number of Bellman backups executed and "maximum_residuals" that is the maximum residual found in
+                      each iteration.
     """
     value_function = initial_value_function
 

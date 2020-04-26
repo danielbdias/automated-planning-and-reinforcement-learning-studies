@@ -44,14 +44,14 @@ def enumerative_finite_horizon_value_iteration(mdp, gamma, horizon):
     Parameters:
     mdp (EnumerativeMDP): enumerative Markov Decison Problem to be solved
     gamma (float): discount factor applied to solve this MDP
-    epsilon (float): maximum residual allowed between V_k and V_{k+1}
-    initial_value_function (EnumerativeValueFunction): initial admissible value function
+    horizon (int): number of steps that can be done in this MDP
 
     Returns:
     policy (dict): resulting policy computed for a mdp, represented as a dict that maps a state to an action
-    value_function (dict): values function found by this algorithm, represented as a dict that maps a state to a float
-    iterations (int): number of iterations needed until convergence
-    maximum_residuals (list): list of residuals found until convergence
+    value_function (dict): value function found by this algorithm, represented as a dict that maps a state to a float
+    statistics (dict): dictionary containing some statistics about the algorithm execution. We have two statistics here:
+                      "iterations" that is equal to the horizon parameter and "bellman_backups_done" that is the overall
+                      number of Bellman backups executed.
     """
     last_horizon_value_function = EnumerativeValueFunction(lambda state: 0) # value function with zeroes
 
