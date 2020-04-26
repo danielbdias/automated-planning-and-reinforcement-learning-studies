@@ -50,12 +50,12 @@ def compute_policy(mdp, gamma, value_function):
 
     return policy
 
-def enumerative_value_iteration(mdp, gamma, epsilon, initial_value_function = None):
-    """Executes the Value Iteration algorithm.
+def enumerative_rtdp(mdp, max_trials = 1_000, initial_value_function = None):
+    """Executes the Real Time Dynamic Programming (RTDP) algorithm.
 
     Parameters:
     mdp (EnumerativeMDP): enumerative Markov Decison Problem to be solved
-    gamma (float): discount factor applied to solve this MDP (assumes infinite on indefinite horizon)
+    max_trials (int): maximum number of trials executed by RTDP
     epsilon (float): maximum residual allowed between V_k and V_{k+1}
 
     Returns:
