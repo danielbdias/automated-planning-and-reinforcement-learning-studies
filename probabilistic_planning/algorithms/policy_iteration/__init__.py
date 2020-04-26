@@ -1,3 +1,4 @@
 from .enumerative_policy_iteration import enumerative_policy_iteration
+from .enumerative_modified_policy_iteration import enumerative_modified_policy_iteration
 
-__all__ = ["enumerative_policy_iteration"]
+__all__ = ["enumerative_policy_iteration", "enumerative_modified_policy_iteration"]
