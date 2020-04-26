@@ -39,7 +39,7 @@ def compute_policy(mdp, gamma, value_function):
     return policy
 
 def enumerative_finite_horizon_value_iteration(mdp, gamma, horizon):
-    """Executes the Value Iteration algorithm.
+    """Executes the Value Iteration algorithm for finite horizon MDPs.
 
     Parameters:
     mdp (EnumerativeMDP): enumerative Markov Decison Problem to be solved

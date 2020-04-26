@@ -4,24 +4,25 @@
 from .enumerative_transition_function import EnumerativeTransitionFunction
 from ...helpers import validate_defined_argument
 
-def build_state_set(state_indentifiers, state_set_name, base_state_set=None):
+import numpy as np
+
+def build_state_list(state_indentifiers, state_list_name, base_state_list=None):
     """Build and validate a state set."""
 
-    validate_defined_argument(state_indentifiers, state_set_name)
+    validate_defined_argument(state_indentifiers, state_list_name)
 
     if len(state_indentifiers) == 0:
-        raise ValueError(f"The {state_set_name} should have at least one state")
+        raise ValueError(f"The {state_list_name} should have at least one state")
 
-    state_as_set = set(state_indentifiers)
-    if len(state_as_set) != len(state_indentifiers):
-        raise ValueError(f"There is a repeated state identifier in the {state_set_name}")
+    if len(state_indentifiers) != len(state_indentifiers):
+        raise ValueError(f"There is a repeated state identifier in the {state_list_name}")
 
-    if base_state_set is not None:
+    if base_state_list is not None:
         for state in state_indentifiers:
-            if state not in base_state_set:
-                raise ValueError(f"Unrecognized state [{state}] in {state_set_name}")
+            if state not in base_state_list:
+                raise ValueError(f"Unrecognized state [{state}] in {state_list_name}")
 
-    return state_as_set
+    return sorted(state_indentifiers)
 
 def build_reward_function(reward_function, states):
     """Build and validate a reward function."""
@@ -44,11 +45,11 @@ def build_transition_funtion(transition_function, states):
 
     return EnumerativeTransitionFunction(transition_function, transition_function.keys(), states)
 
-def build_action_set(actions):
+def build_action_list(actions):
     """Build and validate an action set."""
 
     # transition function already validates the actions
-    return set(actions)
+    return sorted(actions)
 
 class EnumerativeMDP:
     """Represents an enumerative Markov Decision Process.
@@ -77,18 +78,18 @@ class EnumerativeMDP:
         Returns:
             instance (EnumerativeMDP): an enumerative Markov Decision Process
         """
-        self.states = build_state_set(states, "states")
+        self.states = build_state_list(states, "states")
         self.reward_function = build_reward_function(reward_function, self.states)
         self.transition_function = build_transition_funtion(transition_function, self.states)
-        self.actions = build_action_set(self.transition_function.actions)
+        self.actions = build_action_list(self.transition_function.actions)
 
         if initial_states:
-            self.initial_states = build_state_set(initial_states, "initial states", self.states)
+            self.initial_states = build_state_list(initial_states, "initial states", self.states)
         else:
             self.initial_states = set()
 
         if goal_states:
-            self.goal_states = build_state_set(goal_states, "goal states", self.states)
+            self.goal_states = build_state_list(goal_states, "goal states", self.states)
         else:
             self.goal_states = set()
 
@@ -97,3 +98,9 @@ class EnumerativeMDP:
 
     def transition(self, from_state, action, to_state):
         return self.transition_function.get_transition_probability(from_state, action, to_state)
+
+    def reward_matrix(self):
+        return np.matrix(list(map(lambda state: [ self.reward(state) ], self.states)))
+
+    def transition_matrix(self, action):
+        return self.transition_function.get_transition_matrix(action)

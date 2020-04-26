@@ -1,8 +1,3 @@
-"""Value iteration algorithms to many types of MDP.
-
-enumerative_value_iteration: algorithm to solve Enumerative MDPs
-"""
-
 from .enumerative_infinite_horizon_value_iteration import enumerative_infinite_horizon_value_iteration
 from .enumerative_finite_horizon_value_iteration import enumerative_finite_horizon_value_iteration
 
