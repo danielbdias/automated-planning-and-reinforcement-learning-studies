@@ -96,3 +96,7 @@ reward
 	robot-at-x04y03 0
 	broken-robot -1
 endreward
+
+initialstate
+    robot-at-x01y01
+endinitialstate

@@ -58,8 +58,9 @@ def enumerative_modified_policy_iteration(mdp, gamma, epsilon, m, initial_value_
     Returns:
     policy (dict): resulting policy computed for a mdp, represented as a dict that maps a state to an action
     value_function (dict): value function found by this algorithm, represented as a dict that maps a state to a float
-    statistics (dict): dictionary containing some statistics about the algorithm execution. We have one statistic here:
-                      "iterations" that is equal to the number of iterations required to improve to the optimal policy.
+    statistics (dict): dictionary containing some statistics about the algorithm execution. We have two statistics here:
+                      "iterations" that is equal to the number of iterations required to improve to the optimal policy and
+                      "maximum_residuals" that is the maximum residual found in each iteration.
     """
     value_function = initial_value_function
 

@@ -86,12 +86,12 @@ class EnumerativeMDP:
         if initial_states:
             self.initial_states = build_state_list(initial_states, "initial states", self.states)
         else:
-            self.initial_states = set()
+            self.initial_states = list()
 
         if goal_states:
             self.goal_states = build_state_list(goal_states, "goal states", self.states)
         else:
-            self.goal_states = set()
+            self.goal_states = list()
 
     def reward(self, state):
         return self.reward_function[state]
