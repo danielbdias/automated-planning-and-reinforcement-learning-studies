@@ -42,18 +42,20 @@ def compute_greedy_action(state, mdp, gamma, value_function):
 
     return best_action
 
-def sample_next_state(state, action, mdp):
-    sampled_probability = np.random.random_sample()
+def sample_next_state(normalizing_constant, bounded_weighted_probabilities):
+    sampled_probability = np.random.random_sample() * normalizing_constant
     cummulative_probability = 0.0
 
-    for next_state in mdp.states:
-        probability = mdp.transition(state, action, next_state)
-        cummulative_probability = cummulative_probability + probability
+    states = list(bounded_weighted_probabilities.keys())
+
+    for next_state in states:
+        bounded_probability = bounded_weighted_probabilities[next_state]
+        cummulative_probability = cummulative_probability + bounded_probability
 
         if sampled_probability < cummulative_probability:
             return next_state
 
-    return mdp.states[-1] # return last state
+    return states[-1] # return last state
 
 def compute_policy(mdp, gamma, value_function):
     policy = {}
@@ -63,76 +65,46 @@ def compute_policy(mdp, gamma, value_function):
 
     return policy
 
-def all_states_solved(states, solved_states):
+def compute_bounded_weighted_probabilities(state, action, mdp, lower_value_function, upper_value_function):
+    normalizing_constant = 0
+    bounded_weighted_probabilities = {}
+
+    for next_state in mdp.states:
+        probability = mdp.transition(state, action, next_state)
+        bound = upper_value_function[next_state] - lower_value_function[next_state]
+
+        bounded_weighted_probability = probability * bound
+        bounded_weighted_probabilities[next_state] = bounded_weighted_probability
+        normalizing_constant = normalizing_constant + bounded_weighted_probability
+
+    return normalizing_constant, bounded_weighted_probabilities
+
+def all_states_reached_converged(states, epsilon, lower_value_function, upper_value_function):
     for state in states:
-        if state not in solved_states:
+        if (upper_value_function[state] - lower_value_function[state]) > epsilon:
             return False
 
     return True
 
-def residual(state, mdp, gamma, value_function):
-    action = compute_greedy_action(state, mdp, gamma, value_function)
-    quality = compute_quality(state, action, mdp, gamma, value_function)
+def all_states_reached_bound(states, normalizing_constant, tau, lower_value_function, upper_value_function):
+    for state in states:
+        bound = (upper_value_function[state] - lower_value_function[state]) / tau
 
-    return abs(value_function[state] - quality)
+        if bound >= normalizing_constant:
+            return False
 
-def reachable_states(state, action, mdp):
-    states = []
+    return True
 
-    for next_state in mdp.states:
-        probability = mdp.transition(state, action, next_state)
-        if probability > 0:
-            states.append(next_state)
-
-    return states
-
-def check_solved(root_state, epsilon, solved_states, mdp, gamma, value_function):
-    solved = True
-    open_states = []
-    closed_states = []
-    bellman_backups_done = 0
-
-    if root_state not in solved_states:
-        open_states.append(root_state)
-
-    while len(open_states) != 0:
-        state = open_states.pop()
-        closed_states.append(state)
-
-        if residual(state, mdp, gamma, value_function) > epsilon:
-            solved = False
-            continue
-
-        action = compute_greedy_action(state, mdp, gamma, value_function)
-
-        for next_state in reachable_states(state, action, mdp):
-            is_solved = next_state in solved_states
-            is_open = next_state in open_states
-            is_closed = next_state in closed_states
-
-            if not (is_solved or is_closed or is_open):
-                open_states.append(next_state)
-
-    if solved:
-        for closed_state in closed_states:
-            solved_states.append(closed_state)
-    else:
-        while len(closed_states) != 0:
-            closed_state = closed_states.pop()
-
-            value_function[closed_state] = compute_bellman_backup(closed_state, mdp, gamma, value_function)
-            bellman_backups_done = bellman_backups_done + 1
-
-    return solved, bellman_backups_done
-
-def enumerative_lrtdp(mdp, gamma, max_depth, epsilon, initial_value_function = None, seed = None):
-    """Executes the Labeled Real Time Dynamic Programming algorithm.
+def enumerative_brtdp(mdp, gamma, max_depth, epsilon, tau, initial_lower_value_function = None, initial_upper_value_function = None, seed = None):
+    """Executes the Bounded Real Time Dynamic Programming algorithm.
 
     Parameters:
     mdp (EnumerativeMDP): enumerative Markov Decison Problem to be solved
     gamma (float): discount factor applied to solve this MDP (assumes infinite on indefinite horizon)
+    trials (int): number of trials to execute
     max_depth (int): max depth to search (used to avoid infinite loops on deadends)
-    epsilon (float): maximum residual allowed between V_k and V_{k+1}
+    epsilon (float): maximum residual allowed between V_upper and V_lower
+    tau (float): adaptative criterion, used to check and limit V_upper and V_lower differences
     initial_value_function (EnumerativeValueFunction): initial value function to start the algorithm. If this value
                                                        is ommited, the algorithm will consider a initial value function that
                                                        that returns 0 (zero) for all states.
@@ -146,36 +118,44 @@ def enumerative_lrtdp(mdp, gamma, max_depth, epsilon, initial_value_function = N
                       number of Bellman backups executed and "maximum_residuals" that is the maximum residual found in
                       each iteration.
     """
-    value_function = initial_value_function
+    lower_value_function = initial_lower_value_function
 
-    if value_function is None:
-        value_function = EnumerativeValueFunction(lambda state: 0) # value function with zeroes
+    if lower_value_function is None:
+        lower_value_function = EnumerativeValueFunction(lambda state: 0) # value function with zeroes
+
+    upper_value_function = initial_upper_value_function
+
+    if upper_value_function is None:
+        upper_value_function = EnumerativeValueFunction(lambda state: 1 + epsilon) # value function with ones
 
     if seed is not None:
         np.random.seed(seed)
 
-    solved_states = []
     bellman_backups_done = 0
     trials = 0
 
-    while not all_states_solved(mdp.initial_states, solved_states):
+    while not all_states_reached_converged(mdp.initial_states, epsilon, lower_value_function, upper_value_function):
         trials = trials + 1
         visited_states = []
         initial_state = np.random.choice(mdp.initial_states)
 
         state = initial_state
 
-        while state not in solved_states:
+        while True:
             visited_states.append(state)
 
-            if state in mdp.goal_states:
-                break
-
-            value_function[state] = compute_bellman_backup(state, mdp, gamma, value_function)
+            upper_value_function[state] = compute_bellman_backup(state, mdp, gamma, upper_value_function)
             bellman_backups_done = bellman_backups_done + 1
 
-            next_action = compute_greedy_action(state, mdp, gamma, value_function)
-            state = sample_next_state(state, next_action, mdp)
+            next_action = compute_greedy_action(state, mdp, gamma, lower_value_function)
+            lower_value_function[state] = compute_quality(state, next_action, mdp, gamma, lower_value_function)
+
+            normalizing_constant, bounded_weighted_probabilities = compute_bounded_weighted_probabilities(state, next_action, mdp, lower_value_function, upper_value_function)
+
+            if all_states_reached_bound(mdp.initial_states, normalizing_constant, tau, lower_value_function, upper_value_function):
+                break
+
+            state = sample_next_state(normalizing_constant, bounded_weighted_probabilities)
 
             if len(visited_states) > max_depth:
                 break
@@ -183,18 +163,16 @@ def enumerative_lrtdp(mdp, gamma, max_depth, epsilon, initial_value_function = N
         while len(visited_states) != 0:
             state = visited_states.pop()
 
-            solved, bellman_backups = check_solved(state, epsilon, solved_states, mdp, gamma, value_function)
-            bellman_backups_done = bellman_backups_done + bellman_backups
-
-            if not solved:
-                break
+            lower_value_function[state] = compute_bellman_backup(state, mdp, gamma, lower_value_function)
+            upper_value_function[state] = compute_bellman_backup(state, mdp, gamma, upper_value_function)
+            bellman_backups_done = bellman_backups_done + 2
 
     # compute policy
-    policy = compute_policy(mdp, gamma, value_function)
+    policy = compute_policy(mdp, gamma, lower_value_function)
 
     statistics = {
         "iterations": trials,
         "bellman_backups_done": bellman_backups_done
     }
 
-    return policy, value_function, statistics
+    return policy, lower_value_function, statistics
