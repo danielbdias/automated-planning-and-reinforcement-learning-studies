@@ -25,6 +25,9 @@ class EnumerativeValueFunction:
     def __setitem__(self, state, value):
         self._internal_dict[state] = value
 
+    def __repr__(self):
+        return repr(self._internal_dict)
+
     def states(self):
         return list(self._internal_dict.keys())
 

@@ -100,3 +100,7 @@ endreward
 initialstate
     robot-at-x01y01
 endinitialstate
+
+goalstate
+    robot-at-x04y03
+endgoalstate

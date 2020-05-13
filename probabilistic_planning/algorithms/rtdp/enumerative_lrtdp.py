@@ -63,14 +63,77 @@ def compute_policy(mdp, gamma, value_function):
 
     return policy
 
-def enumerative_rtdp(mdp, gamma, trials, max_depth, initial_value_function = None, seed = None):
-    """Executes the Real Time Dynamic Programming algorithm.
+def all_states_solved(states, solved_states):
+    for state in states:
+        if state not in solved_states:
+            return False
+
+    return True
+
+def residual(state, mdp, gamma, value_function):
+    action = compute_greedy_action(state, mdp, gamma, value_function)
+    quality = compute_quality(state, action, mdp, gamma, value_function)
+
+    return abs(value_function[state] - quality)
+
+def reachable_states(state, action, mdp):
+    states = []
+
+    for next_state in mdp.states:
+        probability = mdp.transition(state, action, next_state)
+        if probability > 0:
+            states.append(next_state)
+
+    return states
+
+def check_solved(root_state, epsilon, solved_states, mdp, gamma, value_function):
+    solved = True
+    open_states = []
+    closed_states = []
+    bellman_backups_done = 0
+
+    if root_state not in solved_states:
+        open_states.append(root_state)
+
+    while len(open_states) != 0:
+        state = open_states.pop()
+        closed_states.append(state)
+
+        if residual(state, mdp, gamma, value_function) > epsilon:
+            solved = False
+            continue
+
+        action = compute_greedy_action(state, mdp, gamma, value_function)
+
+        for next_state in reachable_states(state, action, mdp):
+            is_solved = next_state in solved_states
+            is_open = next_state in open_states
+            is_closed = next_state in closed_states
+
+            if not (is_solved or is_closed or is_open):
+                open_states.append(next_state)
+
+    if solved:
+        for closed_state in closed_states:
+            solved_states.append(closed_state)
+    else:
+        while len(closed_states) != 0:
+            closed_state = closed_states.pop()
+
+            value_function[closed_state] = compute_bellman_backup(closed_state, mdp, gamma, value_function)
+            bellman_backups_done = bellman_backups_done + 1
+
+    return solved, bellman_backups_done
+
+def enumerative_lrtdp(mdp, gamma, trials, max_depth, epsilon, initial_value_function = None, seed = None):
+    """Executes the Labeled Real Time Dynamic Programming algorithm.
 
     Parameters:
     mdp (EnumerativeMDP): enumerative Markov Decison Problem to be solved
     gamma (float): discount factor applied to solve this MDP (assumes infinite on indefinite horizon)
     trials (int): number of trials to execute
     max_depth (int): max depth to search (used to avoid infinite loops on deadends)
+    epsilon (float): maximum residual allowed between V_k and V_{k+1}
     initial_value_function (EnumerativeValueFunction): initial value function to start the algorithm. If this value
                                                        is ommited, the algorithm will consider a initial value function that
                                                        that returns 0 (zero) for all states.
@@ -92,16 +155,20 @@ def enumerative_rtdp(mdp, gamma, trials, max_depth, initial_value_function = Non
     if seed is not None:
         np.random.seed(seed)
 
+    solved_states = []
     bellman_backups_done = 0
 
-    for trial in range(0, trials):
+    while not all_states_solved(mdp.initial_states, solved_states):
         visited_states = []
         initial_state = np.random.choice(mdp.initial_states)
 
         state = initial_state
 
-        while state not in mdp.goal_states:
+        while state not in solved_states:
             visited_states.append(state)
+
+            if state in mdp.goal_states:
+                break
 
             value_function[state] = compute_bellman_backup(state, mdp, gamma, value_function)
             bellman_backups_done = bellman_backups_done + 1
@@ -110,6 +177,15 @@ def enumerative_rtdp(mdp, gamma, trials, max_depth, initial_value_function = Non
             state = sample_next_state(state, next_action, mdp)
 
             if len(visited_states) > max_depth:
+                break
+
+        while len(visited_states) != 0:
+            state = visited_states.pop()
+
+            solved, bellman_backups = check_solved(state, epsilon, solved_states, mdp, gamma, value_function)
+            bellman_backups_done = bellman_backups_done + bellman_backups
+
+            if not solved:
                 break
 
     # compute policy
