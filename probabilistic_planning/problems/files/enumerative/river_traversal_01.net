@@ -1,0 +1,1203 @@
+states
+	agent_at_x01_y01, agent_at_x01_y02, agent_at_x01_y03, agent_at_x01_y04, agent_at_x01_y05, agent_at_x01_y06, agent_at_x01_y07, agent_at_x01_y08, agent_at_x01_y09, agent_at_x01_y10, agent_at_x01_y11, agent_at_x01_y12, agent_at_x01_y13, agent_at_x01_y14, agent_at_x01_y15, agent_at_x01_y16, agent_at_x01_y17, agent_at_x01_y18, agent_at_x01_y19, agent_at_x01_y20, agent_at_x01_y21, agent_at_x01_y22, agent_at_x01_y23, agent_at_x01_y24, agent_at_x01_y25, agent_at_x02_y01, agent_at_x02_y02, agent_at_x02_y03, agent_at_x02_y04, agent_at_x02_y05, agent_at_x02_y06, agent_at_x02_y07, agent_at_x02_y08, agent_at_x02_y09, agent_at_x02_y10, agent_at_x02_y11, agent_at_x02_y12, agent_at_x02_y13, agent_at_x02_y14, agent_at_x02_y15, agent_at_x02_y16, agent_at_x02_y17, agent_at_x02_y18, agent_at_x02_y19, agent_at_x02_y20, agent_at_x02_y21, agent_at_x02_y22, agent_at_x02_y23, agent_at_x02_y24, agent_at_x02_y25, agent_at_x03_y01, agent_at_x03_y02, agent_at_x03_y03, agent_at_x03_y04, agent_at_x03_y05, agent_at_x03_y06, agent_at_x03_y07, agent_at_x03_y08, agent_at_x03_y09, agent_at_x03_y10, agent_at_x03_y11, agent_at_x03_y12, agent_at_x03_y13, agent_at_x03_y14, agent_at_x03_y15, agent_at_x03_y16, agent_at_x03_y17, agent_at_x03_y18, agent_at_x03_y19, agent_at_x03_y20, agent_at_x03_y21, agent_at_x03_y22, agent_at_x03_y23, agent_at_x03_y24, agent_at_x03_y25, agent_at_x04_y01, agent_at_x04_y02, agent_at_x04_y03, agent_at_x04_y04, agent_at_x04_y05, agent_at_x04_y06, agent_at_x04_y07, agent_at_x04_y08, agent_at_x04_y09, agent_at_x04_y10, agent_at_x04_y11, agent_at_x04_y12, agent_at_x04_y13, agent_at_x04_y14, agent_at_x04_y15, agent_at_x04_y16, agent_at_x04_y17, agent_at_x04_y18, agent_at_x04_y19, agent_at_x04_y20, agent_at_x04_y21, agent_at_x04_y22, agent_at_x04_y23, agent_at_x04_y24, agent_at_x04_y25, agent_at_x05_y01, agent_at_x05_y02, agent_at_x05_y03, agent_at_x05_y04, agent_at_x05_y05, agent_at_x05_y06, agent_at_x05_y07, agent_at_x05_y08, agent_at_x05_y09, agent_at_x05_y10, agent_at_x05_y11, agent_at_x05_y12, agent_at_x05_y13, agent_at_x05_y14, agent_at_x05_y15, agent_at_x05_y16, agent_at_x05_y17, agent_at_x05_y18, agent_at_x05_y19, agent_at_x05_y20, agent_at_x05_y21, agent_at_x05_y22, agent_at_x05_y23, agent_at_x05_y24, agent_at_x05_y25
+endstates
+
+action move-south
+	agent_at_x01_y01 agent_at_x01_y01 1.0
+	agent_at_x01_y02 agent_at_x01_y01 1.0
+	agent_at_x01_y03 agent_at_x01_y02 1.0
+	agent_at_x01_y04 agent_at_x01_y03 1.0
+	agent_at_x01_y05 agent_at_x01_y04 1.0
+	agent_at_x01_y06 agent_at_x01_y05 1.0
+	agent_at_x01_y07 agent_at_x01_y06 1.0
+	agent_at_x01_y08 agent_at_x01_y07 1.0
+	agent_at_x01_y09 agent_at_x01_y08 1.0
+	agent_at_x01_y10 agent_at_x01_y09 1.0
+	agent_at_x01_y11 agent_at_x01_y10 1.0
+	agent_at_x01_y12 agent_at_x01_y11 1.0
+	agent_at_x01_y13 agent_at_x01_y12 1.0
+	agent_at_x01_y14 agent_at_x01_y13 1.0
+	agent_at_x01_y15 agent_at_x01_y14 1.0
+	agent_at_x01_y16 agent_at_x01_y15 1.0
+	agent_at_x01_y17 agent_at_x01_y16 1.0
+	agent_at_x01_y18 agent_at_x01_y17 1.0
+	agent_at_x01_y19 agent_at_x01_y18 1.0
+	agent_at_x01_y20 agent_at_x01_y19 1.0
+	agent_at_x01_y21 agent_at_x01_y20 1.0
+	agent_at_x01_y22 agent_at_x01_y21 1.0
+	agent_at_x01_y23 agent_at_x01_y22 1.0
+	agent_at_x01_y24 agent_at_x01_y23 1.0
+	agent_at_x01_y25 agent_at_x01_y24 1.0
+	agent_at_x02_y01 agent_at_x01_y01 1.0
+	agent_at_x02_y02 agent_at_x02_y01 1.0
+	agent_at_x02_y03 agent_at_x02_y02 1.0
+	agent_at_x02_y04 agent_at_x02_y03 1.0
+	agent_at_x02_y05 agent_at_x02_y04 1.0
+	agent_at_x02_y06 agent_at_x02_y05 1.0
+	agent_at_x02_y07 agent_at_x02_y06 1.0
+	agent_at_x02_y08 agent_at_x02_y07 1.0
+	agent_at_x02_y09 agent_at_x02_y08 1.0
+	agent_at_x02_y10 agent_at_x02_y09 1.0
+	agent_at_x02_y11 agent_at_x02_y10 1.0
+	agent_at_x02_y12 agent_at_x02_y11 1.0
+	agent_at_x02_y13 agent_at_x02_y12 1.0
+	agent_at_x02_y14 agent_at_x02_y13 1.0
+	agent_at_x02_y15 agent_at_x02_y14 1.0
+	agent_at_x02_y16 agent_at_x02_y15 1.0
+	agent_at_x02_y17 agent_at_x02_y16 1.0
+	agent_at_x02_y18 agent_at_x02_y17 1.0
+	agent_at_x02_y19 agent_at_x02_y18 1.0
+	agent_at_x02_y20 agent_at_x02_y19 1.0
+	agent_at_x02_y21 agent_at_x02_y20 1.0
+	agent_at_x02_y22 agent_at_x02_y21 1.0
+	agent_at_x02_y23 agent_at_x02_y22 1.0
+	agent_at_x02_y24 agent_at_x02_y23 1.0
+	agent_at_x02_y25 agent_at_x02_y24 1.0
+	agent_at_x03_y01 agent_at_x01_y01 1.0
+	agent_at_x03_y02 agent_at_x03_y01 1.0
+	agent_at_x03_y03 agent_at_x03_y02 1.0
+	agent_at_x03_y04 agent_at_x03_y03 1.0
+	agent_at_x03_y05 agent_at_x03_y04 1.0
+	agent_at_x03_y06 agent_at_x03_y05 1.0
+	agent_at_x03_y07 agent_at_x03_y06 1.0
+	agent_at_x03_y08 agent_at_x03_y07 1.0
+	agent_at_x03_y09 agent_at_x03_y08 1.0
+	agent_at_x03_y10 agent_at_x03_y09 1.0
+	agent_at_x03_y11 agent_at_x03_y10 1.0
+	agent_at_x03_y12 agent_at_x03_y11 1.0
+	agent_at_x03_y13 agent_at_x03_y12 1.0
+	agent_at_x03_y14 agent_at_x03_y13 1.0
+	agent_at_x03_y15 agent_at_x03_y14 1.0
+	agent_at_x03_y16 agent_at_x03_y15 1.0
+	agent_at_x03_y17 agent_at_x03_y16 1.0
+	agent_at_x03_y18 agent_at_x03_y17 1.0
+	agent_at_x03_y19 agent_at_x03_y18 1.0
+	agent_at_x03_y20 agent_at_x03_y19 1.0
+	agent_at_x03_y21 agent_at_x03_y20 1.0
+	agent_at_x03_y22 agent_at_x03_y21 1.0
+	agent_at_x03_y23 agent_at_x03_y22 1.0
+	agent_at_x03_y24 agent_at_x03_y23 1.0
+	agent_at_x03_y25 agent_at_x03_y24 1.0
+	agent_at_x04_y01 agent_at_x01_y01 1.0
+	agent_at_x04_y02 agent_at_x04_y01 1.0
+	agent_at_x04_y03 agent_at_x04_y02 1.0
+	agent_at_x04_y04 agent_at_x04_y03 1.0
+	agent_at_x04_y05 agent_at_x04_y04 1.0
+	agent_at_x04_y06 agent_at_x04_y05 1.0
+	agent_at_x04_y07 agent_at_x04_y06 1.0
+	agent_at_x04_y08 agent_at_x04_y07 1.0
+	agent_at_x04_y09 agent_at_x04_y08 1.0
+	agent_at_x04_y10 agent_at_x04_y09 1.0
+	agent_at_x04_y11 agent_at_x04_y10 1.0
+	agent_at_x04_y12 agent_at_x04_y11 1.0
+	agent_at_x04_y13 agent_at_x04_y12 1.0
+	agent_at_x04_y14 agent_at_x04_y13 1.0
+	agent_at_x04_y15 agent_at_x04_y14 1.0
+	agent_at_x04_y16 agent_at_x04_y15 1.0
+	agent_at_x04_y17 agent_at_x04_y16 1.0
+	agent_at_x04_y18 agent_at_x04_y17 1.0
+	agent_at_x04_y19 agent_at_x04_y18 1.0
+	agent_at_x04_y20 agent_at_x04_y19 1.0
+	agent_at_x04_y21 agent_at_x04_y20 1.0
+	agent_at_x04_y22 agent_at_x04_y21 1.0
+	agent_at_x04_y23 agent_at_x04_y22 1.0
+	agent_at_x04_y24 agent_at_x04_y23 1.0
+	agent_at_x04_y25 agent_at_x04_y24 1.0
+	agent_at_x05_y01 agent_at_x05_y01 1.0
+	agent_at_x05_y02 agent_at_x05_y01 1.0
+	agent_at_x05_y03 agent_at_x05_y02 1.0
+	agent_at_x05_y04 agent_at_x05_y03 1.0
+	agent_at_x05_y05 agent_at_x05_y04 1.0
+	agent_at_x05_y06 agent_at_x05_y05 1.0
+	agent_at_x05_y07 agent_at_x05_y06 1.0
+	agent_at_x05_y08 agent_at_x05_y07 1.0
+	agent_at_x05_y09 agent_at_x05_y08 1.0
+	agent_at_x05_y10 agent_at_x05_y09 1.0
+	agent_at_x05_y11 agent_at_x05_y10 1.0
+	agent_at_x05_y12 agent_at_x05_y11 1.0
+	agent_at_x05_y13 agent_at_x05_y12 1.0
+	agent_at_x05_y14 agent_at_x05_y13 1.0
+	agent_at_x05_y15 agent_at_x05_y14 1.0
+	agent_at_x05_y16 agent_at_x05_y15 1.0
+	agent_at_x05_y17 agent_at_x05_y16 1.0
+	agent_at_x05_y18 agent_at_x05_y17 1.0
+	agent_at_x05_y19 agent_at_x05_y18 1.0
+	agent_at_x05_y20 agent_at_x05_y19 1.0
+	agent_at_x05_y21 agent_at_x05_y20 1.0
+	agent_at_x05_y22 agent_at_x05_y21 1.0
+	agent_at_x05_y23 agent_at_x05_y22 1.0
+	agent_at_x05_y24 agent_at_x05_y23 1.0
+	agent_at_x05_y25 agent_at_x05_y24 1.0
+endaction
+
+action move-north
+	agent_at_x01_y01 agent_at_x01_y02 1.0
+	agent_at_x01_y02 agent_at_x01_y03 1.0
+	agent_at_x01_y03 agent_at_x01_y04 1.0
+	agent_at_x01_y04 agent_at_x01_y05 1.0
+	agent_at_x01_y05 agent_at_x01_y06 1.0
+	agent_at_x01_y06 agent_at_x01_y07 1.0
+	agent_at_x01_y07 agent_at_x01_y08 1.0
+	agent_at_x01_y08 agent_at_x01_y09 1.0
+	agent_at_x01_y09 agent_at_x01_y10 1.0
+	agent_at_x01_y10 agent_at_x01_y11 1.0
+	agent_at_x01_y11 agent_at_x01_y12 1.0
+	agent_at_x01_y12 agent_at_x01_y13 1.0
+	agent_at_x01_y13 agent_at_x01_y14 1.0
+	agent_at_x01_y14 agent_at_x01_y15 1.0
+	agent_at_x01_y15 agent_at_x01_y16 1.0
+	agent_at_x01_y16 agent_at_x01_y17 1.0
+	agent_at_x01_y17 agent_at_x01_y18 1.0
+	agent_at_x01_y18 agent_at_x01_y19 1.0
+	agent_at_x01_y19 agent_at_x01_y20 1.0
+	agent_at_x01_y20 agent_at_x01_y21 1.0
+	agent_at_x01_y21 agent_at_x01_y22 1.0
+	agent_at_x01_y22 agent_at_x01_y23 1.0
+	agent_at_x01_y23 agent_at_x01_y24 1.0
+	agent_at_x01_y24 agent_at_x01_y25 1.0
+	agent_at_x01_y25 agent_at_x01_y25 1.0
+	agent_at_x02_y01 agent_at_x01_y01 1.0
+	agent_at_x02_y02 agent_at_x02_y01 0.04
+	agent_at_x02_y02 agent_at_x02_y02 0.32
+	agent_at_x02_y02 agent_at_x02_y03 0.64
+	agent_at_x02_y03 agent_at_x02_y02 0.04
+	agent_at_x02_y03 agent_at_x02_y03 0.32
+	agent_at_x02_y03 agent_at_x02_y04 0.64
+	agent_at_x02_y04 agent_at_x02_y03 0.04
+	agent_at_x02_y04 agent_at_x02_y04 0.32
+	agent_at_x02_y04 agent_at_x02_y05 0.64
+	agent_at_x02_y05 agent_at_x02_y04 0.04
+	agent_at_x02_y05 agent_at_x02_y05 0.32
+	agent_at_x02_y05 agent_at_x02_y06 0.64
+	agent_at_x02_y06 agent_at_x02_y05 0.04
+	agent_at_x02_y06 agent_at_x02_y06 0.32
+	agent_at_x02_y06 agent_at_x02_y07 0.64
+	agent_at_x02_y07 agent_at_x02_y06 0.04
+	agent_at_x02_y07 agent_at_x02_y07 0.32
+	agent_at_x02_y07 agent_at_x02_y08 0.64
+	agent_at_x02_y08 agent_at_x02_y07 0.04
+	agent_at_x02_y08 agent_at_x02_y08 0.32
+	agent_at_x02_y08 agent_at_x02_y09 0.64
+	agent_at_x02_y09 agent_at_x02_y08 0.04
+	agent_at_x02_y09 agent_at_x02_y09 0.32
+	agent_at_x02_y09 agent_at_x02_y10 0.64
+	agent_at_x02_y10 agent_at_x02_y09 0.04
+	agent_at_x02_y10 agent_at_x02_y10 0.32
+	agent_at_x02_y10 agent_at_x02_y11 0.64
+	agent_at_x02_y11 agent_at_x02_y10 0.04
+	agent_at_x02_y11 agent_at_x02_y11 0.32
+	agent_at_x02_y11 agent_at_x02_y12 0.64
+	agent_at_x02_y12 agent_at_x02_y11 0.04
+	agent_at_x02_y12 agent_at_x02_y12 0.32
+	agent_at_x02_y12 agent_at_x02_y13 0.64
+	agent_at_x02_y13 agent_at_x02_y12 0.04
+	agent_at_x02_y13 agent_at_x02_y13 0.32
+	agent_at_x02_y13 agent_at_x02_y14 0.64
+	agent_at_x02_y14 agent_at_x02_y13 0.04
+	agent_at_x02_y14 agent_at_x02_y14 0.32
+	agent_at_x02_y14 agent_at_x02_y15 0.64
+	agent_at_x02_y15 agent_at_x02_y14 0.04
+	agent_at_x02_y15 agent_at_x02_y15 0.32
+	agent_at_x02_y15 agent_at_x02_y16 0.64
+	agent_at_x02_y16 agent_at_x02_y15 0.04
+	agent_at_x02_y16 agent_at_x02_y16 0.32
+	agent_at_x02_y16 agent_at_x02_y17 0.64
+	agent_at_x02_y17 agent_at_x02_y16 0.04
+	agent_at_x02_y17 agent_at_x02_y17 0.32
+	agent_at_x02_y17 agent_at_x02_y18 0.64
+	agent_at_x02_y18 agent_at_x02_y17 0.04
+	agent_at_x02_y18 agent_at_x02_y18 0.32
+	agent_at_x02_y18 agent_at_x02_y19 0.64
+	agent_at_x02_y19 agent_at_x02_y18 0.04
+	agent_at_x02_y19 agent_at_x02_y19 0.32
+	agent_at_x02_y19 agent_at_x02_y20 0.64
+	agent_at_x02_y20 agent_at_x02_y19 0.04
+	agent_at_x02_y20 agent_at_x02_y20 0.32
+	agent_at_x02_y20 agent_at_x02_y21 0.64
+	agent_at_x02_y21 agent_at_x02_y20 0.04
+	agent_at_x02_y21 agent_at_x02_y21 0.32
+	agent_at_x02_y21 agent_at_x02_y22 0.64
+	agent_at_x02_y22 agent_at_x02_y21 0.04
+	agent_at_x02_y22 agent_at_x02_y22 0.32
+	agent_at_x02_y22 agent_at_x02_y23 0.64
+	agent_at_x02_y23 agent_at_x02_y22 0.04
+	agent_at_x02_y23 agent_at_x02_y23 0.32
+	agent_at_x02_y23 agent_at_x02_y24 0.64
+	agent_at_x02_y24 agent_at_x02_y23 0.04
+	agent_at_x02_y24 agent_at_x02_y24 0.32
+	agent_at_x02_y24 agent_at_x02_y25 0.64
+	agent_at_x02_y25 agent_at_x02_y25 1.0
+	agent_at_x03_y01 agent_at_x01_y01 1.0
+	agent_at_x03_y02 agent_at_x03_y01 0.04
+	agent_at_x03_y02 agent_at_x03_y02 0.32
+	agent_at_x03_y02 agent_at_x03_y03 0.64
+	agent_at_x03_y03 agent_at_x03_y02 0.04
+	agent_at_x03_y03 agent_at_x03_y03 0.32
+	agent_at_x03_y03 agent_at_x03_y04 0.64
+	agent_at_x03_y04 agent_at_x03_y03 0.04
+	agent_at_x03_y04 agent_at_x03_y04 0.32
+	agent_at_x03_y04 agent_at_x03_y05 0.64
+	agent_at_x03_y05 agent_at_x03_y04 0.04
+	agent_at_x03_y05 agent_at_x03_y05 0.32
+	agent_at_x03_y05 agent_at_x03_y06 0.64
+	agent_at_x03_y06 agent_at_x03_y05 0.04
+	agent_at_x03_y06 agent_at_x03_y06 0.32
+	agent_at_x03_y06 agent_at_x03_y07 0.64
+	agent_at_x03_y07 agent_at_x03_y06 0.04
+	agent_at_x03_y07 agent_at_x03_y07 0.32
+	agent_at_x03_y07 agent_at_x03_y08 0.64
+	agent_at_x03_y08 agent_at_x03_y07 0.04
+	agent_at_x03_y08 agent_at_x03_y08 0.32
+	agent_at_x03_y08 agent_at_x03_y09 0.64
+	agent_at_x03_y09 agent_at_x03_y08 0.04
+	agent_at_x03_y09 agent_at_x03_y09 0.32
+	agent_at_x03_y09 agent_at_x03_y10 0.64
+	agent_at_x03_y10 agent_at_x03_y09 0.04
+	agent_at_x03_y10 agent_at_x03_y10 0.32
+	agent_at_x03_y10 agent_at_x03_y11 0.64
+	agent_at_x03_y11 agent_at_x03_y10 0.04
+	agent_at_x03_y11 agent_at_x03_y11 0.32
+	agent_at_x03_y11 agent_at_x03_y12 0.64
+	agent_at_x03_y12 agent_at_x03_y11 0.04
+	agent_at_x03_y12 agent_at_x03_y12 0.32
+	agent_at_x03_y12 agent_at_x03_y13 0.64
+	agent_at_x03_y13 agent_at_x03_y12 0.04
+	agent_at_x03_y13 agent_at_x03_y13 0.32
+	agent_at_x03_y13 agent_at_x03_y14 0.64
+	agent_at_x03_y14 agent_at_x03_y13 0.04
+	agent_at_x03_y14 agent_at_x03_y14 0.32
+	agent_at_x03_y14 agent_at_x03_y15 0.64
+	agent_at_x03_y15 agent_at_x03_y14 0.04
+	agent_at_x03_y15 agent_at_x03_y15 0.32
+	agent_at_x03_y15 agent_at_x03_y16 0.64
+	agent_at_x03_y16 agent_at_x03_y15 0.04
+	agent_at_x03_y16 agent_at_x03_y16 0.32
+	agent_at_x03_y16 agent_at_x03_y17 0.64
+	agent_at_x03_y17 agent_at_x03_y16 0.04
+	agent_at_x03_y17 agent_at_x03_y17 0.32
+	agent_at_x03_y17 agent_at_x03_y18 0.64
+	agent_at_x03_y18 agent_at_x03_y17 0.04
+	agent_at_x03_y18 agent_at_x03_y18 0.32
+	agent_at_x03_y18 agent_at_x03_y19 0.64
+	agent_at_x03_y19 agent_at_x03_y18 0.04
+	agent_at_x03_y19 agent_at_x03_y19 0.32
+	agent_at_x03_y19 agent_at_x03_y20 0.64
+	agent_at_x03_y20 agent_at_x03_y19 0.04
+	agent_at_x03_y20 agent_at_x03_y20 0.32
+	agent_at_x03_y20 agent_at_x03_y21 0.64
+	agent_at_x03_y21 agent_at_x03_y20 0.04
+	agent_at_x03_y21 agent_at_x03_y21 0.32
+	agent_at_x03_y21 agent_at_x03_y22 0.64
+	agent_at_x03_y22 agent_at_x03_y21 0.04
+	agent_at_x03_y22 agent_at_x03_y22 0.32
+	agent_at_x03_y22 agent_at_x03_y23 0.64
+	agent_at_x03_y23 agent_at_x03_y22 0.04
+	agent_at_x03_y23 agent_at_x03_y23 0.32
+	agent_at_x03_y23 agent_at_x03_y24 0.64
+	agent_at_x03_y24 agent_at_x03_y23 0.04
+	agent_at_x03_y24 agent_at_x03_y24 0.32
+	agent_at_x03_y24 agent_at_x03_y25 0.64
+	agent_at_x03_y25 agent_at_x03_y25 1.0
+	agent_at_x04_y01 agent_at_x01_y01 1.0
+	agent_at_x04_y02 agent_at_x04_y01 0.04
+	agent_at_x04_y02 agent_at_x04_y02 0.32
+	agent_at_x04_y02 agent_at_x04_y03 0.64
+	agent_at_x04_y03 agent_at_x04_y02 0.04
+	agent_at_x04_y03 agent_at_x04_y03 0.32
+	agent_at_x04_y03 agent_at_x04_y04 0.64
+	agent_at_x04_y04 agent_at_x04_y03 0.04
+	agent_at_x04_y04 agent_at_x04_y04 0.32
+	agent_at_x04_y04 agent_at_x04_y05 0.64
+	agent_at_x04_y05 agent_at_x04_y04 0.04
+	agent_at_x04_y05 agent_at_x04_y05 0.32
+	agent_at_x04_y05 agent_at_x04_y06 0.64
+	agent_at_x04_y06 agent_at_x04_y05 0.04
+	agent_at_x04_y06 agent_at_x04_y06 0.32
+	agent_at_x04_y06 agent_at_x04_y07 0.64
+	agent_at_x04_y07 agent_at_x04_y06 0.04
+	agent_at_x04_y07 agent_at_x04_y07 0.32
+	agent_at_x04_y07 agent_at_x04_y08 0.64
+	agent_at_x04_y08 agent_at_x04_y07 0.04
+	agent_at_x04_y08 agent_at_x04_y08 0.32
+	agent_at_x04_y08 agent_at_x04_y09 0.64
+	agent_at_x04_y09 agent_at_x04_y08 0.04
+	agent_at_x04_y09 agent_at_x04_y09 0.32
+	agent_at_x04_y09 agent_at_x04_y10 0.64
+	agent_at_x04_y10 agent_at_x04_y09 0.04
+	agent_at_x04_y10 agent_at_x04_y10 0.32
+	agent_at_x04_y10 agent_at_x04_y11 0.64
+	agent_at_x04_y11 agent_at_x04_y10 0.04
+	agent_at_x04_y11 agent_at_x04_y11 0.32
+	agent_at_x04_y11 agent_at_x04_y12 0.64
+	agent_at_x04_y12 agent_at_x04_y11 0.04
+	agent_at_x04_y12 agent_at_x04_y12 0.32
+	agent_at_x04_y12 agent_at_x04_y13 0.64
+	agent_at_x04_y13 agent_at_x04_y12 0.04
+	agent_at_x04_y13 agent_at_x04_y13 0.32
+	agent_at_x04_y13 agent_at_x04_y14 0.64
+	agent_at_x04_y14 agent_at_x04_y13 0.04
+	agent_at_x04_y14 agent_at_x04_y14 0.32
+	agent_at_x04_y14 agent_at_x04_y15 0.64
+	agent_at_x04_y15 agent_at_x04_y14 0.04
+	agent_at_x04_y15 agent_at_x04_y15 0.32
+	agent_at_x04_y15 agent_at_x04_y16 0.64
+	agent_at_x04_y16 agent_at_x04_y15 0.04
+	agent_at_x04_y16 agent_at_x04_y16 0.32
+	agent_at_x04_y16 agent_at_x04_y17 0.64
+	agent_at_x04_y17 agent_at_x04_y16 0.04
+	agent_at_x04_y17 agent_at_x04_y17 0.32
+	agent_at_x04_y17 agent_at_x04_y18 0.64
+	agent_at_x04_y18 agent_at_x04_y17 0.04
+	agent_at_x04_y18 agent_at_x04_y18 0.32
+	agent_at_x04_y18 agent_at_x04_y19 0.64
+	agent_at_x04_y19 agent_at_x04_y18 0.04
+	agent_at_x04_y19 agent_at_x04_y19 0.32
+	agent_at_x04_y19 agent_at_x04_y20 0.64
+	agent_at_x04_y20 agent_at_x04_y19 0.04
+	agent_at_x04_y20 agent_at_x04_y20 0.32
+	agent_at_x04_y20 agent_at_x04_y21 0.64
+	agent_at_x04_y21 agent_at_x04_y20 0.04
+	agent_at_x04_y21 agent_at_x04_y21 0.32
+	agent_at_x04_y21 agent_at_x04_y22 0.64
+	agent_at_x04_y22 agent_at_x04_y21 0.04
+	agent_at_x04_y22 agent_at_x04_y22 0.32
+	agent_at_x04_y22 agent_at_x04_y23 0.64
+	agent_at_x04_y23 agent_at_x04_y22 0.04
+	agent_at_x04_y23 agent_at_x04_y23 0.32
+	agent_at_x04_y23 agent_at_x04_y24 0.64
+	agent_at_x04_y24 agent_at_x04_y23 0.04
+	agent_at_x04_y24 agent_at_x04_y24 0.32
+	agent_at_x04_y24 agent_at_x04_y25 0.64
+	agent_at_x04_y25 agent_at_x04_y25 1.0
+	agent_at_x05_y01 agent_at_x05_y01 1.0
+	agent_at_x05_y02 agent_at_x05_y03 1.0
+	agent_at_x05_y03 agent_at_x05_y04 1.0
+	agent_at_x05_y04 agent_at_x05_y05 1.0
+	agent_at_x05_y05 agent_at_x05_y06 1.0
+	agent_at_x05_y06 agent_at_x05_y07 1.0
+	agent_at_x05_y07 agent_at_x05_y08 1.0
+	agent_at_x05_y08 agent_at_x05_y09 1.0
+	agent_at_x05_y09 agent_at_x05_y10 1.0
+	agent_at_x05_y10 agent_at_x05_y11 1.0
+	agent_at_x05_y11 agent_at_x05_y12 1.0
+	agent_at_x05_y12 agent_at_x05_y13 1.0
+	agent_at_x05_y13 agent_at_x05_y14 1.0
+	agent_at_x05_y14 agent_at_x05_y15 1.0
+	agent_at_x05_y15 agent_at_x05_y16 1.0
+	agent_at_x05_y16 agent_at_x05_y17 1.0
+	agent_at_x05_y17 agent_at_x05_y18 1.0
+	agent_at_x05_y18 agent_at_x05_y19 1.0
+	agent_at_x05_y19 agent_at_x05_y20 1.0
+	agent_at_x05_y20 agent_at_x05_y21 1.0
+	agent_at_x05_y21 agent_at_x05_y22 1.0
+	agent_at_x05_y22 agent_at_x05_y23 1.0
+	agent_at_x05_y23 agent_at_x05_y24 1.0
+	agent_at_x05_y24 agent_at_x05_y25 1.0
+	agent_at_x05_y25 agent_at_x05_y25 1.0
+endaction
+
+action move-west
+	agent_at_x01_y01 agent_at_x01_y01 1.0
+	agent_at_x01_y02 agent_at_x01_y02 1.0
+	agent_at_x01_y03 agent_at_x01_y03 1.0
+	agent_at_x01_y04 agent_at_x01_y04 1.0
+	agent_at_x01_y05 agent_at_x01_y05 1.0
+	agent_at_x01_y06 agent_at_x01_y06 1.0
+	agent_at_x01_y07 agent_at_x01_y07 1.0
+	agent_at_x01_y08 agent_at_x01_y08 1.0
+	agent_at_x01_y09 agent_at_x01_y09 1.0
+	agent_at_x01_y10 agent_at_x01_y10 1.0
+	agent_at_x01_y11 agent_at_x01_y11 1.0
+	agent_at_x01_y12 agent_at_x01_y12 1.0
+	agent_at_x01_y13 agent_at_x01_y13 1.0
+	agent_at_x01_y14 agent_at_x01_y14 1.0
+	agent_at_x01_y15 agent_at_x01_y15 1.0
+	agent_at_x01_y16 agent_at_x01_y16 1.0
+	agent_at_x01_y17 agent_at_x01_y17 1.0
+	agent_at_x01_y18 agent_at_x01_y18 1.0
+	agent_at_x01_y19 agent_at_x01_y19 1.0
+	agent_at_x01_y20 agent_at_x01_y20 1.0
+	agent_at_x01_y21 agent_at_x01_y21 1.0
+	agent_at_x01_y22 agent_at_x01_y22 1.0
+	agent_at_x01_y23 agent_at_x01_y23 1.0
+	agent_at_x01_y24 agent_at_x01_y24 1.0
+	agent_at_x01_y25 agent_at_x01_y25 1.0
+	agent_at_x02_y01 agent_at_x01_y01 1.0
+	agent_at_x02_y02 agent_at_x01_y01 0.16
+	agent_at_x02_y02 agent_at_x01_y02 0.64
+	agent_at_x02_y02 agent_at_x02_y01 0.04
+	agent_at_x02_y02 agent_at_x02_y02 0.16
+	agent_at_x02_y03 agent_at_x01_y02 0.16
+	agent_at_x02_y03 agent_at_x01_y03 0.64
+	agent_at_x02_y03 agent_at_x02_y02 0.04
+	agent_at_x02_y03 agent_at_x02_y03 0.16
+	agent_at_x02_y04 agent_at_x01_y03 0.16
+	agent_at_x02_y04 agent_at_x01_y04 0.64
+	agent_at_x02_y04 agent_at_x02_y03 0.04
+	agent_at_x02_y04 agent_at_x02_y04 0.16
+	agent_at_x02_y05 agent_at_x01_y04 0.16
+	agent_at_x02_y05 agent_at_x01_y05 0.64
+	agent_at_x02_y05 agent_at_x02_y04 0.04
+	agent_at_x02_y05 agent_at_x02_y05 0.16
+	agent_at_x02_y06 agent_at_x01_y05 0.16
+	agent_at_x02_y06 agent_at_x01_y06 0.64
+	agent_at_x02_y06 agent_at_x02_y05 0.04
+	agent_at_x02_y06 agent_at_x02_y06 0.16
+	agent_at_x02_y07 agent_at_x01_y06 0.16
+	agent_at_x02_y07 agent_at_x01_y07 0.64
+	agent_at_x02_y07 agent_at_x02_y06 0.04
+	agent_at_x02_y07 agent_at_x02_y07 0.16
+	agent_at_x02_y08 agent_at_x01_y07 0.16
+	agent_at_x02_y08 agent_at_x01_y08 0.64
+	agent_at_x02_y08 agent_at_x02_y07 0.04
+	agent_at_x02_y08 agent_at_x02_y08 0.16
+	agent_at_x02_y09 agent_at_x01_y08 0.16
+	agent_at_x02_y09 agent_at_x01_y09 0.64
+	agent_at_x02_y09 agent_at_x02_y08 0.04
+	agent_at_x02_y09 agent_at_x02_y09 0.16
+	agent_at_x02_y10 agent_at_x01_y09 0.16
+	agent_at_x02_y10 agent_at_x01_y10 0.64
+	agent_at_x02_y10 agent_at_x02_y09 0.04
+	agent_at_x02_y10 agent_at_x02_y10 0.16
+	agent_at_x02_y11 agent_at_x01_y10 0.16
+	agent_at_x02_y11 agent_at_x01_y11 0.64
+	agent_at_x02_y11 agent_at_x02_y10 0.04
+	agent_at_x02_y11 agent_at_x02_y11 0.16
+	agent_at_x02_y12 agent_at_x01_y11 0.16
+	agent_at_x02_y12 agent_at_x01_y12 0.64
+	agent_at_x02_y12 agent_at_x02_y11 0.04
+	agent_at_x02_y12 agent_at_x02_y12 0.16
+	agent_at_x02_y13 agent_at_x01_y12 0.16
+	agent_at_x02_y13 agent_at_x01_y13 0.64
+	agent_at_x02_y13 agent_at_x02_y12 0.04
+	agent_at_x02_y13 agent_at_x02_y13 0.16
+	agent_at_x02_y14 agent_at_x01_y13 0.16
+	agent_at_x02_y14 agent_at_x01_y14 0.64
+	agent_at_x02_y14 agent_at_x02_y13 0.04
+	agent_at_x02_y14 agent_at_x02_y14 0.16
+	agent_at_x02_y15 agent_at_x01_y14 0.16
+	agent_at_x02_y15 agent_at_x01_y15 0.64
+	agent_at_x02_y15 agent_at_x02_y14 0.04
+	agent_at_x02_y15 agent_at_x02_y15 0.16
+	agent_at_x02_y16 agent_at_x01_y15 0.16
+	agent_at_x02_y16 agent_at_x01_y16 0.64
+	agent_at_x02_y16 agent_at_x02_y15 0.04
+	agent_at_x02_y16 agent_at_x02_y16 0.16
+	agent_at_x02_y17 agent_at_x01_y16 0.16
+	agent_at_x02_y17 agent_at_x01_y17 0.64
+	agent_at_x02_y17 agent_at_x02_y16 0.04
+	agent_at_x02_y17 agent_at_x02_y17 0.16
+	agent_at_x02_y18 agent_at_x01_y17 0.16
+	agent_at_x02_y18 agent_at_x01_y18 0.64
+	agent_at_x02_y18 agent_at_x02_y17 0.04
+	agent_at_x02_y18 agent_at_x02_y18 0.16
+	agent_at_x02_y19 agent_at_x01_y18 0.16
+	agent_at_x02_y19 agent_at_x01_y19 0.64
+	agent_at_x02_y19 agent_at_x02_y18 0.04
+	agent_at_x02_y19 agent_at_x02_y19 0.16
+	agent_at_x02_y20 agent_at_x01_y19 0.16
+	agent_at_x02_y20 agent_at_x01_y20 0.64
+	agent_at_x02_y20 agent_at_x02_y19 0.04
+	agent_at_x02_y20 agent_at_x02_y20 0.16
+	agent_at_x02_y21 agent_at_x01_y20 0.16
+	agent_at_x02_y21 agent_at_x01_y21 0.64
+	agent_at_x02_y21 agent_at_x02_y20 0.04
+	agent_at_x02_y21 agent_at_x02_y21 0.16
+	agent_at_x02_y22 agent_at_x01_y21 0.16
+	agent_at_x02_y22 agent_at_x01_y22 0.64
+	agent_at_x02_y22 agent_at_x02_y21 0.04
+	agent_at_x02_y22 agent_at_x02_y22 0.16
+	agent_at_x02_y23 agent_at_x01_y22 0.16
+	agent_at_x02_y23 agent_at_x01_y23 0.64
+	agent_at_x02_y23 agent_at_x02_y22 0.04
+	agent_at_x02_y23 agent_at_x02_y23 0.16
+	agent_at_x02_y24 agent_at_x01_y23 0.16
+	agent_at_x02_y24 agent_at_x01_y24 0.64
+	agent_at_x02_y24 agent_at_x02_y23 0.04
+	agent_at_x02_y24 agent_at_x02_y24 0.16
+	agent_at_x02_y25 agent_at_x01_y25 1.0
+	agent_at_x03_y01 agent_at_x01_y01 1.0
+	agent_at_x03_y02 agent_at_x02_y01 0.16
+	agent_at_x03_y02 agent_at_x02_y02 0.64
+	agent_at_x03_y02 agent_at_x03_y01 0.04
+	agent_at_x03_y02 agent_at_x03_y02 0.16
+	agent_at_x03_y03 agent_at_x02_y02 0.16
+	agent_at_x03_y03 agent_at_x02_y03 0.64
+	agent_at_x03_y03 agent_at_x03_y02 0.04
+	agent_at_x03_y03 agent_at_x03_y03 0.16
+	agent_at_x03_y04 agent_at_x02_y03 0.16
+	agent_at_x03_y04 agent_at_x02_y04 0.64
+	agent_at_x03_y04 agent_at_x03_y03 0.04
+	agent_at_x03_y04 agent_at_x03_y04 0.16
+	agent_at_x03_y05 agent_at_x02_y04 0.16
+	agent_at_x03_y05 agent_at_x02_y05 0.64
+	agent_at_x03_y05 agent_at_x03_y04 0.04
+	agent_at_x03_y05 agent_at_x03_y05 0.16
+	agent_at_x03_y06 agent_at_x02_y05 0.16
+	agent_at_x03_y06 agent_at_x02_y06 0.64
+	agent_at_x03_y06 agent_at_x03_y05 0.04
+	agent_at_x03_y06 agent_at_x03_y06 0.16
+	agent_at_x03_y07 agent_at_x02_y06 0.16
+	agent_at_x03_y07 agent_at_x02_y07 0.64
+	agent_at_x03_y07 agent_at_x03_y06 0.04
+	agent_at_x03_y07 agent_at_x03_y07 0.16
+	agent_at_x03_y08 agent_at_x02_y07 0.16
+	agent_at_x03_y08 agent_at_x02_y08 0.64
+	agent_at_x03_y08 agent_at_x03_y07 0.04
+	agent_at_x03_y08 agent_at_x03_y08 0.16
+	agent_at_x03_y09 agent_at_x02_y08 0.16
+	agent_at_x03_y09 agent_at_x02_y09 0.64
+	agent_at_x03_y09 agent_at_x03_y08 0.04
+	agent_at_x03_y09 agent_at_x03_y09 0.16
+	agent_at_x03_y10 agent_at_x02_y09 0.16
+	agent_at_x03_y10 agent_at_x02_y10 0.64
+	agent_at_x03_y10 agent_at_x03_y09 0.04
+	agent_at_x03_y10 agent_at_x03_y10 0.16
+	agent_at_x03_y11 agent_at_x02_y10 0.16
+	agent_at_x03_y11 agent_at_x02_y11 0.64
+	agent_at_x03_y11 agent_at_x03_y10 0.04
+	agent_at_x03_y11 agent_at_x03_y11 0.16
+	agent_at_x03_y12 agent_at_x02_y11 0.16
+	agent_at_x03_y12 agent_at_x02_y12 0.64
+	agent_at_x03_y12 agent_at_x03_y11 0.04
+	agent_at_x03_y12 agent_at_x03_y12 0.16
+	agent_at_x03_y13 agent_at_x02_y12 0.16
+	agent_at_x03_y13 agent_at_x02_y13 0.64
+	agent_at_x03_y13 agent_at_x03_y12 0.04
+	agent_at_x03_y13 agent_at_x03_y13 0.16
+	agent_at_x03_y14 agent_at_x02_y13 0.16
+	agent_at_x03_y14 agent_at_x02_y14 0.64
+	agent_at_x03_y14 agent_at_x03_y13 0.04
+	agent_at_x03_y14 agent_at_x03_y14 0.16
+	agent_at_x03_y15 agent_at_x02_y14 0.16
+	agent_at_x03_y15 agent_at_x02_y15 0.64
+	agent_at_x03_y15 agent_at_x03_y14 0.04
+	agent_at_x03_y15 agent_at_x03_y15 0.16
+	agent_at_x03_y16 agent_at_x02_y15 0.16
+	agent_at_x03_y16 agent_at_x02_y16 0.64
+	agent_at_x03_y16 agent_at_x03_y15 0.04
+	agent_at_x03_y16 agent_at_x03_y16 0.16
+	agent_at_x03_y17 agent_at_x02_y16 0.16
+	agent_at_x03_y17 agent_at_x02_y17 0.64
+	agent_at_x03_y17 agent_at_x03_y16 0.04
+	agent_at_x03_y17 agent_at_x03_y17 0.16
+	agent_at_x03_y18 agent_at_x02_y17 0.16
+	agent_at_x03_y18 agent_at_x02_y18 0.64
+	agent_at_x03_y18 agent_at_x03_y17 0.04
+	agent_at_x03_y18 agent_at_x03_y18 0.16
+	agent_at_x03_y19 agent_at_x02_y18 0.16
+	agent_at_x03_y19 agent_at_x02_y19 0.64
+	agent_at_x03_y19 agent_at_x03_y18 0.04
+	agent_at_x03_y19 agent_at_x03_y19 0.16
+	agent_at_x03_y20 agent_at_x02_y19 0.16
+	agent_at_x03_y20 agent_at_x02_y20 0.64
+	agent_at_x03_y20 agent_at_x03_y19 0.04
+	agent_at_x03_y20 agent_at_x03_y20 0.16
+	agent_at_x03_y21 agent_at_x02_y20 0.16
+	agent_at_x03_y21 agent_at_x02_y21 0.64
+	agent_at_x03_y21 agent_at_x03_y20 0.04
+	agent_at_x03_y21 agent_at_x03_y21 0.16
+	agent_at_x03_y22 agent_at_x02_y21 0.16
+	agent_at_x03_y22 agent_at_x02_y22 0.64
+	agent_at_x03_y22 agent_at_x03_y21 0.04
+	agent_at_x03_y22 agent_at_x03_y22 0.16
+	agent_at_x03_y23 agent_at_x02_y22 0.16
+	agent_at_x03_y23 agent_at_x02_y23 0.64
+	agent_at_x03_y23 agent_at_x03_y22 0.04
+	agent_at_x03_y23 agent_at_x03_y23 0.16
+	agent_at_x03_y24 agent_at_x02_y23 0.16
+	agent_at_x03_y24 agent_at_x02_y24 0.64
+	agent_at_x03_y24 agent_at_x03_y23 0.04
+	agent_at_x03_y24 agent_at_x03_y24 0.16
+	agent_at_x03_y25 agent_at_x02_y25 1.0
+	agent_at_x04_y01 agent_at_x01_y01 1.0
+	agent_at_x04_y02 agent_at_x03_y01 0.16
+	agent_at_x04_y02 agent_at_x03_y02 0.64
+	agent_at_x04_y02 agent_at_x04_y01 0.04
+	agent_at_x04_y02 agent_at_x04_y02 0.16
+	agent_at_x04_y03 agent_at_x03_y02 0.16
+	agent_at_x04_y03 agent_at_x03_y03 0.64
+	agent_at_x04_y03 agent_at_x04_y02 0.04
+	agent_at_x04_y03 agent_at_x04_y03 0.16
+	agent_at_x04_y04 agent_at_x03_y03 0.16
+	agent_at_x04_y04 agent_at_x03_y04 0.64
+	agent_at_x04_y04 agent_at_x04_y03 0.04
+	agent_at_x04_y04 agent_at_x04_y04 0.16
+	agent_at_x04_y05 agent_at_x03_y04 0.16
+	agent_at_x04_y05 agent_at_x03_y05 0.64
+	agent_at_x04_y05 agent_at_x04_y04 0.04
+	agent_at_x04_y05 agent_at_x04_y05 0.16
+	agent_at_x04_y06 agent_at_x03_y05 0.16
+	agent_at_x04_y06 agent_at_x03_y06 0.64
+	agent_at_x04_y06 agent_at_x04_y05 0.04
+	agent_at_x04_y06 agent_at_x04_y06 0.16
+	agent_at_x04_y07 agent_at_x03_y06 0.16
+	agent_at_x04_y07 agent_at_x03_y07 0.64
+	agent_at_x04_y07 agent_at_x04_y06 0.04
+	agent_at_x04_y07 agent_at_x04_y07 0.16
+	agent_at_x04_y08 agent_at_x03_y07 0.16
+	agent_at_x04_y08 agent_at_x03_y08 0.64
+	agent_at_x04_y08 agent_at_x04_y07 0.04
+	agent_at_x04_y08 agent_at_x04_y08 0.16
+	agent_at_x04_y09 agent_at_x03_y08 0.16
+	agent_at_x04_y09 agent_at_x03_y09 0.64
+	agent_at_x04_y09 agent_at_x04_y08 0.04
+	agent_at_x04_y09 agent_at_x04_y09 0.16
+	agent_at_x04_y10 agent_at_x03_y09 0.16
+	agent_at_x04_y10 agent_at_x03_y10 0.64
+	agent_at_x04_y10 agent_at_x04_y09 0.04
+	agent_at_x04_y10 agent_at_x04_y10 0.16
+	agent_at_x04_y11 agent_at_x03_y10 0.16
+	agent_at_x04_y11 agent_at_x03_y11 0.64
+	agent_at_x04_y11 agent_at_x04_y10 0.04
+	agent_at_x04_y11 agent_at_x04_y11 0.16
+	agent_at_x04_y12 agent_at_x03_y11 0.16
+	agent_at_x04_y12 agent_at_x03_y12 0.64
+	agent_at_x04_y12 agent_at_x04_y11 0.04
+	agent_at_x04_y12 agent_at_x04_y12 0.16
+	agent_at_x04_y13 agent_at_x03_y12 0.16
+	agent_at_x04_y13 agent_at_x03_y13 0.64
+	agent_at_x04_y13 agent_at_x04_y12 0.04
+	agent_at_x04_y13 agent_at_x04_y13 0.16
+	agent_at_x04_y14 agent_at_x03_y13 0.16
+	agent_at_x04_y14 agent_at_x03_y14 0.64
+	agent_at_x04_y14 agent_at_x04_y13 0.04
+	agent_at_x04_y14 agent_at_x04_y14 0.16
+	agent_at_x04_y15 agent_at_x03_y14 0.16
+	agent_at_x04_y15 agent_at_x03_y15 0.64
+	agent_at_x04_y15 agent_at_x04_y14 0.04
+	agent_at_x04_y15 agent_at_x04_y15 0.16
+	agent_at_x04_y16 agent_at_x03_y15 0.16
+	agent_at_x04_y16 agent_at_x03_y16 0.64
+	agent_at_x04_y16 agent_at_x04_y15 0.04
+	agent_at_x04_y16 agent_at_x04_y16 0.16
+	agent_at_x04_y17 agent_at_x03_y16 0.16
+	agent_at_x04_y17 agent_at_x03_y17 0.64
+	agent_at_x04_y17 agent_at_x04_y16 0.04
+	agent_at_x04_y17 agent_at_x04_y17 0.16
+	agent_at_x04_y18 agent_at_x03_y17 0.16
+	agent_at_x04_y18 agent_at_x03_y18 0.64
+	agent_at_x04_y18 agent_at_x04_y17 0.04
+	agent_at_x04_y18 agent_at_x04_y18 0.16
+	agent_at_x04_y19 agent_at_x03_y18 0.16
+	agent_at_x04_y19 agent_at_x03_y19 0.64
+	agent_at_x04_y19 agent_at_x04_y18 0.04
+	agent_at_x04_y19 agent_at_x04_y19 0.16
+	agent_at_x04_y20 agent_at_x03_y19 0.16
+	agent_at_x04_y20 agent_at_x03_y20 0.64
+	agent_at_x04_y20 agent_at_x04_y19 0.04
+	agent_at_x04_y20 agent_at_x04_y20 0.16
+	agent_at_x04_y21 agent_at_x03_y20 0.16
+	agent_at_x04_y21 agent_at_x03_y21 0.64
+	agent_at_x04_y21 agent_at_x04_y20 0.04
+	agent_at_x04_y21 agent_at_x04_y21 0.16
+	agent_at_x04_y22 agent_at_x03_y21 0.16
+	agent_at_x04_y22 agent_at_x03_y22 0.64
+	agent_at_x04_y22 agent_at_x04_y21 0.04
+	agent_at_x04_y22 agent_at_x04_y22 0.16
+	agent_at_x04_y23 agent_at_x03_y22 0.16
+	agent_at_x04_y23 agent_at_x03_y23 0.64
+	agent_at_x04_y23 agent_at_x04_y22 0.04
+	agent_at_x04_y23 agent_at_x04_y23 0.16
+	agent_at_x04_y24 agent_at_x03_y23 0.16
+	agent_at_x04_y24 agent_at_x03_y24 0.64
+	agent_at_x04_y24 agent_at_x04_y23 0.04
+	agent_at_x04_y24 agent_at_x04_y24 0.16
+	agent_at_x04_y25 agent_at_x03_y25 1.0
+	agent_at_x05_y01 agent_at_x05_y01 1.0
+	agent_at_x05_y02 agent_at_x04_y02 1.0
+	agent_at_x05_y03 agent_at_x04_y03 1.0
+	agent_at_x05_y04 agent_at_x04_y04 1.0
+	agent_at_x05_y05 agent_at_x04_y05 1.0
+	agent_at_x05_y06 agent_at_x04_y06 1.0
+	agent_at_x05_y07 agent_at_x04_y07 1.0
+	agent_at_x05_y08 agent_at_x04_y08 1.0
+	agent_at_x05_y09 agent_at_x04_y09 1.0
+	agent_at_x05_y10 agent_at_x04_y10 1.0
+	agent_at_x05_y11 agent_at_x04_y11 1.0
+	agent_at_x05_y12 agent_at_x04_y12 1.0
+	agent_at_x05_y13 agent_at_x04_y13 1.0
+	agent_at_x05_y14 agent_at_x04_y14 1.0
+	agent_at_x05_y15 agent_at_x04_y15 1.0
+	agent_at_x05_y16 agent_at_x04_y16 1.0
+	agent_at_x05_y17 agent_at_x04_y17 1.0
+	agent_at_x05_y18 agent_at_x04_y18 1.0
+	agent_at_x05_y19 agent_at_x04_y19 1.0
+	agent_at_x05_y20 agent_at_x04_y20 1.0
+	agent_at_x05_y21 agent_at_x04_y21 1.0
+	agent_at_x05_y22 agent_at_x04_y22 1.0
+	agent_at_x05_y23 agent_at_x04_y23 1.0
+	agent_at_x05_y24 agent_at_x04_y24 1.0
+	agent_at_x05_y25 agent_at_x04_y25 1.0
+endaction
+
+action move-east
+	agent_at_x01_y01 agent_at_x02_y01 1.0
+	agent_at_x01_y02 agent_at_x02_y02 1.0
+	agent_at_x01_y03 agent_at_x02_y03 1.0
+	agent_at_x01_y04 agent_at_x02_y04 1.0
+	agent_at_x01_y05 agent_at_x02_y05 1.0
+	agent_at_x01_y06 agent_at_x02_y06 1.0
+	agent_at_x01_y07 agent_at_x02_y07 1.0
+	agent_at_x01_y08 agent_at_x02_y08 1.0
+	agent_at_x01_y09 agent_at_x02_y09 1.0
+	agent_at_x01_y10 agent_at_x02_y10 1.0
+	agent_at_x01_y11 agent_at_x02_y11 1.0
+	agent_at_x01_y12 agent_at_x02_y12 1.0
+	agent_at_x01_y13 agent_at_x02_y13 1.0
+	agent_at_x01_y14 agent_at_x02_y14 1.0
+	agent_at_x01_y15 agent_at_x02_y15 1.0
+	agent_at_x01_y16 agent_at_x02_y16 1.0
+	agent_at_x01_y17 agent_at_x02_y17 1.0
+	agent_at_x01_y18 agent_at_x02_y18 1.0
+	agent_at_x01_y19 agent_at_x02_y19 1.0
+	agent_at_x01_y20 agent_at_x02_y20 1.0
+	agent_at_x01_y21 agent_at_x02_y21 1.0
+	agent_at_x01_y22 agent_at_x02_y22 1.0
+	agent_at_x01_y23 agent_at_x02_y23 1.0
+	agent_at_x01_y24 agent_at_x02_y24 1.0
+	agent_at_x01_y25 agent_at_x02_y25 1.0
+	agent_at_x02_y01 agent_at_x01_y01 1.0
+	agent_at_x02_y02 agent_at_x02_y01 0.04
+	agent_at_x02_y02 agent_at_x02_y02 0.16
+	agent_at_x02_y02 agent_at_x03_y01 0.16
+	agent_at_x02_y02 agent_at_x03_y02 0.64
+	agent_at_x02_y03 agent_at_x02_y02 0.04
+	agent_at_x02_y03 agent_at_x02_y03 0.16
+	agent_at_x02_y03 agent_at_x03_y02 0.16
+	agent_at_x02_y03 agent_at_x03_y03 0.64
+	agent_at_x02_y04 agent_at_x02_y03 0.04
+	agent_at_x02_y04 agent_at_x02_y04 0.16
+	agent_at_x02_y04 agent_at_x03_y03 0.16
+	agent_at_x02_y04 agent_at_x03_y04 0.64
+	agent_at_x02_y05 agent_at_x02_y04 0.04
+	agent_at_x02_y05 agent_at_x02_y05 0.16
+	agent_at_x02_y05 agent_at_x03_y04 0.16
+	agent_at_x02_y05 agent_at_x03_y05 0.64
+	agent_at_x02_y06 agent_at_x02_y05 0.04
+	agent_at_x02_y06 agent_at_x02_y06 0.16
+	agent_at_x02_y06 agent_at_x03_y05 0.16
+	agent_at_x02_y06 agent_at_x03_y06 0.64
+	agent_at_x02_y07 agent_at_x02_y06 0.04
+	agent_at_x02_y07 agent_at_x02_y07 0.16
+	agent_at_x02_y07 agent_at_x03_y06 0.16
+	agent_at_x02_y07 agent_at_x03_y07 0.64
+	agent_at_x02_y08 agent_at_x02_y07 0.04
+	agent_at_x02_y08 agent_at_x02_y08 0.16
+	agent_at_x02_y08 agent_at_x03_y07 0.16
+	agent_at_x02_y08 agent_at_x03_y08 0.64
+	agent_at_x02_y09 agent_at_x02_y08 0.04
+	agent_at_x02_y09 agent_at_x02_y09 0.16
+	agent_at_x02_y09 agent_at_x03_y08 0.16
+	agent_at_x02_y09 agent_at_x03_y09 0.64
+	agent_at_x02_y10 agent_at_x02_y09 0.04
+	agent_at_x02_y10 agent_at_x02_y10 0.16
+	agent_at_x02_y10 agent_at_x03_y09 0.16
+	agent_at_x02_y10 agent_at_x03_y10 0.64
+	agent_at_x02_y11 agent_at_x02_y10 0.04
+	agent_at_x02_y11 agent_at_x02_y11 0.16
+	agent_at_x02_y11 agent_at_x03_y10 0.16
+	agent_at_x02_y11 agent_at_x03_y11 0.64
+	agent_at_x02_y12 agent_at_x02_y11 0.04
+	agent_at_x02_y12 agent_at_x02_y12 0.16
+	agent_at_x02_y12 agent_at_x03_y11 0.16
+	agent_at_x02_y12 agent_at_x03_y12 0.64
+	agent_at_x02_y13 agent_at_x02_y12 0.04
+	agent_at_x02_y13 agent_at_x02_y13 0.16
+	agent_at_x02_y13 agent_at_x03_y12 0.16
+	agent_at_x02_y13 agent_at_x03_y13 0.64
+	agent_at_x02_y14 agent_at_x02_y13 0.04
+	agent_at_x02_y14 agent_at_x02_y14 0.16
+	agent_at_x02_y14 agent_at_x03_y13 0.16
+	agent_at_x02_y14 agent_at_x03_y14 0.64
+	agent_at_x02_y15 agent_at_x02_y14 0.04
+	agent_at_x02_y15 agent_at_x02_y15 0.16
+	agent_at_x02_y15 agent_at_x03_y14 0.16
+	agent_at_x02_y15 agent_at_x03_y15 0.64
+	agent_at_x02_y16 agent_at_x02_y15 0.04
+	agent_at_x02_y16 agent_at_x02_y16 0.16
+	agent_at_x02_y16 agent_at_x03_y15 0.16
+	agent_at_x02_y16 agent_at_x03_y16 0.64
+	agent_at_x02_y17 agent_at_x02_y16 0.04
+	agent_at_x02_y17 agent_at_x02_y17 0.16
+	agent_at_x02_y17 agent_at_x03_y16 0.16
+	agent_at_x02_y17 agent_at_x03_y17 0.64
+	agent_at_x02_y18 agent_at_x02_y17 0.04
+	agent_at_x02_y18 agent_at_x02_y18 0.16
+	agent_at_x02_y18 agent_at_x03_y17 0.16
+	agent_at_x02_y18 agent_at_x03_y18 0.64
+	agent_at_x02_y19 agent_at_x02_y18 0.04
+	agent_at_x02_y19 agent_at_x02_y19 0.16
+	agent_at_x02_y19 agent_at_x03_y18 0.16
+	agent_at_x02_y19 agent_at_x03_y19 0.64
+	agent_at_x02_y20 agent_at_x02_y19 0.04
+	agent_at_x02_y20 agent_at_x02_y20 0.16
+	agent_at_x02_y20 agent_at_x03_y19 0.16
+	agent_at_x02_y20 agent_at_x03_y20 0.64
+	agent_at_x02_y21 agent_at_x02_y20 0.04
+	agent_at_x02_y21 agent_at_x02_y21 0.16
+	agent_at_x02_y21 agent_at_x03_y20 0.16
+	agent_at_x02_y21 agent_at_x03_y21 0.64
+	agent_at_x02_y22 agent_at_x02_y21 0.04
+	agent_at_x02_y22 agent_at_x02_y22 0.16
+	agent_at_x02_y22 agent_at_x03_y21 0.16
+	agent_at_x02_y22 agent_at_x03_y22 0.64
+	agent_at_x02_y23 agent_at_x02_y22 0.04
+	agent_at_x02_y23 agent_at_x02_y23 0.16
+	agent_at_x02_y23 agent_at_x03_y22 0.16
+	agent_at_x02_y23 agent_at_x03_y23 0.64
+	agent_at_x02_y24 agent_at_x02_y23 0.04
+	agent_at_x02_y24 agent_at_x02_y24 0.16
+	agent_at_x02_y24 agent_at_x03_y23 0.16
+	agent_at_x02_y24 agent_at_x03_y24 0.64
+	agent_at_x02_y25 agent_at_x03_y25 1.0
+	agent_at_x03_y01 agent_at_x01_y01 1.0
+	agent_at_x03_y02 agent_at_x03_y01 0.04
+	agent_at_x03_y02 agent_at_x03_y02 0.16
+	agent_at_x03_y02 agent_at_x04_y01 0.16
+	agent_at_x03_y02 agent_at_x04_y02 0.64
+	agent_at_x03_y03 agent_at_x03_y02 0.04
+	agent_at_x03_y03 agent_at_x03_y03 0.16
+	agent_at_x03_y03 agent_at_x04_y02 0.16
+	agent_at_x03_y03 agent_at_x04_y03 0.64
+	agent_at_x03_y04 agent_at_x03_y03 0.04
+	agent_at_x03_y04 agent_at_x03_y04 0.16
+	agent_at_x03_y04 agent_at_x04_y03 0.16
+	agent_at_x03_y04 agent_at_x04_y04 0.64
+	agent_at_x03_y05 agent_at_x03_y04 0.04
+	agent_at_x03_y05 agent_at_x03_y05 0.16
+	agent_at_x03_y05 agent_at_x04_y04 0.16
+	agent_at_x03_y05 agent_at_x04_y05 0.64
+	agent_at_x03_y06 agent_at_x03_y05 0.04
+	agent_at_x03_y06 agent_at_x03_y06 0.16
+	agent_at_x03_y06 agent_at_x04_y05 0.16
+	agent_at_x03_y06 agent_at_x04_y06 0.64
+	agent_at_x03_y07 agent_at_x03_y06 0.04
+	agent_at_x03_y07 agent_at_x03_y07 0.16
+	agent_at_x03_y07 agent_at_x04_y06 0.16
+	agent_at_x03_y07 agent_at_x04_y07 0.64
+	agent_at_x03_y08 agent_at_x03_y07 0.04
+	agent_at_x03_y08 agent_at_x03_y08 0.16
+	agent_at_x03_y08 agent_at_x04_y07 0.16
+	agent_at_x03_y08 agent_at_x04_y08 0.64
+	agent_at_x03_y09 agent_at_x03_y08 0.04
+	agent_at_x03_y09 agent_at_x03_y09 0.16
+	agent_at_x03_y09 agent_at_x04_y08 0.16
+	agent_at_x03_y09 agent_at_x04_y09 0.64
+	agent_at_x03_y10 agent_at_x03_y09 0.04
+	agent_at_x03_y10 agent_at_x03_y10 0.16
+	agent_at_x03_y10 agent_at_x04_y09 0.16
+	agent_at_x03_y10 agent_at_x04_y10 0.64
+	agent_at_x03_y11 agent_at_x03_y10 0.04
+	agent_at_x03_y11 agent_at_x03_y11 0.16
+	agent_at_x03_y11 agent_at_x04_y10 0.16
+	agent_at_x03_y11 agent_at_x04_y11 0.64
+	agent_at_x03_y12 agent_at_x03_y11 0.04
+	agent_at_x03_y12 agent_at_x03_y12 0.16
+	agent_at_x03_y12 agent_at_x04_y11 0.16
+	agent_at_x03_y12 agent_at_x04_y12 0.64
+	agent_at_x03_y13 agent_at_x03_y12 0.04
+	agent_at_x03_y13 agent_at_x03_y13 0.16
+	agent_at_x03_y13 agent_at_x04_y12 0.16
+	agent_at_x03_y13 agent_at_x04_y13 0.64
+	agent_at_x03_y14 agent_at_x03_y13 0.04
+	agent_at_x03_y14 agent_at_x03_y14 0.16
+	agent_at_x03_y14 agent_at_x04_y13 0.16
+	agent_at_x03_y14 agent_at_x04_y14 0.64
+	agent_at_x03_y15 agent_at_x03_y14 0.04
+	agent_at_x03_y15 agent_at_x03_y15 0.16
+	agent_at_x03_y15 agent_at_x04_y14 0.16
+	agent_at_x03_y15 agent_at_x04_y15 0.64
+	agent_at_x03_y16 agent_at_x03_y15 0.04
+	agent_at_x03_y16 agent_at_x03_y16 0.16
+	agent_at_x03_y16 agent_at_x04_y15 0.16
+	agent_at_x03_y16 agent_at_x04_y16 0.64
+	agent_at_x03_y17 agent_at_x03_y16 0.04
+	agent_at_x03_y17 agent_at_x03_y17 0.16
+	agent_at_x03_y17 agent_at_x04_y16 0.16
+	agent_at_x03_y17 agent_at_x04_y17 0.64
+	agent_at_x03_y18 agent_at_x03_y17 0.04
+	agent_at_x03_y18 agent_at_x03_y18 0.16
+	agent_at_x03_y18 agent_at_x04_y17 0.16
+	agent_at_x03_y18 agent_at_x04_y18 0.64
+	agent_at_x03_y19 agent_at_x03_y18 0.04
+	agent_at_x03_y19 agent_at_x03_y19 0.16
+	agent_at_x03_y19 agent_at_x04_y18 0.16
+	agent_at_x03_y19 agent_at_x04_y19 0.64
+	agent_at_x03_y20 agent_at_x03_y19 0.04
+	agent_at_x03_y20 agent_at_x03_y20 0.16
+	agent_at_x03_y20 agent_at_x04_y19 0.16
+	agent_at_x03_y20 agent_at_x04_y20 0.64
+	agent_at_x03_y21 agent_at_x03_y20 0.04
+	agent_at_x03_y21 agent_at_x03_y21 0.16
+	agent_at_x03_y21 agent_at_x04_y20 0.16
+	agent_at_x03_y21 agent_at_x04_y21 0.64
+	agent_at_x03_y22 agent_at_x03_y21 0.04
+	agent_at_x03_y22 agent_at_x03_y22 0.16
+	agent_at_x03_y22 agent_at_x04_y21 0.16
+	agent_at_x03_y22 agent_at_x04_y22 0.64
+	agent_at_x03_y23 agent_at_x03_y22 0.04
+	agent_at_x03_y23 agent_at_x03_y23 0.16
+	agent_at_x03_y23 agent_at_x04_y22 0.16
+	agent_at_x03_y23 agent_at_x04_y23 0.64
+	agent_at_x03_y24 agent_at_x03_y23 0.04
+	agent_at_x03_y24 agent_at_x03_y24 0.16
+	agent_at_x03_y24 agent_at_x04_y23 0.16
+	agent_at_x03_y24 agent_at_x04_y24 0.64
+	agent_at_x03_y25 agent_at_x04_y25 1.0
+	agent_at_x04_y01 agent_at_x01_y01 1.0
+	agent_at_x04_y02 agent_at_x04_y01 0.04
+	agent_at_x04_y02 agent_at_x04_y02 0.16
+	agent_at_x04_y02 agent_at_x05_y01 0.16
+	agent_at_x04_y02 agent_at_x05_y02 0.64
+	agent_at_x04_y03 agent_at_x04_y02 0.04
+	agent_at_x04_y03 agent_at_x04_y03 0.16
+	agent_at_x04_y03 agent_at_x05_y02 0.16
+	agent_at_x04_y03 agent_at_x05_y03 0.64
+	agent_at_x04_y04 agent_at_x04_y03 0.04
+	agent_at_x04_y04 agent_at_x04_y04 0.16
+	agent_at_x04_y04 agent_at_x05_y03 0.16
+	agent_at_x04_y04 agent_at_x05_y04 0.64
+	agent_at_x04_y05 agent_at_x04_y04 0.04
+	agent_at_x04_y05 agent_at_x04_y05 0.16
+	agent_at_x04_y05 agent_at_x05_y04 0.16
+	agent_at_x04_y05 agent_at_x05_y05 0.64
+	agent_at_x04_y06 agent_at_x04_y05 0.04
+	agent_at_x04_y06 agent_at_x04_y06 0.16
+	agent_at_x04_y06 agent_at_x05_y05 0.16
+	agent_at_x04_y06 agent_at_x05_y06 0.64
+	agent_at_x04_y07 agent_at_x04_y06 0.04
+	agent_at_x04_y07 agent_at_x04_y07 0.16
+	agent_at_x04_y07 agent_at_x05_y06 0.16
+	agent_at_x04_y07 agent_at_x05_y07 0.64
+	agent_at_x04_y08 agent_at_x04_y07 0.04
+	agent_at_x04_y08 agent_at_x04_y08 0.16
+	agent_at_x04_y08 agent_at_x05_y07 0.16
+	agent_at_x04_y08 agent_at_x05_y08 0.64
+	agent_at_x04_y09 agent_at_x04_y08 0.04
+	agent_at_x04_y09 agent_at_x04_y09 0.16
+	agent_at_x04_y09 agent_at_x05_y08 0.16
+	agent_at_x04_y09 agent_at_x05_y09 0.64
+	agent_at_x04_y10 agent_at_x04_y09 0.04
+	agent_at_x04_y10 agent_at_x04_y10 0.16
+	agent_at_x04_y10 agent_at_x05_y09 0.16
+	agent_at_x04_y10 agent_at_x05_y10 0.64
+	agent_at_x04_y11 agent_at_x04_y10 0.04
+	agent_at_x04_y11 agent_at_x04_y11 0.16
+	agent_at_x04_y11 agent_at_x05_y10 0.16
+	agent_at_x04_y11 agent_at_x05_y11 0.64
+	agent_at_x04_y12 agent_at_x04_y11 0.04
+	agent_at_x04_y12 agent_at_x04_y12 0.16
+	agent_at_x04_y12 agent_at_x05_y11 0.16
+	agent_at_x04_y12 agent_at_x05_y12 0.64
+	agent_at_x04_y13 agent_at_x04_y12 0.04
+	agent_at_x04_y13 agent_at_x04_y13 0.16
+	agent_at_x04_y13 agent_at_x05_y12 0.16
+	agent_at_x04_y13 agent_at_x05_y13 0.64
+	agent_at_x04_y14 agent_at_x04_y13 0.04
+	agent_at_x04_y14 agent_at_x04_y14 0.16
+	agent_at_x04_y14 agent_at_x05_y13 0.16
+	agent_at_x04_y14 agent_at_x05_y14 0.64
+	agent_at_x04_y15 agent_at_x04_y14 0.04
+	agent_at_x04_y15 agent_at_x04_y15 0.16
+	agent_at_x04_y15 agent_at_x05_y14 0.16
+	agent_at_x04_y15 agent_at_x05_y15 0.64
+	agent_at_x04_y16 agent_at_x04_y15 0.04
+	agent_at_x04_y16 agent_at_x04_y16 0.16
+	agent_at_x04_y16 agent_at_x05_y15 0.16
+	agent_at_x04_y16 agent_at_x05_y16 0.64
+	agent_at_x04_y17 agent_at_x04_y16 0.04
+	agent_at_x04_y17 agent_at_x04_y17 0.16
+	agent_at_x04_y17 agent_at_x05_y16 0.16
+	agent_at_x04_y17 agent_at_x05_y17 0.64
+	agent_at_x04_y18 agent_at_x04_y17 0.04
+	agent_at_x04_y18 agent_at_x04_y18 0.16
+	agent_at_x04_y18 agent_at_x05_y17 0.16
+	agent_at_x04_y18 agent_at_x05_y18 0.64
+	agent_at_x04_y19 agent_at_x04_y18 0.04
+	agent_at_x04_y19 agent_at_x04_y19 0.16
+	agent_at_x04_y19 agent_at_x05_y18 0.16
+	agent_at_x04_y19 agent_at_x05_y19 0.64
+	agent_at_x04_y20 agent_at_x04_y19 0.04
+	agent_at_x04_y20 agent_at_x04_y20 0.16
+	agent_at_x04_y20 agent_at_x05_y19 0.16
+	agent_at_x04_y20 agent_at_x05_y20 0.64
+	agent_at_x04_y21 agent_at_x04_y20 0.04
+	agent_at_x04_y21 agent_at_x04_y21 0.16
+	agent_at_x04_y21 agent_at_x05_y20 0.16
+	agent_at_x04_y21 agent_at_x05_y21 0.64
+	agent_at_x04_y22 agent_at_x04_y21 0.04
+	agent_at_x04_y22 agent_at_x04_y22 0.16
+	agent_at_x04_y22 agent_at_x05_y21 0.16
+	agent_at_x04_y22 agent_at_x05_y22 0.64
+	agent_at_x04_y23 agent_at_x04_y22 0.04
+	agent_at_x04_y23 agent_at_x04_y23 0.16
+	agent_at_x04_y23 agent_at_x05_y22 0.16
+	agent_at_x04_y23 agent_at_x05_y23 0.64
+	agent_at_x04_y24 agent_at_x04_y23 0.04
+	agent_at_x04_y24 agent_at_x04_y24 0.16
+	agent_at_x04_y24 agent_at_x05_y23 0.16
+	agent_at_x04_y24 agent_at_x05_y24 0.64
+	agent_at_x04_y25 agent_at_x05_y25 1.0
+	agent_at_x05_y01 agent_at_x05_y01 1.0
+	agent_at_x05_y02 agent_at_x05_y02 1.0
+	agent_at_x05_y03 agent_at_x05_y03 1.0
+	agent_at_x05_y04 agent_at_x05_y04 1.0
+	agent_at_x05_y05 agent_at_x05_y05 1.0
+	agent_at_x05_y06 agent_at_x05_y06 1.0
+	agent_at_x05_y07 agent_at_x05_y07 1.0
+	agent_at_x05_y08 agent_at_x05_y08 1.0
+	agent_at_x05_y09 agent_at_x05_y09 1.0
+	agent_at_x05_y10 agent_at_x05_y10 1.0
+	agent_at_x05_y11 agent_at_x05_y11 1.0
+	agent_at_x05_y12 agent_at_x05_y12 1.0
+	agent_at_x05_y13 agent_at_x05_y13 1.0
+	agent_at_x05_y14 agent_at_x05_y14 1.0
+	agent_at_x05_y15 agent_at_x05_y15 1.0
+	agent_at_x05_y16 agent_at_x05_y16 1.0
+	agent_at_x05_y17 agent_at_x05_y17 1.0
+	agent_at_x05_y18 agent_at_x05_y18 1.0
+	agent_at_x05_y19 agent_at_x05_y19 1.0
+	agent_at_x05_y20 agent_at_x05_y20 1.0
+	agent_at_x05_y21 agent_at_x05_y21 1.0
+	agent_at_x05_y22 agent_at_x05_y22 1.0
+	agent_at_x05_y23 agent_at_x05_y23 1.0
+	agent_at_x05_y24 agent_at_x05_y24 1.0
+	agent_at_x05_y25 agent_at_x05_y25 1.0
+endaction
+
+reward
+	agent_at_x01_y01 -1.0
+	agent_at_x01_y02 -1.0
+	agent_at_x01_y03 -1.0
+	agent_at_x01_y04 -1.0
+	agent_at_x01_y05 -1.0
+	agent_at_x01_y06 -1.0
+	agent_at_x01_y07 -1.0
+	agent_at_x01_y08 -1.0
+	agent_at_x01_y09 -1.0
+	agent_at_x01_y10 -1.0
+	agent_at_x01_y11 -1.0
+	agent_at_x01_y12 -1.0
+	agent_at_x01_y13 -1.0
+	agent_at_x01_y14 -1.0
+	agent_at_x01_y15 -1.0
+	agent_at_x01_y16 -1.0
+	agent_at_x01_y17 -1.0
+	agent_at_x01_y18 -1.0
+	agent_at_x01_y19 -1.0
+	agent_at_x01_y20 -1.0
+	agent_at_x01_y21 -1.0
+	agent_at_x01_y22 -1.0
+	agent_at_x01_y23 -1.0
+	agent_at_x01_y24 -1.0
+	agent_at_x01_y25 -1.0
+	agent_at_x02_y01 -1.0
+	agent_at_x02_y02 -1.0
+	agent_at_x02_y03 -1.0
+	agent_at_x02_y04 -1.0
+	agent_at_x02_y05 -1.0
+	agent_at_x02_y06 -1.0
+	agent_at_x02_y07 -1.0
+	agent_at_x02_y08 -1.0
+	agent_at_x02_y09 -1.0
+	agent_at_x02_y10 -1.0
+	agent_at_x02_y11 -1.0
+	agent_at_x02_y12 -1.0
+	agent_at_x02_y13 -1.0
+	agent_at_x02_y14 -1.0
+	agent_at_x02_y15 -1.0
+	agent_at_x02_y16 -1.0
+	agent_at_x02_y17 -1.0
+	agent_at_x02_y18 -1.0
+	agent_at_x02_y19 -1.0
+	agent_at_x02_y20 -1.0
+	agent_at_x02_y21 -1.0
+	agent_at_x02_y22 -1.0
+	agent_at_x02_y23 -1.0
+	agent_at_x02_y24 -1.0
+	agent_at_x02_y25 -1.0
+	agent_at_x03_y01 -1.0
+	agent_at_x03_y02 -1.0
+	agent_at_x03_y03 -1.0
+	agent_at_x03_y04 -1.0
+	agent_at_x03_y05 -1.0
+	agent_at_x03_y06 -1.0
+	agent_at_x03_y07 -1.0
+	agent_at_x03_y08 -1.0
+	agent_at_x03_y09 -1.0
+	agent_at_x03_y10 -1.0
+	agent_at_x03_y11 -1.0
+	agent_at_x03_y12 -1.0
+	agent_at_x03_y13 -1.0
+	agent_at_x03_y14 -1.0
+	agent_at_x03_y15 -1.0
+	agent_at_x03_y16 -1.0
+	agent_at_x03_y17 -1.0
+	agent_at_x03_y18 -1.0
+	agent_at_x03_y19 -1.0
+	agent_at_x03_y20 -1.0
+	agent_at_x03_y21 -1.0
+	agent_at_x03_y22 -1.0
+	agent_at_x03_y23 -1.0
+	agent_at_x03_y24 -1.0
+	agent_at_x03_y25 -1.0
+	agent_at_x04_y01 -1.0
+	agent_at_x04_y02 -1.0
+	agent_at_x04_y03 -1.0
+	agent_at_x04_y04 -1.0
+	agent_at_x04_y05 -1.0
+	agent_at_x04_y06 -1.0
+	agent_at_x04_y07 -1.0
+	agent_at_x04_y08 -1.0
+	agent_at_x04_y09 -1.0
+	agent_at_x04_y10 -1.0
+	agent_at_x04_y11 -1.0
+	agent_at_x04_y12 -1.0
+	agent_at_x04_y13 -1.0
+	agent_at_x04_y14 -1.0
+	agent_at_x04_y15 -1.0
+	agent_at_x04_y16 -1.0
+	agent_at_x04_y17 -1.0
+	agent_at_x04_y18 -1.0
+	agent_at_x04_y19 -1.0
+	agent_at_x04_y20 -1.0
+	agent_at_x04_y21 -1.0
+	agent_at_x04_y22 -1.0
+	agent_at_x04_y23 -1.0
+	agent_at_x04_y24 -1.0
+	agent_at_x04_y25 -1.0
+	agent_at_x05_y01 -0.0
+	agent_at_x05_y02 -1.0
+	agent_at_x05_y03 -1.0
+	agent_at_x05_y04 -1.0
+	agent_at_x05_y05 -1.0
+	agent_at_x05_y06 -1.0
+	agent_at_x05_y07 -1.0
+	agent_at_x05_y08 -1.0
+	agent_at_x05_y09 -1.0
+	agent_at_x05_y10 -1.0
+	agent_at_x05_y11 -1.0
+	agent_at_x05_y12 -1.0
+	agent_at_x05_y13 -1.0
+	agent_at_x05_y14 -1.0
+	agent_at_x05_y15 -1.0
+	agent_at_x05_y16 -1.0
+	agent_at_x05_y17 -1.0
+	agent_at_x05_y18 -1.0
+	agent_at_x05_y19 -1.0
+	agent_at_x05_y20 -1.0
+	agent_at_x05_y21 -1.0
+	agent_at_x05_y22 -1.0
+	agent_at_x05_y23 -1.0
+	agent_at_x05_y24 -1.0
+	agent_at_x05_y25 -1.0
+endreward
+
+initialstate
+	agent_at_x01_y01
+endinitialstate
+
+goalstate
+	agent_at_x05_y01
+endgoalstate
