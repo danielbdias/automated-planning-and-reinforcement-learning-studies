@@ -1,0 +1,320 @@
+\def\year{2020}\relax
+
+\documentclass[letterpaper]{article}
+
+\usepackage{aaai20}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage[hyphens]{url}
+\usepackage{graphicx}
+\urlstyle{rm}
+\def\UrlFont{\rm}
+
+\usepackage{graphicx}
+\frenchspacing
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[vlined,algoruled,titlenumbered,noend,portugues]{algorithm2e}
+
+\pdfinfo{
+  /Title (Relatório 01 - Algoritmos de Planejamento Probabilístico)
+  /Author (Daniel Baptista Dias)
+}
+
+% /Title (Relatório 01 - Algoritmos de Planejamento Probabilístico)
+% /Author (Daniel Baptista Dias)
+
+\setcounter{secnumdepth}{0} %May be changed to 1 or 2 if section numbers are desired.
+
+% The file aaai20.sty is the style file for AAAI Press proceedings, working notes, and technical reports.
+\setlength\titlebox{2.5in} % If your paper contains an overfull \vbox too high warning at the beginning of the document, use this
+% command to correct it. You may not alter the value below 2.5 in
+
+\title{Relatório 01 - Algoritmos de Planejamento Probabilístico}
+\author{Daniel Baptista Dias}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+TODO
+\end{abstract}
+
+\section{Introdução}
+\label{sec:introducao}
+
+Na disciplina de Inteligência Artificial existe uma área chamada de Planejamento Automatizado
+que estuda formas de como um agente pode tomar um conjunto de decisões em sequência interagindo
+com um ambiente com o objetivo de solucionar um problema.
+
+O foco deste trabalho será em uma das subáreas do Planejamento Automatizado, o Planejamento Probabilístico, onde
+é assumido que o resultado da interação do agente com o ambiente é incerto, e que dada uma ação realizada pelo agente
+em um ambiente dada uma determinada situação, essa ação pode ter diferentes resultados, cuja frequência é ditada por
+uma distribuição de probabilidades.
+
+Um arcabouço utilizado para modelar problemas de Planejamento Probabilístico é utilizar os Processos Markovianos de Decisão
+(MDP, do inglês \textit{Markov Decision Processes})\cite{Puterman-1994} que possui alguns algoritmos conhecidos para resolve-los.
+
+Serão analizados os algoritmos Iteração de Valor \cite{Howard-1960}, RTDP (do inglês, Real Time Dynamic Programming)
+\cite{BartoBradtkeSingh-1995} e LRTDP (Labeled Real Time Dynamic Programming) \cite{BonetGeffer-2003} em relação a como eles
+solucionam os MDPs.
+
+\section{Arcabouço Teórico}
+
+No contexto de tomada de decisões por um agente em um ambiente completamente observável, um Processo de Decisão Markoviano (MDP)
+pode ser descrito por uma tupla $\mathcal{M}=\langle S,A,R,P,\gamma \rangle$, onde:
+
+\begin{itemize}
+    \item $S$ é um conjunto de estados finitos e discretos, que definem a situação do ambiente em um determinado momento;
+    \item $A$ é um conjunto de ações que o agente pode executar;
+    \item $R : S \rightarrow \mathcal{R} $ é a função recompensa, que retorna a recompensa obtida pelo agente ao se alcançar um determinado estado;
+    \item $P : S \times A \times S \rightarrow [0, 1]$ é uma função de transição que retorna a probabilidade de um agente, dado que executou uma ação $a \in A$ em um estado $s \in S$, alcançar o estado $s' \in S$. Neste trabalho uma outra notação que também será usada para representar essa transição é $P(s'|s,a)$.
+\end{itemize}
+
+Neste ambiente a tomada de decisão ocorre por etapas (estágios), onde o agente executa uma ação de cada vez alterando o estado do ambiente e recebendo uma recompensa ou sendo penalizado com um custo (recompensa negativa). Um problema pode ter três tipos de horizonte, caracterizados pela quantidade de estágios de decisão que o agente poderá tomar:
+
+\begin{itemize}
+    \item \textbf{horizonte finito}: o agente tem um número finito de $T$ estágios de decisão;
+    \item \textbf{horizonte infinito}: o agente tem infinitos estágios de decisão ($T = \infty$);
+    \item \textbf{horizonte indeterminado}: o agente tem possui um número de estágios de decisão desconhecido ($T$ desconhecido).
+\end{itemize}
+
+O objetivo do agente neste MDP é encontrar uma política $\pi : S \rightarrow A$ que indique a melhor ação a ser tomada em cada estado $s$ a fim de se obter a maior recompensa possível.
+
+Para identificar esta política pode-se calcular o valor dela para cada estado $s$ através do critério da recompensa esperada total. Esse critério indica o quanto de recompensa um agente pode receber em média a executar uma política $\pi$ a partir do estado $s_0 = s$ até o instante $T$ dado um fator de desconto $\gamma$ (limitado ao intervalo [0, 1]), calculada pela função valor $V : S \rightarrow \mathcal{R} $ para a política $\pi$:
+
+\begin{equation} \label{eq:total_expected_reward}
+    V_\pi(s) = E_\pi \left[ \sum_{T}^{t=0} \gamma^t r_t | s_0 = s \right]
+\end{equation}
+
+Um política ótima $\pi^*$ para um MDP é aquela que tem o maior valor entre todas as outras políticas possíveis para cada estado, ou seja: $V_{\pi^*}(s) \geq V_{pi'}(s), \forall s,\pi'$.
+
+O valor da política ótima $V_{\pi^*}$ pode ser encontrado a partir função valor ótima $V^* = V_{\pi^*}$ definida pela equação de Bellman \cite{Bellman-1966}, que encontra uma função valor que maximize as recompensas esperadas para todo $s \in S$:
+
+\begin{equation} \label{eq:bellman_equation}
+    V^*(s) = R(s) + \max_{a \in A} \left\{ \sum_{s'\in S} P(s'|s,a)V^*(s') \right\}
+\end{equation}
+
+\section{Algoritmos}
+
+Os algoritmos que buscam soluções para MDPs estudados neste artigo são algoritmos que buscam políticas ótimas baseados em programação dinâmica com garantia de convergência. Eles podem ser divididos em dois tipos: os algoritmos síncronos, que buscam calcular o valor da execução de uma política para todos os estados e ir refinando esse valor a cada ciclo de cálculo (iteração) e os algoritmos assíncronos que buscam atualizar os estados de forma arbitrária com garantia de convergência dadas algumas premissas.
+
+O algoritmo Iteração de Valor \cite{Howard-1960} se enquadra na categoria dos algoritmos síncronos e o RTDP \cite{BartoBradtkeSingh-1995} e sua variante o LRTDP \cite{BonetGeffer-2003} se enquadram na categoria de algoritnos assíncronos.
+
+\subsection{Iteração de Valor}
+
+O algoritmo Iteração de Valor (IV, Algoritmo~\ref{alg:iteracao-valor}) é uma solução clássica baseada em programação dinâmica síncrona que busca aplicar a equação de Bellman.
+
+\begin{equation}
+    Q^{t+1}(s,a) = R(s,a) + \gamma \sum_{s' \in S} P(s'|s,a) V^{t}(s') \label{eq:qbackup}
+\end{equation}
+
+\begin{equation}
+    V^{t+1}(s) = \max_{a \in A} \left\{ Q^{t+1}(s,a) \right\} \label{eq:vmax}
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\linesnumbered
+\dontprintsemicolon
+\begin{algorithm}[t!]
+{
+	\caption{\textsc{IteraçãoDeValor}($ V^0, \epsilon $)}
+	\label{alg:iteracao-valor}
+%	\Entrada{ $V^0$ uma função valor arbitrária e $ \epsilon $, o erro máximo permitido entre $V^t$ e $V^{t+1}$. }
+%	\Saida{ $V$, função valor ótima, calculada pelo algoritmo }
+	\Inicio{
+		$t := 0$\\
+		$V^t := V^0$\\
+
+		\Repita {$ \delta < \epsilon $}
+		{
+			$t := t + 1$\\
+
+			\ParaCada {$s \in S$}
+			{
+				$V^{t+1}(s) := s.\textsc{Update}(V^{t})$ \emph{// Ver (\ref{eq:qbackup}) \& (\ref{eq:vmax})}\\
+				\lSe { $ | V^{t+1}(s) - V^t(s) | > \delta $ } { $\delta := | V^{t+1}(s) - V^t(s) | $ }
+			}
+		}
+
+		\Retorna{$V$}
+	}
+}
+\end{algorithm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{RTDP}
+
+bla
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\linesnumbered
+\begin{algorithm}[t]
+{
+	\caption{\textsc{RTDP}($ V^0, s_0, G, maxtime, maxdepth $) $ \to V$}
+	\label{alg:rtdp-enum}
+	\emph{// Algoritmo baseado em \cite{BartoBradtkeSingh-1995}}\\
+%	\Entrada{ $V^0$, uma função valor arbitrária, $s_0$, o estado inicial do sistema,
+%	$ G $, o conjunto de estados meta do problema, $maxtime$, tempo máximo de execução
+%	do algoritmo e $maxdepth$, profundidade máxima de visita em um trial. }
+%	\Saida{ $V$, função valor ótima, calculada pelo algoritmo }
+	\Inicio{
+		\emph{// Inicializa $V$ com a função valor admissível $V^0$}\\
+		$V := V^0$\\
+
+		\Enqto{não tenha excedido $ maxtime $}
+		{
+			$\textit{depth} := 0$\\
+	    		$\textit{s} = s_0 $\\
+
+			\Enqto{$(\textit{s} \notin G ) \wedge (\textit{depth} < \textit{maxdepth})$}
+			{
+				$\mathit{depth} := \mathit{depth} + 1$\\
+				$V(s):= \textit{s}.\textsc{Update}(V)$ \emph{// Veja (\ref{eq:qbackup}) \& (\ref{eq:vmax})}\\
+            	    $a := \textit{s}.\textsc{GreedyAction}(V)$ \emph{// Veja (\ref{eq:greedy_pol})}\\
+            	    $\textit{s} := \textit{s}.\textsc{ChooseNextState}(a)$ \emph{// Veja (\ref{eq:choose-next-state})}\\
+			}
+		}
+
+		\Retorna{$V$}
+	}
+}
+\end{algorithm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{LRTDP}
+
+bla
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\linesnumbered
+\begin{algorithm}[t]
+{
+	\caption{\textsc{LRTDP}($ V^0, s_0, \epsilon, G, maxtime, maxdepth $) $ \to V$}
+	\label{alg:lrtdp-enum}
+	\emph{// Algoritmo baseado em \cite{BonetGeffer-2003}}\\
+%	\Entrada{ $V^0$, uma função valor arbitrária, $s_0$, o estado inicial do sistema,
+%	$\epsilon$, o erro máximo permitido entre $V^t$ e $V^{t+1}$, 	$ G $, o conjunto
+%	de estados meta do problema, $maxtime$, tempo máximo de execução
+%	do algoritmo e $maxdepth$, profundidade máxima de visita em um trial. }
+%	\Saida{ $V$, função valor ótima, calculada pelo algoritmo }
+	\Inicio{
+		\emph{// Inicializa $V$ com a função valor admissível $V^0$}\\
+		$V := V^0$\\
+
+		\Enqto{não tenha excedido $ maxtime \vee s_0.\textsc{Solved}()$}
+		{
+			$\textit{depth} := 0$\\
+			$\textit{visited}$.\textsc{Clear}() \emph{// Limpa a pilha de estados visitados}\\
+	    		$\textit{s} = s_0 $
+
+			\Enqto{$(\neg \textit{s}.\textsc{Solved}()) \wedge (\textit{depth} < \textit{maxdepth})$}
+			{
+				$\mathit{depth} := \mathit{depth} + 1$\\
+				$\mathit{visited}$.\textsc{Push}($\textit{s}$)\\
+
+				\Se{$(\textit{s} \notin G)$}{\textbf{interrompe loop}}
+				$V(s):= \textit{s}.\textsc{Update}(V)$ \emph{// Veja (\ref{eq:qbackup}) \& (\ref{eq:vmax})}\\
+            	    $a := \textit{s}.\textsc{GreedyAction}(V)$ \emph{// Veja (\ref{eq:greedy_pol})}\\
+            	    $\textit{s} := \textit{s}.\textsc{ChooseNextState}(a)$ \emph{// Veja (\ref{eq:choose-next-state})}\\
+			}
+
+			\emph{// Verifica a convergência do estado somente se o trial foi encerrado em um estado-meta ou em um estado resolvido} \\
+			\Se{$(\textit{depth} < \textit{maxdepth})$}
+			{
+				\Enqto{$\neg \textit{visited}$.\textsc{Empty}()}
+				{
+					$\textit{s} := \textit{visited}$.\textsc{Pop}()\\
+					\Se{$ \textit{s}.\textsc{CheckSolved}(V, \epsilon)$} {\textbf{interrompe loop}}
+				}
+			}
+		}
+
+		\Retorna{$V$}
+	}
+}
+\end{algorithm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+lalalal
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\linesnumbered
+\begin{algorithm}[t]
+{
+	\caption{\textsc{CheckSolved}($ V, \textit{s}, \epsilon $) $\longrightarrow rv$ }
+	\label{alg:checksolved}
+	\emph{// Algoritmo baseado em \cite{BonetGeffer-2003}}\\
+%	\Entrada{ $V$, função valor calculada pelo LRTDP, $s$, o estado a ser verificado,
+%	$\epsilon$, o erro máximo permitido entre $V^t$ e $V^{t+1}$. }
+%	\Saida{ $rv$, booleano, indicando que o grafo guloso enraizado a partir de $s$
+%	está resolvido.}
+	\Inicio{
+		$ \textit{rv} = true $\\
+		$ \textit{open} = \varnothing $\\
+		$ \textit{closed} = \varnothing $\\
+		\lSe{$\neg \textit{s}.\textsc{Solved}()$}{ $\textit{open}$.\textsc{Push}($\textit{s}$) }
+
+		\Enqto{$ \neg \textit{open}.\textsc{Empty}() $}
+		{
+			$\textit{s} = \textit{open}$.\textsc{Pop}() \\
+			$\textit{closed}$.\textsc{Push}($\textit{s}$) \\
+
+			\Se{$ \textit{s}.\textsc{Residual}() \geq \epsilon $ }
+			{
+				$ \textit{rv} = false $\\
+				\textbf{continua loop}
+			}
+
+			$\textit{a} = \textit{s}.\textsc{GreedyAction}(V)$ \\
+
+			\ParaCada{$\textit{s'} \in \textit{s}.\textsc{SuccessorStates}(a)$}
+			{
+				\Se{$ \neg \textit{s'}.\textsc{Solved}() \wedge \textit{s'} \notin (\textit{open} \cup \textit{closed})$}
+				{
+					$\textit{open}$.\textsc{Push}($\textit{s'}$)
+				}
+			}
+		}
+
+		\eSe{$ \textit{rv} = true $ }
+		{
+			\ParaCada{$\textit{s'} \in \textit{closed}$}
+			{
+				$\textit{s'}.\textsc{MarkAsSolved}()$
+			}
+		}
+		{
+			\Enqto{$\textit{closed}.\textsc{Empty}()$}
+			{
+				$ \textit{s} = \textit{closed}$.\textsc{Pop}()\\
+				$ V(s) = \textit{s}.\textsc{Update}(V)$
+			}
+		}
+
+		\emph{//$ \textit{rv} $ é retornado como verdadeiro quando $ \textit{s} $ está resolvido} \\
+		\Retorna{$ \textit{rv} $}
+	}
+}
+\end{algorithm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Resultados}
+descreva os experimentos (problema, parâmetros, quantidade de execuções) e avaliação (gráficos, tabelas, etc)
+
+\section{Conclusão}
+discuta os resultados
+
+\bibliography{references.bib}
+\bibliographystyle{aaai}
+
+\end{document}

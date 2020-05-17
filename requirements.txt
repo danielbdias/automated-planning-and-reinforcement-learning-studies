@@ -5,6 +5,7 @@ numpy
 pyddlib
 pylint
 pyyaml
-Sphinx
 watchdog
 watchdog[watchmedo]
+# temp dependencies
+benchmarkit
