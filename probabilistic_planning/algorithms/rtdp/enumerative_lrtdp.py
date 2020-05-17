@@ -76,6 +76,14 @@ def residual(state, mdp, gamma, value_function):
 
     return abs(value_function[state] - quality)
 
+def initial_states_residuals(mdp, gamma, value_function):
+    residuals = []
+
+    for initial_state in mdp.initial_states:
+        residuals.append(residual(initial_state, mdp, gamma, value_function))
+
+    return residuals
+
 def reachable_states(state, action, mdp):
     states = []
 
@@ -157,6 +165,7 @@ def enumerative_lrtdp(mdp, gamma, max_depth, epsilon, initial_value_function = N
     solved_states = []
     bellman_backups_done = 0
     trials = 0
+    maximum_residuals = []
 
     while not all_states_solved(mdp.initial_states, solved_states):
         trials = trials + 1
@@ -189,12 +198,15 @@ def enumerative_lrtdp(mdp, gamma, max_depth, epsilon, initial_value_function = N
             if not solved:
                 break
 
+        maximum_residuals.append(max(initial_states_residuals(mdp, gamma, value_function)))
+
     # compute policy
     policy = compute_policy(mdp, gamma, value_function)
 
     statistics = {
         "iterations": trials,
-        "bellman_backups_done": bellman_backups_done
+        "bellman_backups_done": bellman_backups_done,
+        "maximum_residuals": maximum_residuals
     }
 
     return policy, value_function, statistics

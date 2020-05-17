@@ -63,14 +63,38 @@ def compute_policy(mdp, gamma, value_function):
 
     return policy
 
-def enumerative_rtdp(mdp, gamma, trials, max_depth, initial_value_function = None, seed = None):
+def residual(state, mdp, gamma, value_function):
+    action = compute_greedy_action(state, mdp, gamma, value_function)
+    quality = compute_quality(state, action, mdp, gamma, value_function)
+
+    return abs(value_function[state] - quality)
+
+def initial_states_residuals(mdp, gamma, value_function):
+    residuals = []
+
+    for initial_state in mdp.initial_states:
+        residuals.append(residual(initial_state, mdp, gamma, value_function))
+
+    return residuals
+
+def all_initial_states_converged(mdp, gamma, value_function, epsilon):
+    residuals = initial_states_residuals(mdp, gamma, value_function)
+
+    for residual in residuals:
+        if residual > epsilon:
+            return False
+
+    return True
+
+def enumerative_rtdp(mdp, gamma, max_trials, max_depth, epsilon = None, initial_value_function = None, seed = None):
     """Executes the Real Time Dynamic Programming algorithm.
 
     Parameters:
     mdp (EnumerativeMDP): enumerative Markov Decison Problem to be solved
     gamma (float): discount factor applied to solve this MDP (assumes infinite on indefinite horizon)
-    trials (int): number of trials to execute
+    max_trials (int): maximum number of trials to execute (ignored if an epsilon is informed)
     max_depth (int): max depth to search (used to avoid infinite loops on deadends)
+    epsilon (float): optional maximum residual allowed between V_k and V_{k+1}
     initial_value_function (EnumerativeValueFunction): initial value function to start the algorithm. If this value
                                                        is ommited, the algorithm will consider a initial value function that
                                                        that returns 0 (zero) for all states.
@@ -93,8 +117,11 @@ def enumerative_rtdp(mdp, gamma, trials, max_depth, initial_value_function = Non
         np.random.seed(seed)
 
     bellman_backups_done = 0
+    trials = 0
+    maximum_residuals = []
 
-    for trial in range(0, trials):
+    while True:
+        trials = trials + 1
         visited_states = []
         initial_state = np.random.choice(mdp.initial_states)
 
@@ -112,12 +139,21 @@ def enumerative_rtdp(mdp, gamma, trials, max_depth, initial_value_function = Non
             if len(visited_states) > max_depth:
                 break
 
+        maximum_residuals.append(max(initial_states_residuals(mdp, gamma, value_function)))
+
+        if trials >= max_trials and epsilon is None:
+            break
+
+        if epsilon is not None and all_initial_states_converged(mdp, gamma, value_function, epsilon):
+            break
+
     # compute policy
     policy = compute_policy(mdp, gamma, value_function)
 
     statistics = {
         "iterations": trials,
-        "bellman_backups_done": bellman_backups_done
+        "bellman_backups_done": bellman_backups_done,
+        "maximum_residuals": maximum_residuals
     }
 
     return policy, value_function, statistics
