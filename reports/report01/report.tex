@@ -18,6 +18,9 @@
 
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[vlined,algoruled,titlenumbered,noend,portugues]{algorithm2e}
+\usepackage{booktabs}
+
+\graphicspath{{./images/}}
 
 \pdfinfo{
   /Title (Relatório 01 - Algoritmos de Planejamento Probabilístico)
@@ -39,10 +42,6 @@
 \begin{document}
 
 \maketitle
-
-\begin{abstract}
-TODO
-\end{abstract}
 
 \section{Introdução}
 \label{sec:introducao}
@@ -96,7 +95,7 @@ Um política ótima $\pi^*$ para um MDP é aquela que tem o maior valor entre to
 O valor da política ótima $V_{\pi^*}$ pode ser encontrado a partir função valor ótima $V^* = V_{\pi^*}$ definida pela equação de Bellman \cite{Bellman-1966}, que encontra uma função valor que maximize as recompensas esperadas para todo $s \in S$:
 
 \begin{equation} \label{eq:bellman_equation}
-    V^*(s) = R(s) + \max_{a \in A} \left\{ \sum_{s'\in S} P(s'|s,a)V^*(s') \right\}
+    V^*(s) = R(s) + \max_{a \in A} \left\{ \gamma \sum_{s'\in S} P(s'|s,a)V^*(s') \right\}
 \end{equation}
 
 \section{Algoritmos}
@@ -116,7 +115,7 @@ O algoritmo Iteração de Valor (IV, Algoritmo~\ref{alg:iteracao-valor}) é uma 
 onde $ Q^{t+1}(s,a) $ é considerado uma função qualidade, definida por:
 
 \begin{equation} \label{eq:quality_function}
-    Q^{t+1}(s,a) = R(s) + \sum_{s'\in S} P(s'|s,a)V^t(s')
+    Q^{t+1}(s,a) = R(s) + \gamma \sum_{s'\in S} P(s'|s,a)V^t(s')
 \end{equation}
 
 Outro nome considerado para a aplicação da Equação \ref{eq:bellman_operator} na Iteração de Valor e nos outros algoritmos de programação dinâmica é o \textsc{BellmanBackup}, da seguinte forma:
@@ -325,12 +324,69 @@ Com esta rotina de rotulação e com a condição de término dos trials incluin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Resultados}
-descreva os experimentos (problema, parâmetros, quantidade de execuções) e avaliação (gráficos, tabelas, etc)
+\section{Experimentos e Resultados}
 
-% comparar convergência
+Serão realizados três experimentos neste trabalho:
 
-% montar mapa de calor
+\begin{itemize}
+    \item 1. Comparação de convergência dos algoritmos;
+    \item 2. Performance dos algoritmos de acordo com o tamanho dos problemas;
+    \item 3. Comportamento dos algoritmos variando o estado inicial do agente.
+\end{itemize}
+
+Em todos esses experimentos será o domínio \emph{"Travessia do Rio"}: um agente começa em uma ponta seca do rio e deve ir a outra ponta (Figura \ref{fig:river-traversal-scheme}) podendo se movimentar em quatro direções (norte, sul, leste e oeste). Nele, o agente pode andar por duas áreas: uma área seca (descrita pela parte marrom do grid) onde os movimentos que o agente executar são determinísticos, ou a área molhada (parte azul do grid) onde ao se movimentar, o agente tem uma chance de ao invés de ir para o local desejado, ser "arrastado" em direção a cachoeira. Caso ele atinja a região da cachoira ele voltará para o estado inicial.
+
+Modelando-o como um MDP, os estados são a posição do agente no grid, as ações são os quatro movimentos possíveis do agente e a recompensa (neste caso custo) é de $-1$ para todos os estados exceto a meta.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{river-traversal}
+    \caption{Estrutura do domínio Travessia de Rio}
+    \label{fig:river-traversal-scheme}
+\end{figure}
+
+Este domínio possui 3 tamanhos de grid: um pequeno ($5 \times 25$, 125 estados), um médio ($20 \times 100$, 2000 estados) e um grande ($50 \times 250$, 12500 estados).
+
+Os experimentos foram executados na plataforma Google Colab com o Python\footnote{Localizado em https://colab.research.google.com/drive/1KVVhy5Zi9TlpmxSn14I9H6K49K568GlY}, na época com 2 CPUs de 2.2 GHz e 13GB de memória. As implementações dos algoritmos estão disponíveis no Github\footnote{Localizado em https://github.com/danielbdias/automated-planning-and-reinforcement-learning-studies}.
+
+A menos que o experimento diga o contrário, o resíduo máximo considerado será $ \epsilon = 0.0001 $ e o fator de desconto será de $\gamma = 0.9$.
+
+\subsection{Experimento 1 - Convergência}
+
+Neste experimento foi utilizado o tamanho de grid pequeno, onde os algoritmos foram executados 10 vezes e os valores médios de tempo, iterações (ou trials) e Bellman Backups foi medido. Como critério de parada para o RTDP foram assumidos 100 trials.
+
+\begin{table}[ht]
+    \caption{Métricas médias dos algoritmos}
+    \label{table:exp1-mean-values}
+    \begin{tabular}{llll}
+        \toprule
+        {}                  &      IV &    RTDP &    LRTDP \\
+        \midrule
+        Tempo (em segundos) & 9.38165 &  6.6939 &  5.53093 \\
+        Iterações / Trials  &      33 &     100 &     42.1 \\
+        Bellman Backups     &    4125 &  1423.1 &   1070.7 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Conforme podemos ver na Tabela \ref{table:exp1-mean-values}, o algoritmo que tem a melhor performance média foi o LRTDP, executando em média 42 trials para convergir,
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{initial-state-convergency}
+    \caption{Convergência do estado inicial}
+    \label{fig:initial-state-convergency}
+\end{figure}
+
+%% montar mapa de calor
+
+\subsection{Experimento 2 - Performance}
+
+% experimento 2 comparar performances com o crescimento dos estados
+
+\subsection{Experimento 3 - Alteração dos estados iniciais}
+
+% experimento 3 alteração de estados iniciais
 
 \section{Conclusão}
 discuta os resultados

@@ -2,7 +2,7 @@ import numpy as np
 
 def find_state_index(state_list, state):
     try:
-        index = state_list.index(state)
+        index = state_list[state]
         return index
     except ValueError:
         raise ValueError(f"State [{state}] not found in state set")
@@ -78,7 +78,11 @@ def build_sorted_list(list_value, list_name):
 
 class EnumerativeTransitionFunction:
     def __init__(self, transition_function, actions, states):
-        self.states = build_sorted_list(states, "states")
+        self.states = {}
+
+        for index, state in enumerate(build_sorted_list(states, "states")):
+            self.states[state] = index
+
         self.actions = build_sorted_list(actions, "actions")
         self.transition_matrix_per_action = build_transition_matrix_per_action(transition_function, self.actions, self.states)
 
