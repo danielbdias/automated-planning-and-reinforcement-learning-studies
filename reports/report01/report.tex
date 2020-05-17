@@ -107,15 +107,27 @@ O algoritmo Iteração de Valor \cite{Howard-1960} se enquadra na categoria dos 
 
 \subsection{Iteração de Valor}
 
-O algoritmo Iteração de Valor (IV, Algoritmo~\ref{alg:iteracao-valor}) é uma solução clássica baseada em programação dinâmica síncrona que busca aplicar a equação de Bellman.
+O algoritmo Iteração de Valor (IV, Algoritmo~\ref{alg:iteracao-valor}) é uma solução clássica baseada em programação dinâmica síncrona que busca aplicar a equação de Bellman (Equação \ref{eq:bellman_equation}). Nela iniciamos a função valor com um valor arbitrário $V_0(s), \forall s \in S$ e em cada iteração aplicamos o operador de Bellamn $B$ em cada estado com as seguintes equações:
 
-\begin{equation}
-    Q^{t+1}(s,a) = R(s,a) + \gamma \sum_{s' \in S} P(s'|s,a) V^{t}(s') \label{eq:qbackup}
+\begin{equation} \label{eq:bellman_operator}
+    V^{t+1}(s) = (BV^t)(s) = \max_{a \in A} \left\{ Q^{t+1}(s,a) \right\}
 \end{equation}
 
-\begin{equation}
-    V^{t+1}(s) = \max_{a \in A} \left\{ Q^{t+1}(s,a) \right\} \label{eq:vmax}
+onde $ Q^{t+1}(s,a) $ é considerado uma função qualidade, definida por:
+
+\begin{equation} \label{eq:quality_function}
+    Q^{t+1}(s,a) = R(s) + \sum_{s'\in S} P(s'|s,a)V^t(s')
 \end{equation}
+
+Outro nome considerado para a aplicação da Equação \ref{eq:bellman_operator} na Iteração de Valor e nos outros algoritmos de programação dinâmica é o \textsc{BellmanBackup}, da seguinte forma:
+
+\begin{equation} \label{eq:bellman_backup}
+    \textsc{BellmanBackup}(V^t, s) = (BV^t)(s)
+\end{equation}
+
+Ao aplicar o \textsc{BellmanBackup} em todas os estados assumimos uma propriedade da equação, onde $V^t(s)$ irá convergir para a função valor ótima $V^*(s)$ se realizarmos ele infinitamente, \textit{i.e.}, assumindo um erro $\epsilon_t = \max_s |V^t(s)-V^*(s)|$ temos $\lim_{t \rightarrow \infty} \epsilon_t = 0$.
+
+Neste trabalho será considerado o conceito de $\epsilon$-otimalidade, onde a função valor é ótima se a diferença do valor atual de cada estado e a aplicação de um novo \textsc{BellmanBackup} nele for menor que $\epsilon$ para todos os estados, \textit{i.e.} $ \max_{s \in S} | V(s) - (BV)(s) | \leq \epsilon $.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \linesnumbered
@@ -124,25 +136,21 @@ O algoritmo Iteração de Valor (IV, Algoritmo~\ref{alg:iteracao-valor}) é uma 
 {
 	\caption{\textsc{IteraçãoDeValor}($ V^0, \epsilon $)}
 	\label{alg:iteracao-valor}
-%	\Entrada{ $V^0$ uma função valor arbitrária e $ \epsilon $, o erro máximo permitido entre $V^t$ e $V^{t+1}$. }
-%	\Saida{ $V$, função valor ótima, calculada pelo algoritmo }
-	\Inicio{
-		$t := 0$\\
-		$V^t := V^0$\\
+    $t := 0$\\
+    $V^t := V^0$\\
 
-		\Repita {$ \delta < \epsilon $}
-		{
-			$t := t + 1$\\
+    \Repita {$ \max_{s \in S}(\delta) < \epsilon $}
+    {
+        $t := t + 1$\\
 
-			\ParaCada {$s \in S$}
-			{
-				$V^{t+1}(s) := s.\textsc{Update}(V^{t})$ \emph{// Ver (\ref{eq:qbackup}) \& (\ref{eq:vmax})}\\
-				\lSe { $ | V^{t+1}(s) - V^t(s) | > \delta $ } { $\delta := | V^{t+1}(s) - V^t(s) | $ }
-			}
-		}
+        \ParaCada {$s \in S$}
+        {
+            $V^{t+1}(s) := \textsc{BellmanBackup}(V^{t}, s)$ \\
+            $\delta(s) := | V^{t+1}(s) - V^t(s) | $
+        }
+    }
 
-		\Retorna{$V$}
-	}
+    \Retorna{$V$}
 }
 \end{algorithm}
 
@@ -150,39 +158,52 @@ O algoritmo Iteração de Valor (IV, Algoritmo~\ref{alg:iteracao-valor}) é uma 
 
 \subsection{RTDP}
 
-bla
+Uma característica da Iteração de Valor é que todos os estados são atualizados até se chegar a convergência e encontrar a política ótima para todos eles. Porém em algumas situações é possível saber o estado inicial de um agente em um problema e possível saber que a partir deste estado o agente não conseguirá visitar todos os estados do problema.
+
+Pensando nisso, o algoritmo RTDP (Algoritmo \ref{alg:rtdp-enum}), proposto por \cite{BartoBradtkeSingh-1995}, busca realizar \textsc{BellmanBackup}s somente nos estados alcançáveis por esse estado inicial $s_0$ e criar uma política ótima para eles a partir de uma estratégia onde são mostrados episódios da execução de um agente no ambiente (frequentemente chamados de \emph{trial}) de um estado inicial até um estado meta $s_g \in G$ (onde $P(s_g|s_g,a) = 1$ e $P(s'|s_g,a) = 0 \forall s' \in (S - G), s_g \in G$).
+
+Durante um trial o algoritmo visita um estado $s$, e executa as seguintes ações:
+
+\begin{itemize}
+    \item aplica um \textsc{BellmanBackup} nesse estado e simula a execução de uma ação;
+    \item escolhe uma ação gulosa (\textsc{GreedyAction}) com respeito a a função valor atual, \textit{i.e.} uma ação tenha a maior qualidade (Equação \ref{eq:quality_function}) para o momento;
+
+    \begin{equation} \label{eq:greedy_action}
+        \textsc{GreedyAction}(V, s) = arg \max_{a \in A} Q(s,a)
+    \end{equation}
+
+    \item simula a transição para um novo estado (\textsc{ChooseNextState}) com base na ação gulosa escolhida;
+
+    \begin{equation} \label{eq:bellman_backup}
+        \textsc{ChooseNextState}(s, a) = s' \sim P(\cdot|s,a)
+    \end{equation}
+
+    \item reinicia as ações de visita esse novo estado.
+\end{itemize}
+
+Uma característica deste algoritmo é que apesar é garantido que ele tenha uma convergência para uma política ótima $\pi^*$ caso seja realizados infinitos \emph{trials}, porém o próprio algoritmo descrito por Barto não tem nenhuma condição de parada baseade em convergência. Portanto para este trabalho é adotado que o algoritmo é encerrado após executar por um determinado tempo.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \linesnumbered
 \begin{algorithm}[t]
 {
-	\caption{\textsc{RTDP}($ V^0, s_0, G, maxtime, maxdepth $) $ \to V$}
+	\caption{\textsc{RTDP}($ V^0, s_0, G, maxtime $)}
 	\label{alg:rtdp-enum}
-	\emph{// Algoritmo baseado em \cite{BartoBradtkeSingh-1995}}\\
-%	\Entrada{ $V^0$, uma função valor arbitrária, $s_0$, o estado inicial do sistema,
-%	$ G $, o conjunto de estados meta do problema, $maxtime$, tempo máximo de execução
-%	do algoritmo e $maxdepth$, profundidade máxima de visita em um trial. }
-%	\Saida{ $V$, função valor ótima, calculada pelo algoritmo }
-	\Inicio{
-		\emph{// Inicializa $V$ com a função valor admissível $V^0$}\\
-		$V := V^0$\\
 
-		\Enqto{não tenha excedido $ maxtime $}
+	$V := V^0$\\
+
+	\Enqto{não tenha excedido $ maxtime $}
+	{
+    	$\textit{s} = s_0 $\\
+
+		\Enqto{$(\textit{s} \notin G )$}
 		{
-			$\textit{depth} := 0$\\
-	    		$\textit{s} = s_0 $\\
-
-			\Enqto{$(\textit{s} \notin G ) \wedge (\textit{depth} < \textit{maxdepth})$}
-			{
-				$\mathit{depth} := \mathit{depth} + 1$\\
-				$V(s):= \textit{s}.\textsc{Update}(V)$ \emph{// Veja (\ref{eq:qbackup}) \& (\ref{eq:vmax})}\\
-            	    $a := \textit{s}.\textsc{GreedyAction}(V)$ \emph{// Veja (\ref{eq:greedy_pol})}\\
-            	    $\textit{s} := \textit{s}.\textsc{ChooseNextState}(a)$ \emph{// Veja (\ref{eq:choose-next-state})}\\
-			}
+			$V(s) = \textsc{BellmanBackup}(V, s)$ \\
+           	$a = \textsc{GreedyAction}(V, s)$ \\
+           	$\textit{s} = \textsc{ChooseNextState}(s, a)$ \\
 		}
-
-		\Retorna{$V$}
 	}
+	\Retorna{$V$}
 }
 \end{algorithm}
 
@@ -190,118 +211,114 @@ bla
 
 \subsection{LRTDP}
 
-bla
+No algoritmo RTDP a convergência para todos os estados alcançáveis pode ser lenta, pois estados comprobabilidade baixa são visitados com pouca frequência e seus sucessores podem sofrer menos Backups.
+
+Buscando melhorar essa convergência o algoritmo LRTDP foi proposto por \cite{BonetGeffer-2003}, focando em identificar
+os estados convergidos durante os trials. Estes estados $s$ são rotulados como ``resolvidos'' verificando se $V^t(s)$ tem
+valor ótimo. Desta forma, ao se executar um trial estes estados não serão visitados, evitando assim atualizações desnecessárias neles.
+
+O algoritmo LRTDP (Algoritmo~\ref{alg:lrtdp-enum}) inicialmente atribui $V$ com algum valor heurístico $V^0$ e realiza uma série de simulações (trials) semelhantes ao RTDP, exceto por sua condição de parada. Nestes trials, a condição de parada é acrescida de uma verificação de se o estado atual visitado já foi resolvido. Caso o estado tenha sido resolvido, o trial será interrompido. No final de cada trial uma chamada do algoritmo \textsc{CheckSolved} (Algoritmo \ref{alg:checksolved}) é realizada para cada estado visitado no trial em ordem reversa, com o intuito de verificar se algum destes estados pode ser rotulado como resolvido.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \linesnumbered
 \begin{algorithm}[t]
 {
-	\caption{\textsc{LRTDP}($ V^0, s_0, \epsilon, G, maxtime, maxdepth $) $ \to V$}
+	\caption{\textsc{LRTDP}($ V^0, s_0, \epsilon, G $)}
 	\label{alg:lrtdp-enum}
-	\emph{// Algoritmo baseado em \cite{BonetGeffer-2003}}\\
-%	\Entrada{ $V^0$, uma função valor arbitrária, $s_0$, o estado inicial do sistema,
-%	$\epsilon$, o erro máximo permitido entre $V^t$ e $V^{t+1}$, 	$ G $, o conjunto
-%	de estados meta do problema, $maxtime$, tempo máximo de execução
-%	do algoritmo e $maxdepth$, profundidade máxima de visita em um trial. }
-%	\Saida{ $V$, função valor ótima, calculada pelo algoritmo }
-	\Inicio{
-		\emph{// Inicializa $V$ com a função valor admissível $V^0$}\\
-		$V := V^0$\\
+    $V := V^0$\\
+    $ \textit{solved} = \varnothing $\\
 
-		\Enqto{não tenha excedido $ maxtime \vee s_0.\textsc{Solved}()$}
-		{
-			$\textit{depth} := 0$\\
-			$\textit{visited}$.\textsc{Clear}() \emph{// Limpa a pilha de estados visitados}\\
-	    		$\textit{s} = s_0 $
+    \Enqto{$ s_0 \notin \textit{solved} $}
+    {
+        $\textit{visited}$.\textsc{Clear}() \\
+        $\textit{s} = s_0 $
 
-			\Enqto{$(\neg \textit{s}.\textsc{Solved}()) \wedge (\textit{depth} < \textit{maxdepth})$}
-			{
-				$\mathit{depth} := \mathit{depth} + 1$\\
-				$\mathit{visited}$.\textsc{Push}($\textit{s}$)\\
+        \Enqto{$s \notin \textit{solved}$}
+        {
+            $\mathit{visited}$.\textsc{Push}($\textit{s}$)\\
 
-				\Se{$(\textit{s} \notin G)$}{\textbf{interrompe loop}}
-				$V(s):= \textit{s}.\textsc{Update}(V)$ \emph{// Veja (\ref{eq:qbackup}) \& (\ref{eq:vmax})}\\
-            	    $a := \textit{s}.\textsc{GreedyAction}(V)$ \emph{// Veja (\ref{eq:greedy_pol})}\\
-            	    $\textit{s} := \textit{s}.\textsc{ChooseNextState}(a)$ \emph{// Veja (\ref{eq:choose-next-state})}\\
-			}
+            \Se{$(s \in G)$}{\textbf{interrompe loop}}
+            $V(s) = \textsc{BellmanBackup}(V, s)$ \\
+           	$a = \textsc{GreedyAction}(V, s)$ \\
+           	$s = \textsc{ChooseNextState}(s, a)$ \\
+        }
 
-			\emph{// Verifica a convergência do estado somente se o trial foi encerrado em um estado-meta ou em um estado resolvido} \\
-			\Se{$(\textit{depth} < \textit{maxdepth})$}
-			{
-				\Enqto{$\neg \textit{visited}$.\textsc{Empty}()}
-				{
-					$\textit{s} := \textit{visited}$.\textsc{Pop}()\\
-					\Se{$ \textit{s}.\textsc{CheckSolved}(V, \epsilon)$} {\textbf{interrompe loop}}
-				}
-			}
-		}
+        \Enqto{$\neg \textit{visited}$.\textsc{Empty}()}
+        {
+            $\textit{s} = \textit{visited}$.\textsc{Pop}()\\
+            \Se{$\neg \textsc{CheckSolved}(V, s, \textit{solved}, \epsilon)$} {\textbf{interrompe loop}}
+        }
+    }
 
-		\Retorna{$V$}
-	}
+    \Retorna{$V$}
 }
 \end{algorithm}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-lalalal
+O algoritmo \textsc{CheckSolved} (Algoritmo \ref{alg:checksolved}) rotula cada estado $s$ como resolvido quando todos os estados alcançáveis a partir de $s$ com a política gulosa estiverem resolvidos. O grafo enraizado no estado $s$ chamado de \emph{grafo guloso} é construído através dos estados alcançáveis a partir de $s$ e o conjunto de estados pertencentes ao grafo é chamado de {\em envelope guloso}.
+Este algoritmo realiza uma busca em largura neste grafo procurando por estados que tenham resíduo maior ou igual que $\epsilon$ assumindo:
+
+\begin{equation} \label{eq:state_residual}
+     \textsc{Residual}(s) = | V^{t+1}(s) - V^t(s)|
+\end{equation}
+
+Caso existam estados com resíduo maior que $\epsilon$, seus sucessores não serão visitados nessa busca (pois eles precisarão ser explorados durante um trial) e o grafo guloso será considerado como não resolvido (\textit{i.e.}, não convergiu).
+Durante a busca para controlar os estados visitados, o algoritmo mantém um pilha com os estados ``encerrados'' (\textit{closed}, estados já visitados para a expansão do grafo guloso)  e uma pilha com os estados abertos (\textit{open}, estados a visitar).
+
+Ao terminar de gerar o grafo guloso o \textsc{CheckSolved} pode tomar duas ações: caso ele descubra que todos os estados já convergiram (ou seja o grafo guloso está resolvido e tem todos os estados com resíduo menor que $\epsilon$), os estados desse grafo serão marcados como resolvidos. Caso ainda haja algum estado não resolvido, os estados são atualizados com \textsc{BellmanBackup}s para acelerar sua convergência.
+
+Com esta rotina de rotulação e com a condição de término dos trials incluindo a verificação de estados resolvidos, o algoritmo LRTDP a medida que tem os estados resolvidos começa ter trials reduzidos, conseguindo realizar mais trials que o RTDP tradicional no mesmo intervalo de tempo, focando estes trials apenas em estados não  convergidos.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \linesnumbered
 \begin{algorithm}[t]
 {
-	\caption{\textsc{CheckSolved}($ V, \textit{s}, \epsilon $) $\longrightarrow rv$ }
+	\caption{\textsc{CheckSolved}($ V, s, \textit{solved}, \epsilon $) }
 	\label{alg:checksolved}
-	\emph{// Algoritmo baseado em \cite{BonetGeffer-2003}}\\
-%	\Entrada{ $V$, função valor calculada pelo LRTDP, $s$, o estado a ser verificado,
-%	$\epsilon$, o erro máximo permitido entre $V^t$ e $V^{t+1}$. }
-%	\Saida{ $rv$, booleano, indicando que o grafo guloso enraizado a partir de $s$
-%	está resolvido.}
-	\Inicio{
-		$ \textit{rv} = true $\\
-		$ \textit{open} = \varnothing $\\
-		$ \textit{closed} = \varnothing $\\
-		\lSe{$\neg \textit{s}.\textsc{Solved}()$}{ $\textit{open}$.\textsc{Push}($\textit{s}$) }
+    $ \textit{rv} = true $\\
+    $ \textit{open} = \varnothing $\\
+    $ \textit{closed} = \varnothing $\\
+    \Se{$s \notin \textit{solved}$}{ $\textit{open}$.\textsc{Push}($\textit{s}$) }
 
-		\Enqto{$ \neg \textit{open}.\textsc{Empty}() $}
-		{
-			$\textit{s} = \textit{open}$.\textsc{Pop}() \\
-			$\textit{closed}$.\textsc{Push}($\textit{s}$) \\
+    \Enqto{$ \neg \textit{open}.\textsc{Empty}() $}
+    {
+        $s = \textit{open}$.\textsc{Pop}() \\
+        $\textit{closed}$.\textsc{Push}($s$) \\
 
-			\Se{$ \textit{s}.\textsc{Residual}() \geq \epsilon $ }
-			{
-				$ \textit{rv} = false $\\
-				\textbf{continua loop}
-			}
+        \Se{$ \textsc{Residual}(s) \geq \epsilon $ }
+        {
+            $ \textit{rv} = false $\\
+            \textbf{continua loop}
+        }
 
-			$\textit{a} = \textit{s}.\textsc{GreedyAction}(V)$ \\
+        $a = \textsc{GreedyAction}(V, s)$ \\
 
-			\ParaCada{$\textit{s'} \in \textit{s}.\textsc{SuccessorStates}(a)$}
-			{
-				\Se{$ \neg \textit{s'}.\textsc{Solved}() \wedge \textit{s'} \notin (\textit{open} \cup \textit{closed})$}
-				{
-					$\textit{open}$.\textsc{Push}($\textit{s'}$)
-				}
-			}
-		}
+        \ParaCada{$s' \in \textsc{SuccessorStates}(s, a)$}
+        {
+            \Se{$ s' \notin (\textit{solved} \cup \textit{open} \cup \textit{closed})$}
+            {
+                $\textit{open}$.\textsc{Push}($s'$)
+            }
+        }
+    }
 
-		\eSe{$ \textit{rv} = true $ }
-		{
-			\ParaCada{$\textit{s'} \in \textit{closed}$}
-			{
-				$\textit{s'}.\textsc{MarkAsSolved}()$
-			}
-		}
-		{
-			\Enqto{$\textit{closed}.\textsc{Empty}()$}
-			{
-				$ \textit{s} = \textit{closed}$.\textsc{Pop}()\\
-				$ V(s) = \textit{s}.\textsc{Update}(V)$
-			}
-		}
+    \eSe{$ \textit{rv} = true $ }
+    {
+        \ParaCada{$s' \in \textit{closed}$}
+        {
+            $\textit{solved}$.\textsc{Push}($s'$)
+        }
+    }
+    {
+        \Enqto{$\textit{closed}.\textsc{Empty}()$}
+        {
+            $ s = \textit{closed}$.\textsc{Pop}()\\
+            $V(s) = \textsc{BellmanBackup}(V, s)$ \\
+        }
+    }
 
-		\emph{//$ \textit{rv} $ é retornado como verdadeiro quando $ \textit{s} $ está resolvido} \\
-		\Retorna{$ \textit{rv} $}
-	}
+    \Retorna{$ \textit{rv} $}
 }
 \end{algorithm}
 
@@ -310,6 +327,10 @@ lalalal
 
 \section{Resultados}
 descreva os experimentos (problema, parâmetros, quantidade de execuções) e avaliação (gráficos, tabelas, etc)
+
+% comparar convergência
+
+% montar mapa de calor
 
 \section{Conclusão}
 discuta os resultados
