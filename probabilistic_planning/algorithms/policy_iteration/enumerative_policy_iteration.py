@@ -31,7 +31,7 @@ def evaluate_policy(policy, mdp, gamma):
     # compute value function as a system of equations
     value_function_matrix_for_policy = (identity_matrix - gamma * policy_transition_matrix).getI() * policy_reward_matrix
 
-    computed_value_function = EnumerativeValueFunction()
+    computed_value_function = EnumerativeValueFunction(mdp.states)
 
     for index, state in enumerate(mdp.states):
         computed_value_function[state] = value_function_matrix_for_policy[index]

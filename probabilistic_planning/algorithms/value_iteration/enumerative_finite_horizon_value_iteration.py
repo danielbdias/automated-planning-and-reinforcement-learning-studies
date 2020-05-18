@@ -53,12 +53,12 @@ def enumerative_finite_horizon_value_iteration(mdp, gamma, horizon):
                       "iterations" that is equal to the horizon parameter and "bellman_backups_done" that is the overall
                       number of Bellman backups executed.
     """
-    last_horizon_value_function = EnumerativeValueFunction(lambda state: 0) # value function with zeroes
+    last_horizon_value_function = EnumerativeValueFunction(mdp.states, lambda state: 0) # value function with zeroes
 
     bellman_backups_done = 0
 
     for n in range(horizon - 1, -1, -1): # range from H - 1 to 0
-        current_horizon_value_function = EnumerativeValueFunction(lambda state: 0)
+        current_horizon_value_function = EnumerativeValueFunction(mdp.states, lambda state: 0)
 
         # do bellman update
         for state in mdp.states:

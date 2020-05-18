@@ -5,22 +5,12 @@ def compute_maximum_residual(mdp, first_value_function, second_value_function):
     residuals = map(state_residual, mdp.states)
     return max(residuals)
 
-def compute_quality(state, action, mdp, gamma, value_function):
-    pondered_expected_values = []
-
-    for next_state in mdp.states:
-        pondered_expected_values.append(
-            mdp.transition(state, action, next_state) * value_function[next_state]
-        )
-
-    return mdp.reward(state) + gamma * sum(pondered_expected_values)
-
 def compute_bellman_backup(state, mdp, gamma, value_function):
     qualities = []
 
     for action in mdp.actions:
         qualities.append(
-            compute_quality(state, action, mdp, gamma, value_function)
+            mdp.compute_infinite_horizon_quality(state, action, gamma, value_function)
         )
 
     return max(qualities)
@@ -29,11 +19,11 @@ def compute_policy(mdp, gamma, value_function):
     policy = {}
 
     for state in mdp.states:
-        max_value = float("-inf ")
+        max_value = float("-inf")
         best_action = None
 
         for action in mdp.actions:
-            quality = compute_quality(state, action, mdp, gamma, value_function)
+            quality = mdp.compute_infinite_horizon_quality(state, action, gamma, value_function)
 
             if quality > max_value:
                 max_value = quality
@@ -65,7 +55,7 @@ def enumerative_infinite_horizon_value_iteration(mdp, gamma, epsilon, initial_va
     value_function = initial_value_function
 
     if value_function is None:
-        value_function = EnumerativeValueFunction(lambda state: 0) # value function with zeroes
+        value_function = EnumerativeValueFunction(mdp.states, lambda state: 0) # value function with zeroes
 
     iterations = 0
     maximum_residuals = []

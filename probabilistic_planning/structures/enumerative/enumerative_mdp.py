@@ -36,14 +36,27 @@ def build_reward_function(reward_function, states):
         if state not in states:
             raise ValueError(f"Invalid state [{state}] defined in reward function")
 
-    return reward_function
+    indexed_reward_function = []
+
+    for state in states:
+        indexed_reward_function.append(reward_function[state])
+
+    return indexed_reward_function
 
 def build_transition_funtion(transition_function, states):
     """Build and validate a transition function."""
 
     validate_defined_argument(transition_function, "transition function")
 
-    return EnumerativeTransitionFunction(transition_function, transition_function.keys(), states)
+    transition_function_object = EnumerativeTransitionFunction(transition_function, transition_function.keys(), states)
+
+    indexed_actions = {}
+    transition_matrices = []
+    for index, action in enumerate(transition_function_object.actions):
+        indexed_actions[action] = index
+        transition_matrices.append(transition_function_object.get_transition_matrix(action))
+
+    return transition_matrices, indexed_actions
 
 def build_action_list(actions):
     """Build and validate an action set."""
@@ -79,9 +92,18 @@ class EnumerativeMDP:
             instance (EnumerativeMDP): an enumerative Markov Decision Process
         """
         self.states = build_state_list(states, "states")
+
+        self._indexed_states = {}
+        for index, state in enumerate(self.states):
+            self._indexed_states[state] = index
+
         self.reward_function = build_reward_function(reward_function, self.states)
-        self.transition_function = build_transition_funtion(transition_function, self.states)
-        self.actions = build_action_list(self.transition_function.actions)
+
+        transition_matrices, indexed_actions = build_transition_funtion(transition_function, self.states)
+        self.transition_matrices = transition_matrices
+
+        self.actions = build_action_list(indexed_actions.keys())
+        self._indexed_actions = indexed_actions
 
         if initial_states:
             self.initial_states = build_state_list(initial_states, "initial states", self.states)
@@ -94,13 +116,33 @@ class EnumerativeMDP:
             self.goal_states = list()
 
     def reward(self, state):
-        return self.reward_function[state]
+        state_index = self._indexed_states[state]
+        return self.reward_function[state_index]
 
     def transition(self, from_state, action, to_state):
-        return self.transition_function.get_transition_probability(from_state, action, to_state)
+        action_index = self._indexed_actions[action]
+        from_state_index = self._indexed_states[from_state]
+        to_state_index = self._indexed_states[to_state]
+
+        return self.transition_matrices[action_index][from_state_index, to_state_index]
 
     def reward_matrix(self):
         return np.matrix(list(map(lambda state: [ self.reward(state) ], self.states)))
 
     def transition_matrix(self, action):
         return self.transition_function.get_transition_matrix(action)
+
+    def compute_infinite_horizon_quality(self, state, action, gamma, value_function):
+        value_function_matrix = value_function.to_matrix()
+
+        action_index = self._indexed_actions[action]
+        state_index = self._indexed_states[state]
+
+        transition_matrix = self.transition_matrices[action_index]
+        pondered_sum = transition_matrix[state_index].dot(value_function_matrix)
+        # pondered_sum = 0
+
+        # for next_state_index in range(len(self.states)):
+        #     pondered_sum += transition_matrix[state_index, next_state_index] * value_function_list[next_state_index]
+
+        return self.reward_function[state_index] + gamma * pondered_sum

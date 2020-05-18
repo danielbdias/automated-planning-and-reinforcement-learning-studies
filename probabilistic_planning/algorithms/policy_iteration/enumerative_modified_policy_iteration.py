@@ -65,7 +65,7 @@ def enumerative_modified_policy_iteration(mdp, gamma, epsilon, m, initial_value_
     value_function = initial_value_function
 
     if value_function is None:
-        value_function = EnumerativeValueFunction(lambda state: 0) # value function with zeroes
+        value_function = EnumerativeValueFunction(mdp.states, lambda state: 0) # value function with zeroes
 
     iterations = 0
     maximum_residuals = []

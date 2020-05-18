@@ -121,12 +121,12 @@ def enumerative_brtdp(mdp, gamma, max_depth, epsilon, tau, initial_lower_value_f
     lower_value_function = initial_lower_value_function
 
     if lower_value_function is None:
-        lower_value_function = EnumerativeValueFunction(lambda state: 0) # value function with zeroes
+        lower_value_function = EnumerativeValueFunction(mdp.states, lambda state: 0) # value function with zeroes
 
     upper_value_function = initial_upper_value_function
 
     if upper_value_function is None:
-        upper_value_function = EnumerativeValueFunction(lambda state: 1 + epsilon) # value function with ones
+        upper_value_function = EnumerativeValueFunction(mdp.states, lambda state: 1 + epsilon) # value function with ones
 
     if seed is not None:
         np.random.seed(seed)

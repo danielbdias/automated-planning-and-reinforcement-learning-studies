@@ -362,14 +362,16 @@ Neste experimento foi utilizado o tamanho de grid pequeno, onde os algoritmos fo
         \toprule
         {}                  &      IV &    RTDP &    LRTDP \\
         \midrule
-        Tempo (em segundos) & 9.38165 &  6.6939 &  5.53093 \\
-        Iterações / Trials  &      33 &     100 &     42.1 \\
-        Bellman Backups     &    4125 &  1423.1 &   1070.7 \\
+        Tempo (em segundos) & 3.36332 &  2.63117 &  2.2036 \\
+        Iterações           &      33 &      100 &    43.7 \\
+        Bellman Backups     &    4125 &   1440.4 &  1103.9 \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-Conforme podemos ver na Tabela \ref{table:exp1-mean-values}, o algoritmo que tem a melhor performance média foi o LRTDP, executando em média 42 trials para convergir,
+Conforme podemos ver na Tabela \ref{table:exp1-mean-values}, o algoritmo que tem a melhor performance média foi o LRTDP, executando em média 43 iterações para convergir em pouco mais de 2 segundos e precisando de quase 4 vezes menos Bellman Backups que a iteração de valor para convergir. O RTDP fica com uma performance intermediária em relação ao IV e o LRTDP, precisando de mais trials para chegar próximo de convergir.
+
+Essa velocidade de convergência também pode ser vista na Figura \ref{fig:initial-state-convergency} onde é possível ver os resíduos dos estados iniciais ao longo das iterações. No LRTDP com cerca de 20 trials o estado inicial já chegou próximo de convergir, enquanto o RTDP e o IV precisaram de cerca de 28 iterações.
 
 \begin{figure}[t]
     \centering
