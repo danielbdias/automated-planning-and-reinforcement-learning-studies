@@ -24,5 +24,5 @@ run.lint.watch:
 		--command='clear && make run.lint' \
 		.
 
-build.docs:
-	sphinx-build -b html probabilistic_planning docs
+run.notebooks:
+	jupyter lab

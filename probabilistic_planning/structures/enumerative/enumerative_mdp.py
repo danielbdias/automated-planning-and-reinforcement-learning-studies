@@ -140,9 +140,37 @@ class EnumerativeMDP:
 
         transition_matrix = self.transition_matrices[action_index]
         pondered_sum = transition_matrix[state_index].dot(value_function_matrix)
-        # pondered_sum = 0
-
-        # for next_state_index in range(len(self.states)):
-        #     pondered_sum += transition_matrix[state_index, next_state_index] * value_function_list[next_state_index]
 
         return self.reward_function[state_index] + gamma * pondered_sum
+
+    def reachable_states(self, state, action):
+        states = []
+
+        action_index = self._indexed_actions[action]
+        state_index = self._indexed_states[state]
+        transition_matrix = self.transition_matrices[action_index]
+
+        first_indexes, second_indexes = np.nonzero(transition_matrix[state_index,:] > 0)
+
+        for next_state_index in second_indexes:
+            states.append(self.states[next_state_index])
+
+        return states
+
+    def sample_state(self, state, action):
+        sampled_probability = np.random.random_sample()
+        cummulative_probability = 0.0
+
+        action_index = self._indexed_actions[action]
+        state_index = self._indexed_states[state]
+        transition_matrix = self.transition_matrices[action_index]
+
+        first_indexes, second_indexes = np.nonzero(transition_matrix[state_index,:] > 0)
+
+        for next_state_index in second_indexes:
+            probability = transition_matrix[state_index, next_state_index]
+            cummulative_probability = cummulative_probability + probability
+            if sampled_probability < cummulative_probability:
+                return self.states[next_state_index]
+
+        return self.states[second_indexes[-1]]

@@ -32,19 +32,6 @@ def compute_greedy_action(state, mdp, gamma, value_function):
 
     return best_action
 
-def sample_next_state(state, action, mdp):
-    sampled_probability = np.random.random_sample()
-    cummulative_probability = 0.0
-
-    for next_state in mdp.states:
-        probability = mdp.transition(state, action, next_state)
-        cummulative_probability = cummulative_probability + probability
-
-        if sampled_probability < cummulative_probability:
-            return next_state
-
-    return mdp.states[-1] # return last state
-
 def compute_policy(mdp, gamma, value_function):
     policy = {}
 
@@ -124,7 +111,7 @@ def enumerative_rtdp(mdp, gamma, max_trials, max_depth, epsilon = None, initial_
             bellman_backups_done = bellman_backups_done + 1
 
             next_action = compute_greedy_action(state, mdp, gamma, value_function)
-            state = sample_next_state(state, next_action, mdp)
+            state = mdp.sample_state(state, next_action)
 
             if len(visited_states) > max_depth:
                 break

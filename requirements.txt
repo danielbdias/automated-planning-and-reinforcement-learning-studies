@@ -9,3 +9,4 @@ watchdog
 watchdog[watchmedo]
 # temp dependencies
 benchmarkit
+jupyterlab

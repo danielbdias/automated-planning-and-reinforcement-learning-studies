@@ -349,22 +349,22 @@ Este domínio possui 3 tamanhos de grid: um pequeno ($5 \times 25$, 125 estados)
 
 Os experimentos foram executados na plataforma Google Colab com o Python\footnote{Localizado em https://colab.research.google.com/drive/1KVVhy5Zi9TlpmxSn14I9H6K49K568GlY}, na época com 2 CPUs de 2.2 GHz e 13GB de memória. As implementações dos algoritmos estão disponíveis no Github\footnote{Localizado em https://github.com/danielbdias/automated-planning-and-reinforcement-learning-studies}.
 
-A menos que o experimento diga o contrário, o resíduo máximo considerado será $ \epsilon = 0.0001 $ e o fator de desconto será de $\gamma = 0.9$.
+A menos que o experimento diga o contrário, o resíduo máximo considerado será $ \epsilon = 10^{-7} $ e o fator de desconto será de $\gamma = 0.9$.
 
 \subsection{Experimento 1 - Convergência}
 
-Neste experimento foi utilizado o tamanho de grid pequeno, onde os algoritmos foram executados 10 vezes e os valores médios de tempo, iterações (ou trials) e Bellman Backups foi medido. Como critério de parada para o RTDP foram assumidos 100 trials.
+Neste experimento foram utilizadosos grids de tamanho pequeno e médio, onde os algoritmos foram executados 5 vezes e os valores médios de tempo, iterações (ou trials) e Bellman Backups foi medido. Como critério de parada para o RTDP foram assumidos 350 trials.
 
 \begin{table}[ht]
     \caption{Métricas médias dos algoritmos}
     \label{table:exp1-mean-values}
     \begin{tabular}{llll}
         \toprule
-        {}                  &      IV &    RTDP &    LRTDP \\
+        {}                  &       IV &      RTDP &     LRTDP \\
         \midrule
-        Tempo (em segundos) & 3.36332 &  2.63117 &  2.2036 \\
-        Iterações           &      33 &      100 &    43.7 \\
-        Bellman Backups     &    4125 &   1440.4 &  1103.9 \\
+        Tempo (em segundos) & 0.350736 &  0.77297 &  0.619363 \\
+        Iterações           &       49 &      350 &       199 \\
+        Bellman Backups     &     6125 &   3621.2 &    2655.6 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -375,7 +375,7 @@ Essa velocidade de convergência também pode ser vista na Figura \ref{fig:initi
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.9\columnwidth]{initial-state-convergency}
+    \includegraphics[width=0.9\columnwidth]{initial-state-convergency-01}
     \caption{Convergência do estado inicial}
     \label{fig:initial-state-convergency}
 \end{figure}

@@ -32,19 +32,6 @@ def compute_greedy_action(state, mdp, gamma, value_function):
 
     return best_action
 
-def sample_next_state(state, action, mdp):
-    sampled_probability = np.random.random_sample()
-    cummulative_probability = 0.0
-
-    for next_state in mdp.states:
-        probability = mdp.transition(state, action, next_state)
-        cummulative_probability = cummulative_probability + probability
-
-        if sampled_probability < cummulative_probability:
-            return next_state
-
-    return mdp.states[-1] # return last state
-
 def compute_policy(mdp, gamma, value_function):
     policy = {}
 
@@ -74,16 +61,6 @@ def initial_states_residuals(mdp, gamma, value_function):
 
     return residuals
 
-def reachable_states(state, action, mdp):
-    states = []
-
-    for next_state in mdp.states:
-        probability = mdp.transition(state, action, next_state)
-        if probability > 0:
-            states.append(next_state)
-
-    return states
-
 def check_solved(root_state, epsilon, solved_states, mdp, gamma, value_function):
     solved = True
     open_states = []
@@ -103,7 +80,7 @@ def check_solved(root_state, epsilon, solved_states, mdp, gamma, value_function)
 
         action = compute_greedy_action(state, mdp, gamma, value_function)
 
-        for next_state in reachable_states(state, action, mdp):
+        for next_state in mdp.reachable_states(state, action):
             is_solved = next_state in solved_states
             is_open = next_state in open_states
             is_closed = next_state in closed_states
@@ -174,7 +151,7 @@ def enumerative_lrtdp(mdp, gamma, max_depth, epsilon, initial_value_function = N
             bellman_backups_done = bellman_backups_done + 1
 
             next_action = compute_greedy_action(state, mdp, gamma, value_function)
-            state = sample_next_state(state, next_action, mdp)
+            state = mdp.sample_state(state, next_action)
 
             if len(visited_states) > max_depth:
                 break

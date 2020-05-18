@@ -25,11 +25,11 @@ class EnumerativeValueFunction:
 
     def __getitem__(self, state):
         state_index = self._indexed_states[state]
-        return self._internal_matrix[state_index]
+        return self._internal_matrix[state_index, 0]
 
     def __setitem__(self, state, value):
         state_index = self._indexed_states[state]
-        self._internal_matrix[state_index] = value
+        self._internal_matrix[state_index, 0] = value
 
     def __repr__(self):
         dict_representation = {}
