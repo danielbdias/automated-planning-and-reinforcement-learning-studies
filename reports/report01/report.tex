@@ -326,15 +326,13 @@ Com esta rotina de rotulação e com a condição de término dos trials incluin
 
 \section{Experimentos e Resultados}
 
-Serão realizados três experimentos neste trabalho:
+Uma vez implementado os algoritmos, foram elaborados alguns experimentos visando analizar a execução dos algoritmos, a convergência e o comportamento deles.
 
-\begin{itemize}
-    \item 1. Comparação de convergência dos algoritmos;
-    \item 2. Performance dos algoritmos de acordo com o tamanho dos problemas;
-    \item 3. Comportamento dos algoritmos variando o estado inicial do agente.
-\end{itemize}
+Os experimentos foram executados na plataforma Google Colab com o Python\footnote{Disponível em https://colab.research.google.com/drive/1KVVhy5Zi9TlpmxSn14I9H6K49K568GlY}, na época com 2 CPUs de 2.2 GHz e 13GB de memória. As implementações dos algoritmos estão disponíveis no Github\footnote{Disponível em https://github.com/danielbdias/automated-planning-and-reinforcement-learning-studies}.
 
-Em todos esses experimentos será o domínio \emph{"Travessia do Rio"}: um agente começa em uma ponta seca do rio e deve ir a outra ponta (Figura \ref{fig:river-traversal-scheme}) podendo se movimentar em quatro direções (norte, sul, leste e oeste). Nele, o agente pode andar por duas áreas: uma área seca (descrita pela parte marrom do grid) onde os movimentos que o agente executar são determinísticos, ou a área molhada (parte azul do grid) onde ao se movimentar, o agente tem uma chance de ao invés de ir para o local desejado, ser "arrastado" em direção a cachoeira. Caso ele atinja a região da cachoira ele voltará para o estado inicial.
+Com o intuito de melhorar a performance dos algoritmos e garantir que eles rodassem em tempo hábil, tanto a implementação da Iteração de Valor, quanto a do RTDP e LRTDP utilizaram a biblioteca \emph{numpy}\footnote{https://numpy.org/} durante o cálculo da função qualidade para cada par de estado / ação (Equação \ref{eq:quality_function}) (que realiza os cálculos vertoriais em C e FORTRAN ao invés do Python), o que trouxe algumas diferenças de performance entre os algoritmos em relação ao discutido na literatura, principalmente considerando os resultados de \cite{BonetGeffer-2003}.
+
+O domínio utilizado foi o \emph{"Travessia do Rio"}: um agente começa em uma ponta seca do rio e deve ir a outra ponta (Figura \ref{fig:river-traversal-scheme}) podendo se movimentar em quatro direções (norte, sul, leste e oeste). Nele, o agente pode andar por duas áreas: uma área seca (descrita pela parte marrom do grid) onde os movimentos que o agente executar são determinísticos, ou a área molhada (parte azul do grid) onde ao se movimentar, o agente tem uma chance de ao invés de ir para o local desejado, ser "arrastado" em direção a cachoeira. Caso ele atinja a região da cachoira ele voltará para o estado inicial.
 
 Modelando-o como um MDP, os estados são a posição do agente no grid, as ações são os quatro movimentos possíveis do agente e a recompensa (neste caso custo) é de $-1$ para todos os estados exceto a meta.
 
@@ -347,48 +345,115 @@ Modelando-o como um MDP, os estados são a posição do agente no grid, as açõ
 
 Este domínio possui 3 tamanhos de grid: um pequeno ($5 \times 25$, 125 estados), um médio ($20 \times 100$, 2000 estados) e um grande ($50 \times 250$, 12500 estados).
 
-Os experimentos foram executados na plataforma Google Colab com o Python\footnote{Localizado em https://colab.research.google.com/drive/1KVVhy5Zi9TlpmxSn14I9H6K49K568GlY}, na época com 2 CPUs de 2.2 GHz e 13GB de memória. As implementações dos algoritmos estão disponíveis no Github\footnote{Localizado em https://github.com/danielbdias/automated-planning-and-reinforcement-learning-studies}.
+Os parâmetros de execução dos algoritmos foram:
 
-A menos que o experimento diga o contrário, o resíduo máximo considerado será $ \epsilon = 10^{-7} $ e o fator de desconto será de $\gamma = 0.9$.
+\begin{itemize}
+    \item $ \epsilon = 10^{-7} $
+    \item $\gamma = 0.9$
+    \item $ V_0(s) = 0 \forall s \in S $
+\end{itemize}
 
-\subsection{Experimento 1 - Convergência}
+Cada algoritmo foi executado 5 vezes e os valores médios de tempo, iterações (ou trials) e Bellman Backups foi medido. Os testes do RTDP, que não tem critério de convergência, foram limitados em número de trials para cada grid, sendo eles: 350 trials para o grid pequeno, 4500 para o médio e 10000 trials para o grande.
 
-Neste experimento foram utilizadosos grids de tamanho pequeno e médio, onde os algoritmos foram executados 5 vezes e os valores médios de tempo, iterações (ou trials) e Bellman Backups foi medido. Como critério de parada para o RTDP foram assumidos 350 trials.
+\subsection{Análise das métricas dos algoritmos}
 
 \begin{table}[ht]
-    \caption{Métricas médias dos algoritmos}
-    \label{table:exp1-mean-values}
+    \caption{Métricas médias dos algoritmos - Ambiente 01}
+    \label{table:mean-performance-values-env01}
     \begin{tabular}{llll}
         \toprule
-        {}                  &       IV &      RTDP &     LRTDP \\
+        {}              &          IV &      RTDP &     LRTDP \\
         \midrule
-        Tempo (em segundos) & 0.350736 &  0.77297 &  0.619363 \\
-        Iterações           &       49 &      350 &       199 \\
-        Bellman Backups     &     6125 &   3621.2 &    2655.6 \\
+        Tempo (segs.)   &    0.315657 &  0.506055 &  0.407586 \\
+        Iterações       &          49 &       350 &     192.2 \\
+        Bellman Backups &        6125 &    3605.4 &    2654.8 \\
+        Resíduo         & 6.94628e-09 &         0 &         0 \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-Conforme podemos ver na Tabela \ref{table:exp1-mean-values}, o algoritmo que tem a melhor performance média foi o LRTDP, executando em média 43 iterações para convergir em pouco mais de 2 segundos e precisando de quase 4 vezes menos Bellman Backups que a iteração de valor para convergir. O RTDP fica com uma performance intermediária em relação ao IV e o LRTDP, precisando de mais trials para chegar próximo de convergir.
-
-Essa velocidade de convergência também pode ser vista na Figura \ref{fig:initial-state-convergency} onde é possível ver os resíduos dos estados iniciais ao longo das iterações. No LRTDP com cerca de 20 trials o estado inicial já chegou próximo de convergir, enquanto o RTDP e o IV precisaram de cerca de 28 iterações.
+Ao executar os algoritmos para o grid pequeno (125 estados, com os resultados descritos na Tabela \ref{table:mean-performance-values-env01}), o algoritmo que mais rápido em tempo de execução foi o Iteração de Valor (IV), executando em média 49 iterações para convergir em cerca de 0.3 segundos. O LRTDP executou em média em 0,4 segundos (ligeiramente mais alto que o IV) precisando de cerca de 192 trials e 2654 Backups para convergir. Já o RTDP foi ligeiramente pior que o LRTDP, precisando de mais tempo e Backups para convergir. O valor do Resíduo nas tabelas indica o Resíduo final no estado inicial, utilizado para verificar a convergência do RTDP que deve ser semelhante ao do LRTDP.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.9\columnwidth]{initial-state-convergency-01}
-    \caption{Convergência do estado inicial}
-    \label{fig:initial-state-convergency}
+    \caption{Convergência do estado inicial - Ambiente 01}
+    \label{fig:initial-state-convergency-01}
 \end{figure}
 
+A velocidade e o comportamento de convergência dos algoritmos pode ser vista na Figura \ref{fig:initial-state-convergency-01} onde é possível ver os resíduos dos estados iniciais ao longo das iterações das melhores execuções de cada algoritmo. A convergência do IV acontece de forma contínua uma vez que todos os estados são atualizados ao mesmo tempo, só chegando próximo ao valor ótimo ao final das iterações. Já o RTDP e o LRTDP rapidamente diminuem o resíduo para o estado inicial, porém devido a natureza da exploração do espaço de estados tem esse valor decrescendo de forma irregular até próximo dos 20 trials.
+
+\begin{table}[ht]
+    \caption{Métricas médias dos algoritmos - Ambiente 02}
+    \label{table:mean-performance-values-env02}
+    \begin{tabular}{llll}
+        \toprule
+        {}              &        IV &      RTDP &      LRTDP \\
+        \midrule
+        Tempo (segs.)   &   16.0049 &   28.2215 &   32.8578 \\
+        Iterações       &     127.0 &    4500.0 &    2133.0 \\
+        Bellman Backups &  254000.0 &  178333.0 &  168988.8 \\
+        Resíduo         & 3.782e-09 & 9.415e-14 & 0.000e+00 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{initial-state-convergency-02}
+    \caption{Convergência do estado inicial - Ambiente 02}
+    \label{fig:initial-state-convergency-02}
+\end{figure}
+
+Tanto na execução no grid médio (2000 estados, com os resultados descritos na Tabela \ref{table:mean-performance-values-env02}), quanto na grid grande (12500 estados, com resultados descritos na Tabela \ref{table:mean-performance-values-env03}), pode-se observar um comportamento parecido com o do cenário anterior, porém com o RTDP sendo mais rápido que o LRTDP em ambos os casos, mas com um resíduo maior que o LRTDP, o que pode indicar que o número de trials provavelmente não foram o suficiente para convergir todos os estados alcançáveis. Pode-se ver na Figuras \ref{fig:initial-state-convergency-02} e \ref{fig:initial-state-convergency-03} que o IV continua com o mesmo comportamento de convergência, com um resíduo alto nas primeiras iterações e um decrescimento continuo, enquanto o RTDP e o LRTDP começam com resíduos baixos e vão estabilizando-os de forma irregular ao longo dos trials.
+
+\begin{table}[ht]
+    \caption{Métricas médias dos algoritmos - Ambiente 03}
+    \label{table:mean-performance-values-env03}
+    \begin{tabular}{llll}
+        \toprule
+        {}              &        IV &      RTDP &     LRTDP \\
+        \midrule
+        Tempo (segs.)   &   303.739 &    409.28 &   561.937 \\
+        Iterações       &       176 &     10000 &    3096.8 \\
+        Bellman Backups &   2.2e+06 & 1.111e+06 & 1.164e+06 \\
+        Resíduo         & 9.827e-09 & 7.105e-15 &         0 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{initial-state-convergency-03}
+    \caption{Convergência do estado inicial - Ambiente 03}
+    \label{fig:initial-state-convergency-03}
+\end{figure}
+
+\subsection{Análise dos tempos de execução}
+
+Observando somente o tempo de execução dos algoritmos percebe-se que há um crescimento grande de tempo em cada tamanho de problema, como pode ser visto na Figura \ref{fig:execution-time}. No grid pequeno e médio os algoritmos executaram em questão de segundos enquanto no grid grande eles passaram a executar em torno de minutos.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{execution-time}
+    \caption{Tempo de execução dos algoritmos}
+    \label{fig:execution-time}
+\end{figure}
+
+Analizando sobre a ótica do número de estados em relação ao tempo de execução (Figura \ref{fig:execution-time-vs-states}) sugere-se que o tempo de execução tem um crescimento exponencial em relação ao número de estados de uma problema. Isto se deve muito ao fato de o cálculo de um Bellman backup ser da ordem de $O(|S|^2|A|)$ \cite{MausamKolobov-2012}, ou seja, a medida que o número de estados a ser resolvido cresce, o tempo de execução cresce de forma quadrática.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{execution-time-vs-states}
+    \caption{Tempo de execução x Número de estados}
+    \label{fig:execution-time-vs-states}
+\end{figure}
+
+\subsection{Análise de comportamento no domínio}
+
+teste
 %% montar mapa de calor
-
-\subsection{Experimento 2 - Performance}
-
-% experimento 2 comparar performances com o crescimento dos estados
-
-\subsection{Experimento 3 - Alteração dos estados iniciais}
-
-% experimento 3 alteração de estados iniciais
+%% responder quando cruzar o rio
 
 \section{Conclusão}
 discuta os resultados
