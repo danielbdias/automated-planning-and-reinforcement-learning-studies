@@ -6,6 +6,9 @@ numpy
 pyddlib
 pylint
 pyyaml
+scikit-learn
+reinforcement
+tensorflow
 watchdog
 watchdog[watchmedo]
 # temp dependencies

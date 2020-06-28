@@ -2,6 +2,8 @@ import gym
 import numpy as np
 
 from reinforcement_learning.algorithms.value_based import q_learning, sarsa
+from reinforcement_learning.algorithms.function_approximation import q_learning as approximated_q_learning
+from reinforcement_learning.algorithms.policy_search import reinforce
 
 env = gym.make('CartPole-v1')
 
@@ -16,11 +18,20 @@ def discretize_state(state, truncate_digits = 4):
 
 episodes = 2000
 
+# Q-Learning (Tabular)
 #Q, stats = q_learning(env, episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, discretize_state_function=discretize_state)
-Q, stats = q_learning(env, episodes, discount_factor=0.9, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
+#Q, stats = q_learning(env, episodes, discount_factor=0.9, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
 
+# SARSA (Tabular)
 #Q, stats = sarsa(env, episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, discretize_state_function=discretize_state)
-# Q, stats = sarsa(env, episodes, discount_factor=0.9, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
+Q, stats = sarsa(env, episodes, discount_factor=0.9, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
+
+# Q-Learning (Value Function approximation)
+# TODO: understand and fix code
+# Q, stats = approximated_q_learning(env, episodes, discount_factor=1.0, epsilon=0.1, epsilon_decay=1.0)
+
+# REINFORCE (Policy search)
+stats = reinforce(env, episodes, discount_factor=1.0)
 
 print("\n")
 print(f"Episode Lenghts: {np.mean(stats.episode_lengths)}")
