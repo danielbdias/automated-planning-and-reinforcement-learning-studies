@@ -1,4 +1,5 @@
 argh
+gym
 nose2
 nose2[coverage_plugin]
 numpy
