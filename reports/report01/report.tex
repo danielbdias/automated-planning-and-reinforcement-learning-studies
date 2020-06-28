@@ -52,14 +52,14 @@ com um ambiente com o objetivo de solucionar um problema.
 
 O foco deste trabalho será em uma das subáreas do Planejamento Automatizado, o Planejamento Probabilístico, onde
 é assumido que o resultado da interação do agente com o ambiente é incerto, e que dada uma ação realizada pelo agente
-em um ambiente dada uma determinada situação, essa ação pode ter diferentes resultados, cuja frequência é ditada por
+neste ambiente dada uma determinada situação, essa ação pode ter diferentes resultados, cuja frequência é ditada por
 uma distribuição de probabilidades.
 
-Um arcabouço utilizado para modelar problemas de Planejamento Probabilístico é utilizar os Processos Markovianos de Decisão
-(MDP, do inglês \textit{Markov Decision Processes})\cite{Puterman-1994} que possui alguns algoritmos conhecidos para resolve-los.
+Um arcabouço utilizado para modelar problemas de Planejamento Probabilístico são os Processos Markovianos de Decisão
+(MDP, do inglês \textit{Markov Decision Processes})\cite{Puterman-1994} que possui diverso algoritmos conhecidos para resolve-los.
 
-Serão analizados os algoritmos Iteração de Valor \cite{Howard-1960}, RTDP (do inglês, Real Time Dynamic Programming)
-\cite{BartoBradtkeSingh-1995} e LRTDP (Labeled Real Time Dynamic Programming) \cite{BonetGeffer-2003} em relação a como eles
+Serão analizados os algoritmos Iteração de Valor \cite{Howard-1960}, RTDP (do inglês, \textit{Real Time Dynamic Programming})
+\cite{BartoBradtkeSingh-1995} e LRTDP (do inglês, \textit{Labeled Real Time Dynamic Programming}) \cite{BonetGeffer-2003} em relação a como eles
 solucionam os MDPs.
 
 \section{Arcabouço Teórico}
@@ -71,7 +71,7 @@ pode ser descrito por uma tupla $\mathcal{M}=\langle S,A,R,P,\gamma \rangle$, on
     \item $S$ é um conjunto de estados finitos e discretos, que definem a situação do ambiente em um determinado momento;
     \item $A$ é um conjunto de ações que o agente pode executar;
     \item $R : S \rightarrow \mathcal{R} $ é a função recompensa, que retorna a recompensa obtida pelo agente ao se alcançar um determinado estado;
-    \item $P : S \times A \times S \rightarrow [0, 1]$ é uma função de transição que retorna a probabilidade de um agente, dado que executou uma ação $a \in A$ em um estado $s \in S$, alcançar o estado $s' \in S$. Neste trabalho uma outra notação que também será usada para representar essa transição é $P(s'|s,a)$.
+    \item $P : S \times A \times S \rightarrow [0, 1]$ é uma função de transição que retorna a probabilidade de um agente, dado que executou uma ação $a \in A$ em um estado $s \in S$, alcançar o estado $s' \in S$. Neste trabalho uma notação que também será usada para representar essa transição é $P(s'|s,a)$.
 \end{itemize}
 
 Neste ambiente a tomada de decisão ocorre por etapas (estágios), onde o agente executa uma ação de cada vez alterando o estado do ambiente e recebendo uma recompensa ou sendo penalizado com um custo (recompensa negativa). Um problema pode ter três tipos de horizonte, caracterizados pela quantidade de estágios de decisão que o agente poderá tomar:
@@ -84,7 +84,7 @@ Neste ambiente a tomada de decisão ocorre por etapas (estágios), onde o agente
 
 O objetivo do agente neste MDP é encontrar uma política $\pi : S \rightarrow A$ que indique a melhor ação a ser tomada em cada estado $s$ a fim de se obter a maior recompensa possível.
 
-Para identificar esta política pode-se calcular o valor dela para cada estado $s$ através do critério da recompensa esperada total. Esse critério indica o quanto de recompensa um agente pode receber em média a executar uma política $\pi$ a partir do estado $s_0 = s$ até o instante $T$ dado um fator de desconto $\gamma$ (limitado ao intervalo [0, 1]), calculada pela função valor $V : S \rightarrow \mathcal{R} $ para a política $\pi$:
+Para identificar esta política pode-se calcular o valor dela para cada estado $s$ através do critério da recompensa esperada total. Esse critério indica o quanto de recompensa um agente pode receber em média a executar uma política $\pi$ a partir do estado $s_0 = s$ até o instante $T$ dado um fator de desconto $\gamma$ (limitado ao intervalo $[0, 1]$), calculada pela função valor $V : S \rightarrow \mathcal{R} $ para a política $\pi$:
 
 \begin{equation} \label{eq:total_expected_reward}
     V_\pi(s) = E_\pi \left[ \sum_{T}^{t=0} \gamma^t r_t | s_0 = s \right]
@@ -100,9 +100,9 @@ O valor da política ótima $V_{\pi^*}$ pode ser encontrado a partir função va
 
 \section{Algoritmos}
 
-Os algoritmos que buscam soluções para MDPs estudados neste artigo são algoritmos que buscam políticas ótimas baseados em programação dinâmica com garantia de convergência. Eles podem ser divididos em dois tipos: os algoritmos síncronos, que buscam calcular o valor da execução de uma política para todos os estados e ir refinando esse valor a cada ciclo de cálculo (iteração) e os algoritmos assíncronos que buscam atualizar os estados de forma arbitrária com garantia de convergência dadas algumas premissas.
+Os algoritmos que buscam soluções para MDPs estudados neste artigo são algoritmos baseados em programação dinâmica com garantia de convergência. Eles podem ser divididos em dois tipos: os algoritmos síncronos, que buscam calcular o valor da execução de uma política para todos os estados e ir refinando esse valor a cada ciclo de cálculo (iteração) e os algoritmos assíncronos que buscam atualizar os estados de forma arbitrária com garantia de convergência dadas algumas premissas.
 
-O algoritmo Iteração de Valor \cite{Howard-1960} se enquadra na categoria dos algoritmos síncronos e o RTDP \cite{BartoBradtkeSingh-1995} e sua variante o LRTDP \cite{BonetGeffer-2003} se enquadram na categoria de algoritnos assíncronos.
+O algoritmo Iteração de Valor \cite{Howard-1960} se enquadra na categoria dos algoritmos síncronos e o RTDP \cite{BartoBradtkeSingh-1995} e sua variante o LRTDP \cite{BonetGeffer-2003} se enquadram na categoria de algoritmos assíncronos.
 
 \subsection{Iteração de Valor}
 
@@ -124,7 +124,7 @@ Outro nome considerado para a aplicação da Equação \ref{eq:bellman_operator}
     \textsc{BellmanBackup}(V^t, s) = (BV^t)(s)
 \end{equation}
 
-Ao aplicar o \textsc{BellmanBackup} em todas os estados assumimos uma propriedade da equação, onde $V^t(s)$ irá convergir para a função valor ótima $V^*(s)$ se realizarmos ele infinitamente, \textit{i.e.}, assumindo um erro $\epsilon_t = \max_s |V^t(s)-V^*(s)|$ temos $\lim_{t \rightarrow \infty} \epsilon_t = 0$.
+Ao aplicar o \textsc{BellmanBackup} em todas os estados assumimos uma propriedade dessa equação, onde $V^t(s)$ irá convergir para a função valor ótima $V^*(s)$ se realizarmos ele infinitamente, \textit{i.e.}, assumindo um erro $\epsilon_t = \max_s |V^t(s)-V^*(s)|$ temos $\lim_{t \rightarrow \infty} \epsilon_t = 0$.
 
 Neste trabalho será considerado o conceito de $\epsilon$-otimalidade, onde a função valor é ótima se a diferença do valor atual de cada estado e a aplicação de um novo \textsc{BellmanBackup} nele for menor que $\epsilon$ para todos os estados, \textit{i.e.} $ \max_{s \in S} | V(s) - (BV)(s) | \leq \epsilon $.
 
@@ -159,28 +159,32 @@ Neste trabalho será considerado o conceito de $\epsilon$-otimalidade, onde a fu
 
 Uma característica da Iteração de Valor é que todos os estados são atualizados até se chegar a convergência e encontrar a política ótima para todos eles. Porém em algumas situações é possível saber o estado inicial de um agente em um problema e possível saber que a partir deste estado o agente não conseguirá visitar todos os estados do problema.
 
-Pensando nisso, o algoritmo RTDP (Algoritmo \ref{alg:rtdp-enum}), proposto por \cite{BartoBradtkeSingh-1995}, busca realizar \textsc{BellmanBackup}s somente nos estados alcançáveis por esse estado inicial $s_0$ e criar uma política ótima para eles a partir de uma estratégia onde são mostrados episódios da execução de um agente no ambiente (frequentemente chamados de \emph{trial}) de um estado inicial até um estado meta $s_g \in G$ (onde $P(s_g|s_g,a) = 1$ e $P(s'|s_g,a) = 0 \forall s' \in (S - G), s_g \in G$).
+Pensando nisso, o algoritmo RTDP (Real Time Dynamic Programming, ou Programação Dinâmica em Tempo Real) proposto por \cite{BartoBradtkeSingh-1995}, busca realizar \textsc{BellmanBackup}s nos estados possam ser visitados por um agente a partir de um estado inicial $s_0$ e criar uma política ótima para eles. Esses estados são chamados de \emph{estados alcançáveis}: estados que podem ser visitados por um agente durante a execução de uma política $\pi$ qualquer a partir de $s_0$.
 
-Durante um trial o algoritmo visita um estado $s$, e executa as seguintes ações:
+O intuito do RTDP é a partir de uma estratégia amostrar episódios da execução de um agente no ambiente (frequentemente chamados de \emph{trial}) de um estado inicial até um estado meta $s_g \in G$ (onde $P(s_g|s_g,a) = 1$ e $P(s'|s_g,a) = 0 \forall s' \in (S - G), s_g \in G$).
+
+Ao executar esses trials infinitas vezes é garantido que o RTDP encontrar uma política ótima $\pi^*$ para apenas uma parcela dos estados totais, os \emph{estados relevantes}, que são os estados alcançavéis por $s_0$ executando uma política ótima $\pi^*$.
+
+Os passos a serem executados durante um trial quando o algoritmo visita um estado $s$ são os seguintes:
 
 \begin{itemize}
-    \item aplica um \textsc{BellmanBackup} nesse estado e simula a execução de uma ação;
-    \item escolhe uma ação gulosa (\textsc{GreedyAction}) com respeito a a função valor atual, \textit{i.e.} uma ação tenha a maior qualidade (Equação \ref{eq:quality_function}) para o momento;
+    \item aplicar um \textsc{BellmanBackup} nesse estado e simula a execução de uma ação;
+    \item escolher uma ação gulosa (\textsc{GreedyAction}) com respeito a a função valor atual, \textit{i.e.} uma ação tenha a maior qualidade (Equação \ref{eq:quality_function}) para o momento;
 
     \begin{equation} \label{eq:greedy_action}
         \textsc{GreedyAction}(V, s) = arg \max_{a \in A} Q(s,a)
     \end{equation}
 
-    \item simula a transição para um novo estado (\textsc{ChooseNextState}) com base na ação gulosa escolhida;
+    \item simular a transição para um novo estado (\textsc{ChooseNextState}) com base na ação gulosa escolhida;
 
     \begin{equation} \label{eq:bellman_backup}
         \textsc{ChooseNextState}(s, a) = s' \sim P(\cdot|s,a)
     \end{equation}
 
-    \item reinicia as ações de visita esse novo estado.
+    \item reiniciar as ações de visita esse novo estado.
 \end{itemize}
 
-Uma característica deste algoritmo é que apesar é garantido que ele tenha uma convergência para uma política ótima $\pi^*$ caso seja realizados infinitos \emph{trials}, porém o próprio algoritmo descrito por Barto não tem nenhuma condição de parada baseade em convergência. Portanto para este trabalho é adotado que o algoritmo é encerrado após executar por um determinado tempo.
+Apesar de ser garantido que o RTDP tenha uma convergência para uma política ótima $\pi^*$ caso seja realizados infinitos \emph{trials}, o próprio algoritmo descrito por Barto não tem nenhuma condição de parada baseada em convergência. Portanto para este trabalho será adotado que o algoritmo é encerrado após executar por um determinado tempo, como pode ser visto no Algoritmo \ref{alg:rtdp-enum}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \linesnumbered
@@ -210,9 +214,9 @@ Uma característica deste algoritmo é que apesar é garantido que ele tenha uma
 
 \subsection{LRTDP}
 
-No algoritmo RTDP a convergência para todos os estados alcançáveis pode ser lenta, pois estados comprobabilidade baixa são visitados com pouca frequência e seus sucessores podem sofrer menos Backups.
+No algoritmo RTDP a convergência para todos os estados alcançáveis pode ser lenta, pois estados comprobabilidade baixa são visitados com pouca frequência e seus sucessores podem sofrer menos backups.
 
-Buscando melhorar essa convergência o algoritmo LRTDP foi proposto por \cite{BonetGeffer-2003}, focando em identificar
+Buscando melhorar essa convergência o algoritmo LRTDP (Labeled Real Time Dynamic Programming, ou Programação Dinâmica em Tempo Real Rotulada) foi proposto por \cite{BonetGeffer-2003}, focando em identificar
 os estados convergidos durante os trials. Estes estados $s$ são rotulados como ``resolvidos'' verificando se $V^t(s)$ tem
 valor ótimo. Desta forma, ao se executar um trial estes estados não serão visitados, evitando assim atualizações desnecessárias neles.
 
@@ -263,7 +267,7 @@ Este algoritmo realiza uma busca em largura neste grafo procurando por estados q
 \end{equation}
 
 Caso existam estados com resíduo maior que $\epsilon$, seus sucessores não serão visitados nessa busca (pois eles precisarão ser explorados durante um trial) e o grafo guloso será considerado como não resolvido (\textit{i.e.}, não convergiu).
-Durante a busca para controlar os estados visitados, o algoritmo mantém um pilha com os estados ``encerrados'' (\textit{closed}, estados já visitados para a expansão do grafo guloso)  e uma pilha com os estados abertos (\textit{open}, estados a visitar).
+Durante a busca para controlar os estados visitados, o algoritmo mantém um pilha com os estados ``encerrados'' (\textit{closed}, que são estados já visitados para a expansão do grafo guloso) e uma pilha com os estados abertos (\textit{open}, estados a visitar).
 
 Ao terminar de gerar o grafo guloso o \textsc{CheckSolved} pode tomar duas ações: caso ele descubra que todos os estados já convergiram (ou seja o grafo guloso está resolvido e tem todos os estados com resíduo menor que $\epsilon$), os estados desse grafo serão marcados como resolvidos. Caso ainda haja algum estado não resolvido, os estados são atualizados com \textsc{BellmanBackup}s para acelerar sua convergência.
 
@@ -328,11 +332,11 @@ Com esta rotina de rotulação e com a condição de término dos trials incluin
 
 Uma vez implementado os algoritmos, foram elaborados alguns experimentos visando analizar a execução dos algoritmos, a convergência e o comportamento deles.
 
-Os experimentos foram executados na plataforma Google Colab com o Python\footnote{Disponível em https://colab.research.google.com/drive/1KVVhy5Zi9TlpmxSn14I9H6K49K568GlY}, na época com 2 CPUs de 2.2 GHz e 13GB de memória. As implementações dos algoritmos estão disponíveis no Github\footnote{Disponível em https://github.com/danielbdias/automated-planning-and-reinforcement-learning-studies}.
+Os experimentos foram executados na plataforma Google Colab com o Python, na época deste relatório com 2 CPUs de 2.2 GHz e 13GB de memória. As implementações dos algoritmos estão disponíveis no Github\footnote{Disponível em https://github.com/danielbdias/automated-planning-and-reinforcement-learning-studies}.
 
 Com o intuito de melhorar a performance dos algoritmos e garantir que eles rodassem em tempo hábil, tanto a implementação da Iteração de Valor, quanto a do RTDP e LRTDP utilizaram a biblioteca \emph{numpy}\footnote{https://numpy.org/} durante o cálculo da função qualidade para cada par de estado / ação (Equação \ref{eq:quality_function}) (que realiza os cálculos vertoriais em C e FORTRAN ao invés do Python), o que trouxe algumas diferenças de performance entre os algoritmos em relação ao discutido na literatura, principalmente considerando os resultados de \cite{BonetGeffer-2003}.
 
-O domínio utilizado foi o \emph{"Travessia do Rio"}: um agente começa em uma ponta seca do rio e deve ir a outra ponta (Figura \ref{fig:river-traversal-scheme}) podendo se movimentar em quatro direções (norte, sul, leste e oeste). Nele, o agente pode andar por duas áreas: uma área seca (descrita pela parte marrom do grid) onde os movimentos que o agente executar são determinísticos, ou a área molhada (parte azul do grid) onde ao se movimentar, o agente tem uma chance de ao invés de ir para o local desejado, ser "arrastado" em direção a cachoeira. Caso ele atinja a região da cachoira ele voltará para o estado inicial.
+O domínio utilizado foi o \emph{"Travessia do Rio"}: um agente começa em uma ponta seca do rio e deve ir a outra ponta (Figura \ref{fig:river-traversal-scheme}) podendo se movimentar em quatro direções (norte, sul, leste e oeste). Nele, o agente pode andar por duas áreas: uma área seca (descrita pela parte marrom do grid) onde os movimentos que o agente executar são determinísticos, ou a área molhada (parte azul do grid) onde ao se movimentar, o agente tem uma chance de ao invés de ir para o local desejado, ser "arrastado" em direção a cachoeira. Caso ele atinja a região da cachoeira ele voltará para o estado inicial.
 
 Modelando-o como um MDP, os estados são a posição do agente no grid, as ações são os quatro movimentos possíveis do agente e a recompensa (neste caso custo) é de $-1$ para todos os estados exceto a meta.
 
@@ -343,14 +347,14 @@ Modelando-o como um MDP, os estados são a posição do agente no grid, as açõ
     \label{fig:river-traversal-scheme}
 \end{figure}
 
-Este domínio possui 3 tamanhos de grid: um pequeno ($5 \times 25$, 125 estados), um médio ($20 \times 100$, 2000 estados) e um grande ($50 \times 250$, 12500 estados).
+No contexto deste trabalho serão utilizados três tamanhos de grid: um pequeno ($5 \times 25$, 125 estados, Ambiente 1), um médio ($20 \times 100$, 2000 estados, Ambiente 2) e um grande ($50 \times 250$, 12500 estados, Ambiente 3).
 
 Os parâmetros de execução dos algoritmos foram:
 
 \begin{itemize}
     \item $ \epsilon = 10^{-7} $
     \item $\gamma = 0.9$
-    \item $ V_0(s) = 0 \forall s \in S $
+    \item $ V_0(s) = 0$ para todo $ s \in S $
 \end{itemize}
 
 Cada algoritmo foi executado 5 vezes e os valores médios de tempo, iterações (ou trials) e Bellman Backups foi medido. Os testes do RTDP, que não tem critério de convergência, foram limitados em número de trials para cada grid, sendo eles: 350 trials para o grid pequeno, 4500 para o médio e 10000 trials para o grande.
@@ -451,12 +455,40 @@ Analizando sobre a ótica do número de estados em relação ao tempo de execuç
 
 \subsection{Análise de comportamento no domínio}
 
-teste
-%% montar mapa de calor
-%% responder quando cruzar o rio
+Para se analizar o comportamento dos algoritmos em relação ao domínio de \emph{Travessia de Rio}, optou-se por utilizar somente os resultados do grid pequeno.
+
+Neste domínio ao escolher o caminho mais seguro andando pelas áreas secas e optando cruzar o rio pela ponte até a meta, teremos que contornar todo o grid e assumir um custo alto por esta estratégia. Para reduzir este custo é necessário atravessar o rio, sob o risco de ser arrastado pela cachoeira e voltar para o estado inicial. O dilema é: existe um caminho mais curto atravessando o rio que reduza esse custo ao mesmo tempo que evite que o agente caia na cachoeira?
+
+A política ótima encontrada pela algoritmo Iteração de Valor responde isso, como pode ser visto na Figura \ref{fig:full-policy}. O melhor caminho a partir de $s_0$ é denotado pelas células verdes e consiste em ir ao norte o mínimo possível e cruzar o rio a partir do momento que se tem uma probabilidade mínima de cair na cachoeira.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{full-policy}
+    \caption{Política ótima para o Ambiente 1 (IV)}
+    \label{fig:full-policy}
+\end{figure}
+
+Porém, ao observar este caminho, um questionamento pode ser feito: uma vez encontrado um caminho seguro, seria realmente necessário calcular os Bellman backups para os estados acima do ponto em que o rio pode ser atravessado?
+É neste ponto os algoritmos de programação dinâmica assíncronas trabalham, como o caso do LRTDP. A política que ele retorna, a política ótima parcial ilustrada na Figura \ref{fig:partial-policy} é diferente da política ótima do Iteração de Valor justamente por olhar apenas os estados relevantes (estados alcançados de $s_0$ com a política ótima), mostrando que muitas vezes não há a necessidade do cálculo dos Bellman Backups para todos os estados até a convergência. A Figura \ref{fig:policy-differences} mostra isso, onde em cada célula é a diferença absoluta entre o $V(s)$ encontrado pela Iteração de Valor e o $V(s)$ encontrado para o LRTDP.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{partial-policy}
+    \caption{Política parcial para o Ambiente 1 (LRTDP)}
+    \label{fig:partial-policy}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{policy-differences}
+    \caption{Diferenças entre valores: LRTDP x IV}
+    \label{fig:policy-differences}
+\end{figure}
 
 \section{Conclusão}
-discuta os resultados
+
+Este trabalho buscou estudar e enteder melhor alguns algoritmos de Planejamento Probabilístico que solucionam Procressos de Decisão Markovianos (MDP), em especial o Iteração de Valor, o RTDP e o LRTDP. Dado como um problema foi modelado como um MDP pode-se aplicar algoritmos que buscam tomar uma decisão ótima em qualquer ocasião (encontrando uma política ótima para todos os estados) ou caso haja um conhecimento de estado inicial encontra uma política ótima que atenda somente alguns estados relevantes ao nosso problema.
+Como trabalho futuro, um ponto de melhoria a ser pensado é referente as implementações dos algoritmos. Por se concentrar somente no cálculo dos Bellman Backups, o algoritmo Iteração de Valor pode ser otimizado através de algorimos de calculo matricial resolvendo os problemas propostos em tempo hábil, enquanto no RTDP e o LRTDP além desse cálculo há a necessidade de otimizar a parte de exploração, como o cálculo para se obter os próximos estados de um estado $s$.
 
 \bibliography{references.bib}
 \bibliographystyle{aaai}

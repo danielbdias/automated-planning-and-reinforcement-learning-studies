@@ -1,0 +1,139 @@
+\def\year{2020}\relax
+
+\documentclass[letterpaper]{article}
+
+\usepackage{aaai20}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage[hyphens]{url}
+\usepackage{graphicx}
+\urlstyle{rm}
+\def\UrlFont{\rm}
+
+\usepackage{graphicx}
+\frenchspacing
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[vlined,algoruled,titlenumbered,noend,portugues]{algorithm2e}
+\usepackage{booktabs}
+
+\graphicspath{{./images/}}
+
+\pdfinfo{
+  /Title (Relatório 02 - Algoritmos de Aprendizado por Reforço)
+  /Author (Daniel Baptista Dias)
+}
+
+% /Title (Relatório 01 - Algoritmos de Planejamento Probabilístico)
+% /Author (Daniel Baptista Dias)
+
+\setcounter{secnumdepth}{0} %May be changed to 1 or 2 if section numbers are desired.
+
+% The file aaai20.sty is the style file for AAAI Press proceedings, working notes, and technical reports.
+\setlength\titlebox{2.5in} % If your paper contains an overfull \vbox too high warning at the beginning of the document, use this
+% command to correct it. You may not alter the value below 2.5 in
+
+\title{Relatório 02 - Algoritmos de Aprendizado por Reforço}
+\author{Daniel Baptista Dias}
+
+\begin{document}
+
+\maketitle
+
+\section{Introdução}
+\label{sec:introducao}
+
+bla
+% Na disciplina de Inteligência Artificial existe uma área chamada de Planejamento Automatizado
+% que estuda formas de como um agente pode tomar um conjunto de decisões em sequência interagindo
+% com um ambiente com o objetivo de solucionar um problema.
+
+% O foco deste trabalho será em uma das subáreas do Planejamento Automatizado, o Planejamento Probabilístico, onde
+% é assumido que o resultado da interação do agente com o ambiente é incerto, e que dada uma ação realizada pelo agente
+% neste ambiente dada uma determinada situação, essa ação pode ter diferentes resultados, cuja frequência é ditada por
+% uma distribuição de probabilidades.
+
+% Um arcabouço utilizado para modelar problemas de Planejamento Probabilístico são os Processos Markovianos de Decisão
+% (MDP, do inglês \textit{Markov Decision Processes})\cite{Puterman-1994} que possui diverso algoritmos conhecidos para resolve-los.
+
+% Serão analizados os algoritmos Iteração de Valor \cite{Howard-1960}, RTDP (do inglês, \textit{Real Time Dynamic Programming})
+% \cite{BartoBradtkeSingh-1995} e LRTDP (do inglês, \textit{Labeled Real Time Dynamic Programming}) \cite{BonetGeffer-2003} em relação a como eles
+% solucionam os MDPs.
+
+\section{Arcabouço Teórico}
+
+bla
+% apresentação rápida sobre MDPs
+
+% apresentação sobre algoritmos clássicos e algoritmos por aproximação
+% explicação do SARSA e do Q-Learning
+
+% apresentação sobre algoritmos por policy search
+% explicação do REINFORCE
+
+% apresentação sobre algoritmos por sample efficient
+% explicação do FittQ
+
+
+\section{Algoritmos}
+
+Os algoritmos que buscam soluções para MDPs estudados neste artigo são algoritmos baseados em programação dinâmica com garantia de convergência. Eles podem ser divididos em dois tipos: os algoritmos síncronos, que buscam calcular o valor da execução de uma política para todos os estados e ir refinando esse valor a cada ciclo de cálculo (iteração) e os algoritmos assíncronos que buscam atualizar os estados de forma arbitrária com garantia de convergência dadas algumas premissas.
+
+O algoritmo Iteração de Valor \cite{Howard-1960} se enquadra na categoria dos algoritmos síncronos e o RTDP \cite{BartoBradtkeSingh-1995} e sua variante o LRTDP \cite{BonetGeffer-2003} se enquadram na categoria de algoritmos assíncronos.
+
+\subsection{Q-Learning aproximado}
+% explicação do SARSA e do Q-Learning
+bla
+
+\subsection{REINFORCE}
+% explicação do REINFORCE
+bla
+
+\subsection{FittQ}
+% explicação do FittQ
+bla
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \linesnumbered
+% \dontprintsemicolon
+% \begin{algorithm}[t!]
+% {
+% 	\caption{\textsc{IteraçãoDeValor}($ V^0, \epsilon $)}
+% 	\label{alg:iteracao-valor}
+%     $t := 0$\\
+%     $V^t := V^0$\\
+
+%     \Repita {$ \max_{s \in S}(\delta) < \epsilon $}
+%     {
+%         $t := t + 1$\\
+
+%         \ParaCada {$s \in S$}
+%         {
+%             $V^{t+1}(s) := \textsc{BellmanBackup}(V^{t}, s)$ \\
+%             $\delta(s) := | V^{t+1}(s) - V^t(s) | $
+%         }
+%     }
+
+%     \Retorna{$V$}
+% }
+% \end{algorithm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Experimentos e Resultados}
+
+bla
+% TODO: avaliar experimentos e resultados
+
+\section{Conclusão}
+
+bla
+% TODO: avaliar experimentos e resultados
+
+\bibliography{references.bib}
+\bibliographystyle{aaai}
+
+\end{document}
