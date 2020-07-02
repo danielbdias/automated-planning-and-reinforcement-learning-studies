@@ -115,6 +115,7 @@ def reinforce(env, num_episodes, discount_factor=1.0, verbose=False):
     config = _make_config(num_episodes, discount_factor)
     stats = EpisodeStats(episode_lengths=np.zeros(num_episodes), episode_rewards=np.zeros(num_episodes))
 
+    tf1.reset_default_graph()
     with tf1.Session() as session:
         p = ParameterizedPolicy(session, env.observation_space.shape[0], env.action_space.n, NoLog(), config.lr_policy)
         b = ValueBaseline(session, env.observation_space.shape[0], NoLog(), config.lr_baseline)

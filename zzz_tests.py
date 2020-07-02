@@ -30,7 +30,8 @@ episodes = 5000
 # Q, stats = approximated_q_learning(env, episodes, discount_factor=1.0, epsilon=0.1, epsilon_decay=1.0)
 
 # REINFORCE (Policy search)
-stats = reinforce(env, episodes, discount_factor=1.0)
+reinforce_d_10_stats = reinforce(env, episodes, discount_factor=1.0)
+reinforce_d_09_stats = reinforce(env, episodes, discount_factor=0.9)
 
 print("\n")
 print(f"Episode Lenghts: {np.mean(stats.episode_lengths)}")
