@@ -24,7 +24,7 @@ episodes = 2000
 
 # SARSA (Tabular)
 #Q, stats = sarsa(env, episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, discretize_state_function=discretize_state)
-Q, stats = sarsa(env, episodes, discount_factor=0.9, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
+# Q, stats = sarsa(env, episodes, discount_factor=0.9, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
 
 # Q-Learning (Value Function approximation)
 # TODO: understand and fix code
