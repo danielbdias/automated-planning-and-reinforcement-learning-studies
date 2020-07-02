@@ -2,7 +2,6 @@ import gym
 import numpy as np
 
 from reinforcement_learning.algorithms.value_based import q_learning, sarsa
-from reinforcement_learning.algorithms.function_approximation import q_learning as approximated_q_learning
 from reinforcement_learning.algorithms.policy_search import reinforce
 
 env = gym.make('CartPole-v1')
@@ -16,7 +15,7 @@ def discretize_state(state, truncate_digits = 4):
 
     return "_".join(values)
 
-episodes = 2000
+episodes = 5000
 
 # Q-Learning (Tabular)
 #Q, stats = q_learning(env, episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, discretize_state_function=discretize_state)

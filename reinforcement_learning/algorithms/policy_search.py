@@ -111,7 +111,7 @@ def _make_config(num_episodes, discount_factor):
     Config = namedtuple("ReinforceConfig", ["episodes", "num_trajectories", "gamma", "lr_policy", "lr_baseline"])
     return Config(episodes=num_episodes, num_trajectories=10, gamma=discount_factor, lr_policy=50, lr_baseline=0.01)
 
-def reinforce(env, num_episodes, discount_factor=1.0):
+def reinforce(env, num_episodes, discount_factor=1.0, verbose=False):
     config = _make_config(num_episodes, discount_factor)
     stats = EpisodeStats(episode_lengths=np.zeros(num_episodes), episode_rewards=np.zeros(num_episodes))
 
@@ -123,7 +123,7 @@ def reinforce(env, num_episodes, discount_factor=1.0):
 
         for i_episode in range(num_episodes):
             # Print out which episode we're on, useful for debugging.
-            if (i_episode + 1) % 100 == 0:
+            if ((i_episode + 1) % 100 == 0) and verbose:
                 print("\rEpisode {}/{}.".format(i_episode + 1, num_episodes), end="")
                 sys.stdout.flush()
 

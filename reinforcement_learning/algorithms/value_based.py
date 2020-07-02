@@ -31,7 +31,7 @@ def make_epsilon_greedy_policy(Q, epsilon, nA):
         return A
     return policy_fn
 
-def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, discretize_state_function=None):
+def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, discretize_state_function=None, verbose=False):
     """
     Q-Learning algorithm: Off-policy TD control. Finds the optimal greedy policy
     while following an epsilon-greedy policy
@@ -63,7 +63,7 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, d
 
     for i_episode in range(num_episodes):
         # Print out which episode we're on, useful for debugging.
-        if (i_episode + 1) % 100 == 0:
+        if ((i_episode + 1) % 100 == 0) and verbose:
             print("\rEpisode {}/{}.".format(i_episode + 1, num_episodes), end="")
             sys.stdout.flush()
 
@@ -98,7 +98,7 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, d
 
     return Q, stats
 
-def sarsa(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, discretize_state_function=None):
+def sarsa(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, discretize_state_function=None, verbose=False):
     """
     SARSA algorithm: On-policy TD control. Finds the optimal epsilon-greedy policy.
 
@@ -127,7 +127,7 @@ def sarsa(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, discre
 
     for i_episode in range(num_episodes):
         # Print out which episode we're on, useful for debugging.
-        if (i_episode + 1) % 100 == 0:
+        if ((i_episode + 1) % 100 == 0) and verbose:
             print("\rEpisode {}/{}.".format(i_episode + 1, num_episodes), end="")
             sys.stdout.flush()
 
