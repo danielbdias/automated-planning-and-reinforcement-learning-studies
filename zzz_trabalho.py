@@ -1,63 +1,93 @@
-import time
-import pandas as pd
+import gym
 import numpy as np
-import matplotlib.pyplot as plt
+import time
+import pickle
 
-from probabilistic_planning.problems.reader import read_problem_file
-from probabilistic_planning.algorithms.value_iteration import enumerative_value_iteration
-from probabilistic_planning.algorithms.rtdp import enumerative_rtdp, enumerative_lrtdp
+from reinforcement_learning.algorithms.value_based import q_learning, sarsa
+from reinforcement_learning.algorithms.policy_search import reinforce
 
-epsilon = 1e-8
-gamma = 0.9
+# environment setup
+env = gym.make('CartPole-v1')
 
-def test_algorithm(algorithm_name, mdp, algorithm):
-    start_time = time.time()
+def discretize_state(state, truncate_digits = 4):
+    values = []
 
-    policy, value_function, statistics = algorithm(mdp)
+    for state_value in state:
+        truncated_state_value = int(np.trunc(state_value * (10 ** truncate_digits)))
+        values.append(str(truncated_state_value))
 
-    elapsed_time = time.time() - start_time
-    elapsed_time_as_string = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
+    return "_".join(values)
 
-    return {
-        "algorithm_name": algorithm_name,
-        "elapsed_time": elapsed_time,
-        "elapsed_time_as_string": elapsed_time_as_string,
-        "iterations": statistics["iterations"],
-        "bellman_backups_done": statistics["bellman_backups_done"],
-        "maximum_residuals": statistics["maximum_residuals"],
-        "last_residual": float(statistics["maximum_residuals"][-1])
-    }
+def save_statistics(stats, file_name):
+    pickle.dump(stats.to_tuple(), open(file_name, "wb"))
 
-mdp = read_problem_file(problem_file="probabilistic_planning/problems/files/enumerative/river_traversal_02.net")
+episodes = 5000
 
-result = test_algorithm("IV", mdp, lambda mdp: enumerative_value_iteration(mdp, gamma=0.9, epsilon=1e-8))
-print(result["algorithm_name"])
-print(result["iterations"])
-print(result["elapsed_time"])
+# Q-Learning (Tabular)
+print("Running Q-Learning...")
+# start_time = time.perf_counter()
+# _, q_learning_d_10_alpha_09_epsilon01_stats = q_learning(env, episodes, discount_factor=1.0, alpha=0.9, epsilon=0.1, discretize_state_function=discretize_state)
+# _, q_learning_d_10_alpha_05_epsilon05_stats = q_learning(env, episodes, discount_factor=1.0, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
+# _, q_learning_d_10_alpha_01_epsilon09_stats = q_learning(env, episodes, discount_factor=1.0, alpha=0.1, epsilon=0.9, discretize_state_function=discretize_state)
+# _, q_learning_d_09_alpha_09_epsilon01_stats = q_learning(env, episodes, discount_factor=0.9, alpha=0.9, epsilon=0.1, discretize_state_function=discretize_state)
+# _, q_learning_d_09_alpha_05_epsilon05_stats = q_learning(env, episodes, discount_factor=0.9, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
+# _, q_learning_d_09_alpha_01_epsilon09_stats = q_learning(env, episodes, discount_factor=0.9, alpha=0.1, epsilon=0.9, discretize_state_function=discretize_state)
+# _, q_learning_d_05_alpha_09_epsilon01_stats = q_learning(env, episodes, discount_factor=0.5, alpha=0.9, epsilon=0.1, discretize_state_function=discretize_state)
+# _, q_learning_d_05_alpha_05_epsilon05_stats = q_learning(env, episodes, discount_factor=0.5, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
+# _, q_learning_d_05_alpha_01_epsilon09_stats = q_learning(env, episodes, discount_factor=0.5, alpha=0.1, epsilon=0.9, discretize_state_function=discretize_state)
+# elapsed_time = time.perf_counter() - start_time
+# print(f"Elapsed time: {elapsed_time:0.4f} seconds")
 
-result = test_algorithm("LRTDP", mdp, lambda mdp: enumerative_lrtdp(mdp, gamma=0.9, epsilon=1e-8, max_depth=20_000))
-print(result["algorithm_name"])
-print(result["iterations"])
-print(result["elapsed_time"])
+# print("Saving Q-Learning results...")
+# save_statistics(q_learning_d_10_alpha_09_epsilon01_stats, "./pickles/q_learning_d_10_alpha_09_epsilon01_stats.pickle")
+# save_statistics(q_learning_d_10_alpha_05_epsilon05_stats, "./pickles/q_learning_d_10_alpha_05_epsilon05_stats.pickle")
+# save_statistics(q_learning_d_10_alpha_01_epsilon09_stats, "./pickles/q_learning_d_10_alpha_01_epsilon09_stats.pickle")
+# save_statistics(q_learning_d_09_alpha_09_epsilon01_stats, "./pickles/q_learning_d_09_alpha_09_epsilon01_stats.pickle")
+# save_statistics(q_learning_d_09_alpha_05_epsilon05_stats, "./pickles/q_learning_d_09_alpha_05_epsilon05_stats.pickle")
+# save_statistics(q_learning_d_09_alpha_01_epsilon09_stats, "./pickles/q_learning_d_09_alpha_01_epsilon09_stats.pickle")
+# save_statistics(q_learning_d_05_alpha_09_epsilon01_stats, "./pickles/q_learning_d_05_alpha_09_epsilon01_stats.pickle")
+# save_statistics(q_learning_d_05_alpha_05_epsilon05_stats, "./pickles/q_learning_d_05_alpha_05_epsilon05_stats.pickle")
+# save_statistics(q_learning_d_05_alpha_01_epsilon09_stats, "./pickles/q_learning_d_05_alpha_01_epsilon09_stats.pickle")
+# print("Q-Learning saved.")
 
-result = test_algorithm("RTDP", mdp, lambda mdp: enumerative_rtdp(mdp, gamma=0.9, max_trials=4_500, max_depth=20_000))
-print(result["algorithm_name"])
-print(result["iterations"])
-print(result["elapsed_time"])
+# SARSA (Tabular)
+# print("Running SARSA...")
+# start_time = time.perf_counter()
+# _, sarsa_d_10_alpha_09_epsilon01_stats = sarsa(env, episodes, discount_factor=1.0, alpha=0.9, epsilon=0.1, discretize_state_function=discretize_state)
+# _, sarsa_d_10_alpha_05_epsilon05_stats = sarsa(env, episodes, discount_factor=1.0, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
+# _, sarsa_d_10_alpha_01_epsilon09_stats = sarsa(env, episodes, discount_factor=1.0, alpha=0.1, epsilon=0.9, discretize_state_function=discretize_state)
+# _, sarsa_d_09_alpha_09_epsilon01_stats = sarsa(env, episodes, discount_factor=0.9, alpha=0.9, epsilon=0.1, discretize_state_function=discretize_state)
+# _, sarsa_d_09_alpha_05_epsilon05_stats = sarsa(env, episodes, discount_factor=0.9, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
+# _, sarsa_d_09_alpha_01_epsilon09_stats = sarsa(env, episodes, discount_factor=0.9, alpha=0.1, epsilon=0.9, discretize_state_function=discretize_state)
+# _, sarsa_d_05_alpha_09_epsilon01_stats = sarsa(env, episodes, discount_factor=0.5, alpha=0.9, epsilon=0.1, discretize_state_function=discretize_state)
+# _, sarsa_d_05_alpha_05_epsilon05_stats = sarsa(env, episodes, discount_factor=0.5, alpha=0.5, epsilon=0.5, discretize_state_function=discretize_state)
+# _, sarsa_d_05_alpha_01_epsilon09_stats = sarsa(env, episodes, discount_factor=0.5, alpha=0.1, epsilon=0.9, discretize_state_function=discretize_state)
+# elapsed_time = time.perf_counter() - start_time
+# print(f"Elapsed time: {elapsed_time:0.4f} seconds")
 
-mdp = read_problem_file(problem_file="probabilistic_planning/problems/files/enumerative/river_traversal_03.net")
+# print("Saving SARSA results...")
+# save_statistics(sarsa_d_10_alpha_09_epsilon01_stats, "./pickles/sarsa_d_10_alpha_09_epsilon01_stats.pickle")
+# save_statistics(sarsa_d_10_alpha_05_epsilon05_stats, "./pickles/sarsa_d_10_alpha_05_epsilon05_stats.pickle")
+# save_statistics(sarsa_d_10_alpha_01_epsilon09_stats, "./pickles/sarsa_d_10_alpha_01_epsilon09_stats.pickle")
+# save_statistics(sarsa_d_09_alpha_09_epsilon01_stats, "./pickles/sarsa_d_09_alpha_09_epsilon01_stats.pickle")
+# save_statistics(sarsa_d_09_alpha_05_epsilon05_stats, "./pickles/sarsa_d_09_alpha_05_epsilon05_stats.pickle")
+# save_statistics(sarsa_d_09_alpha_01_epsilon09_stats, "./pickles/sarsa_d_09_alpha_01_epsilon09_stats.pickle")
+# save_statistics(sarsa_d_05_alpha_09_epsilon01_stats, "./pickles/sarsa_d_05_alpha_09_epsilon01_stats.pickle")
+# save_statistics(sarsa_d_05_alpha_05_epsilon05_stats, "./pickles/sarsa_d_05_alpha_05_epsilon05_stats.pickle")
+# save_statistics(sarsa_d_05_alpha_01_epsilon09_stats, "./pickles/sarsa_d_05_alpha_01_epsilon09_stats.pickle")
+# print("SARSA saved.")
 
-result = test_algorithm("IV", mdp, lambda mdp: enumerative_value_iteration(mdp, gamma=0.9, epsilon=1e-8))
-print(result["algorithm_name"])
-print(result["iterations"])
-print(result["elapsed_time"])
+# REINFORCE (Policy search)
+print("Running REINFORCE...")
+start_time = time.perf_counter()
+reinforce_d_10_stats = reinforce(env, episodes, discount_factor=1.0)
+reinforce_d_09_stats = reinforce(env, episodes, discount_factor=0.9)
+reinforce_d_05_stats = reinforce(env, episodes, discount_factor=0.5)
+elapsed_time = time.perf_counter() - start_time
+print(f"Elapsed time: {elapsed_time:0.4f} seconds")
 
-result = test_algorithm("LRTDP", mdp, lambda mdp: enumerative_lrtdp(mdp, gamma=0.9, epsilon=1e-8, max_depth=200_000))
-print(result["algorithm_name"])
-print(result["iterations"])
-print(result["elapsed_time"])
-
-result = test_algorithm("RTDP", mdp, lambda mdp: enumerative_rtdp(mdp, gamma=0.9, max_trials=10_000, max_depth=200_000))
-print(result["algorithm_name"])
-print(result["iterations"])
-print(result["elapsed_time"])
+print("Saving REINFORCE results...")
+save_statistics(reinforce_d_10_stats, "./pickles/reinforce_d_10_stats.pickle")
+save_statistics(reinforce_d_09_stats, "./pickles/reinforce_d_09_stats.pickle")
+save_statistics(reinforce_d_05_stats, "./pickles/reinforce_d_05_stats.pickle")
+print("REINFORCE saved.")

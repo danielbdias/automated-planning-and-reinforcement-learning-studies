@@ -1,6 +1,7 @@
 # REINFORCE adapted from algorithm implemented here: https://github.com/SwamyDev/reinforcement/blob/master/example/reinforce.py
 
 from collections import defaultdict, namedtuple
+from reinforcement_learning.structures import EpisodeStats
 
 import itertools
 import sys
@@ -18,8 +19,6 @@ except ImportError:
 from reinforcement.algorithm.reinforce import Reinforce
 from reinforcement.agents.basis import BatchAgent
 from reinforcement import tf_operations as tf_ops
-
-EpisodeStats = namedtuple("Stats",["episode_lengths", "episode_rewards"])
 
 class NoLog:
     def add_summary(self, *args, **kwargs):

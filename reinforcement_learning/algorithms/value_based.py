@@ -2,12 +2,11 @@
 # SARSA adapted from algorithm implemented here: https://github.com/dennybritz/reinforcement-learning/blob/master/TD/SARSA%20Solution.ipynb
 
 from collections import defaultdict, namedtuple
+from reinforcement_learning.structures import EpisodeStats
 
 import itertools
 import sys
 import numpy as np
-
-EpisodeStats = namedtuple("Stats",["episode_lengths", "episode_rewards"])
 
 def make_epsilon_greedy_policy(Q, epsilon, nA):
     """
