@@ -238,7 +238,7 @@ def neuro_fitted_q(epoch, train_env_max_steps, eval_env_max_steps, discount, ini
         #         )
         #         wandb.log({"Evaluation Episode Cost": eval_episode_cost}, step=epoch)
 
-        # if eval_success:
+        if eval_success:
             # logger.info(
             #     "Epoch {:4d} | Total Cycles {:6d} | Total Cost {:4.2f}".format(
             #         epoch, len(all_rollouts), total_cost
@@ -250,7 +250,7 @@ def neuro_fitted_q(epoch, train_env_max_steps, eval_env_max_steps, discount, ini
             # if CONFIG.USE_WANDB:
             #     wandb.log({"Total Cycles": len(all_rollouts)}, step=epoch)
             #     wandb.log({"Total Cost": total_cost}, step=epoch)
-            # break
+            break
 
     # Save trained agent
     # if CONFIG.SAVE_PATH:
