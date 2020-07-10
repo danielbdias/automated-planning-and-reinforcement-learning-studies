@@ -66,26 +66,8 @@ from reinforcement_learning.structures import EpisodeStats
 AlgorithmConfig = namedtuple("AlgorithmConfig", [ "EPOCH", "TRAIN_ENV_MAX_STEPS", "EVAL_ENV_MAX_STEPS", "DISCOUNT", "INIT_EXPERIENCE", "INCREMENT_EXPERIENCE",
                                                   "HINT_TO_GOAL", "RANDOM_SEED", "TRAIN_RENDER", "EVAL_RENDER", "SAVE_PATH", "LOAD_PATH", "USE_TENSORBOARD", "USE_WANDB" ])
 
-def neuro_fitted_q(epoch, train_env_max_steps, eval_env_max_steps, discount, init_experience = 0, seed = None):
+def neuro_fitt_q(epoch, train_env_max_steps, eval_env_max_steps, discount, init_experience = 0, seed = None):
     """Run NFQ."""
-
-    # Setup hyperparameters
-    parser = configargparse.ArgParser()
-    parser.add("-c", "--config", required=True, is_config_file=True)
-    parser.add("--EPOCH", type=int)
-    parser.add("--TRAIN_ENV_MAX_STEPS", type=int)
-    parser.add("--EVAL_ENV_MAX_STEPS", type=int)
-    parser.add("--DISCOUNT", type=float)
-    parser.add("--INIT_EXPERIENCE", type=int)
-    parser.add("--INCREMENT_EXPERIENCE", action="store_true")
-    parser.add("--HINT_TO_GOAL", action="store_true")
-    parser.add("--RANDOM_SEED", type=int)
-    parser.add("--TRAIN_RENDER", action="store_true")
-    parser.add("--EVAL_RENDER", action="store_true")
-    parser.add("--SAVE_PATH", type=str, default="")
-    parser.add("--LOAD_PATH", type=str, default="")
-    parser.add("--USE_TENSORBOARD", action="store_true")
-    parser.add("--USE_WANDB", action="store_true")
     CONFIG = AlgorithmConfig(
         EPOCH = epoch,
         TRAIN_ENV_MAX_STEPS = train_env_max_steps,
@@ -103,30 +85,8 @@ def neuro_fitted_q(epoch, train_env_max_steps, eval_env_max_steps, discount, ini
         USE_WANDB = False,
     )
 
-    # print()
-    # print("+--------------------------------+--------------------------------+")
-    # print("| Hyperparameters                | Value                          |")
-    # print("+--------------------------------+--------------------------------+")
-    # for arg in vars(CONFIG):
-    #     print(
-    #         "| {:30} | {:<30} |".format(
-    #             arg, getattr(CONFIG, arg) if getattr(CONFIG, arg) is not None else ""
-    #         )
-    #     )
-    # print("+--------------------------------+--------------------------------+")
-    # print()
-
     # Log to File, Console, TensorBoard, W&B
     logger = get_logger()
-
-    # if CONFIG.USE_TENSORBOARD:
-    #     from torch.utils.tensorboard import SummaryWriter
-
-    #     writer = SummaryWriter(log_dir="tensorboard_logs")
-    # if CONFIG.USE_WANDB:
-    #     import wandb
-
-    #     wandb.init(project="implementations-nfq", config=CONFIG)
 
     # Setup environment
     train_env = CartPoleRegulatorEnv(mode="train")
@@ -193,68 +153,12 @@ def neuro_fitted_q(epoch, train_env_max_steps, eval_env_max_steps, discount, ini
             eval_env, CONFIG.EVAL_RENDER
         )
 
-        stats.episode_rewards[epoch] = eval_episode_cost
-        stats.episode_lengths[epoch] = eval_episode_length
-
-        # if CONFIG.INCREMENT_EXPERIENCE:
-            # logger.info(
-            #     "Epoch {:4d} | Train {:3d} / {:4.2f} | Eval {:4d} / {:5.2f} | Train Loss {:.4f}".format(  # noqa: B950
-            #         epoch,
-            #         len(new_rollout),
-            #         episode_cost,
-            #         eval_episode_length,
-            #         eval_episode_cost,
-            #         loss,
-            #     )
-            # )
-            # if CONFIG.USE_TENSORBOARD:
-            #     writer.add_scalar("train/episode_length", len(new_rollout), epoch)
-            #     writer.add_scalar("train/episode_cost", episode_cost, epoch)
-            #     writer.add_scalar("train/loss", loss, epoch)
-            #     writer.add_scalar("eval/episode_length", eval_episode_length, epoch)
-            #     writer.add_scalar("eval/episode_cost", eval_episode_cost, epoch)
-            # if CONFIG.USE_WANDB:
-            #     wandb.log({"Train Episode Length": len(new_rollout)}, step=epoch)
-            #     wandb.log({"Train Episode Cost": episode_cost}, step=epoch)
-            #     wandb.log({"Train Loss": loss}, step=epoch)
-            #     wandb.log(
-            #         {"Evaluation Episode Length": eval_episode_length}, step=epoch
-            #     )
-            #     wandb.log({"Evaluation Episode Cost": eval_episode_cost}, step=epoch)
-        # else:
-        #     logger.info(
-        #         "Epoch {:4d} | Eval {:4d} / {:5.2f} | Train Loss {:.4f}".format(
-        #             epoch, eval_episode_length, eval_episode_cost, loss
-        #         )
-        #     )
-        #     if CONFIG.USE_TENSORBOARD:
-        #         writer.add_scalar("train/loss", loss, epoch)
-        #         writer.add_scalar("eval/episode_length", eval_episode_length, epoch)
-        #         writer.add_scalar("eval/episode_cost", eval_episode_cost, epoch)
-        #     if CONFIG.USE_WANDB:
-        #         wandb.log({"Train Loss": loss}, step=epoch)
-        #         wandb.log(
-        #             {"Evaluation Episode Length": eval_episode_length}, step=epoch
-        #         )
-        #         wandb.log({"Evaluation Episode Cost": eval_episode_cost}, step=epoch)
-
         if eval_success:
-            # logger.info(
-            #     "Epoch {:4d} | Total Cycles {:6d} | Total Cost {:4.2f}".format(
-            #         epoch, len(all_rollouts), total_cost
-            #     )
-            # )
-            # if CONFIG.USE_TENSORBOARD:
-            #     writer.add_scalar("summary/total_cycles", len(all_rollouts), epoch)
-            #     writer.add_scalar("summary/total_cost", total_cost, epoch)
-            # if CONFIG.USE_WANDB:
-            #     wandb.log({"Total Cycles": len(all_rollouts)}, step=epoch)
-            #     wandb.log({"Total Cost": total_cost}, step=epoch)
             break
 
-    # Save trained agent
-    # if CONFIG.SAVE_PATH:
-    #     save_models(CONFIG.SAVE_PATH, nfq_net=nfq_net, optimizer=optimizer)
+        #stats.episode_rewards[epoch] = eval_episode_cost
+        stats.episode_rewards[epoch] = eval_episode_length + 1
+        stats.episode_lengths[epoch] = eval_episode_length
 
     train_env.close()
     eval_env.close()
