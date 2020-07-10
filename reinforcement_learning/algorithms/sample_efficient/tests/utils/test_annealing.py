@@ -3,7 +3,7 @@ import types
 
 import pytest
 
-from utils import get_linear_anneal_func
+from reinforcement_learning.algorithms.sample_efficient.utils import get_linear_anneal_func
 
 
 class TestGetLinearAnnealFunc:

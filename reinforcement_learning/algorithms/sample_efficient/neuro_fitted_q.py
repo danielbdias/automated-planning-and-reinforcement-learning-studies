@@ -53,10 +53,10 @@ import configargparse
 import torch
 import torch.optim as optim
 
-from environments import CartPoleRegulatorEnv
-from nfq.agents import NFQAgent
-from nfq.networks import NFQNetwork
-from utils import get_logger, load_models, make_reproducible, save_models
+from reinforcement_learning.algorithms.sample_efficient.environments import CartPoleRegulatorEnv
+from reinforcement_learning.algorithms.sample_efficient.nfq.agents import NFQAgent
+from reinforcement_learning.algorithms.sample_efficient.nfq.networks import NFQNetwork
+from reinforcement_learning.algorithms.sample_efficient.utils import get_logger, load_models, make_reproducible, save_models
 
 from collections import namedtuple
 import numpy as np
