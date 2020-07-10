@@ -1,5 +1,4 @@
 argh
-gym
 nose2
 nose2[coverage_plugin]
 numpy
@@ -11,6 +10,25 @@ reinforcement
 tensorflow
 watchdog
 watchdog[watchmedo]
+
 # temp dependencies
 benchmarkit
 jupyterlab
+
+# ConfigArgParse allows using config files with argparse.
+ConfigArgParse==0.14.0
+
+# OpenAI Gym is de-facto standard for RL agent-environment interface.
+gym==0.14.0
+
+# PyTorch v1.1+ supports TensorBoard.
+torch==1.1.0
+
+# TensorBoard v1.14+ supports PyTorch.
+tensorboard==1.14.0
+
+# Weights & Biases allows visualizing data online.
+wandb==0.8.5
+
+# coloredlogs provide colors to Python's logger.
+coloredlogs==10.0

@@ -3,6 +3,7 @@ import numpy as np
 
 from reinforcement_learning.algorithms.value_based import q_learning, sarsa
 from reinforcement_learning.algorithms.policy_search import reinforce
+from reinforcement_learning.algorithms.sample_efficient.neuro_fitted_q import neuro_fitted_q
 
 env = gym.make('CartPole-v1')
 
@@ -30,8 +31,10 @@ episodes = 5000
 # Q, stats = approximated_q_learning(env, episodes, discount_factor=1.0, epsilon=0.1, epsilon_decay=1.0)
 
 # REINFORCE (Policy search)
-reinforce_d_10_stats = reinforce(env, episodes, discount_factor=1.0)
-reinforce_d_09_stats = reinforce(env, episodes, discount_factor=0.9)
+# reinforce_d_10_stats = reinforce(env, episodes, discount_factor=1.0)
+# reinforce_d_09_stats = reinforce(env, episodes, discount_factor=0.9)
+
+stats = neuro_fitted_q(episodes, train_env_max_steps=100, eval_env_max_steps=3000, discount=0.9)
 
 print("\n")
 print(f"Episode Lenghts: {np.mean(stats.episode_lengths)}")
