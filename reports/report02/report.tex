@@ -149,14 +149,12 @@ bla
 \dontprintsemicolon
 \begin{algorithm}[t!]
 {
-	\caption{\textsc{Q-Learning}($ env, episodes, \gamma, \alpha, \epsilon $)}
+	\caption{\textsc{Q-Learning}($ env, T, \gamma, \alpha, \epsilon $)}
 	\label{alg:q-learning}
     $Q(s,a) := 0, \forall s \in S, a \in A $\\
-    $episode := 0$
 
-    \Repita {$ episode < episodes $}
+    \ParaCada{$ t \in \{ 1, \dots, T \} $}
     {
-      $episode := episode + 1$\\
       $s := env.start()$\\
 
       \Enqto{$ \neg env.done() $}
@@ -187,14 +185,12 @@ bla
 \dontprintsemicolon
 \begin{algorithm}[t!]
 {
-	\caption{\textsc{SARSA}($ env, episodes, \gamma, \alpha, \epsilon $)}
+	\caption{\textsc{SARSA}($ env, T, \gamma, \alpha, \epsilon $)}
 	\label{alg:sarsa}
     $Q(s,a) := 0, \forall s \in S, a \in A $\\
-    $episode := 0$
 
-    \Repita {$ episode < episodes $}
+    \ParaCada{$ t \in \{ 1, \dots, T \} $}
     {
-      $episode := episode + 1$\\  
       $s := env.start()$\\
       $a := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s) $\\
 
@@ -225,28 +221,45 @@ bla
 \dontprintsemicolon
 \begin{algorithm}[t!]
 {
-	\caption{\textsc{REINFORCE}($ env, episodes, \gamma, \alpha_{\theta}, \alpha^{b} $)}
-	\label{alg:sarsa}
-    $Q(s,a) := 0, \forall s \in S, a \in A $\\
-    $episode := 0$
+	\caption{\textsc{Reinforce}($ env, T, \gamma, \alpha $)}
+	\label{alg:reinforce}
+    inicializa $ \theta $ com valores arbitrários \\
 
-    \Repita {$ episode < episodes $}
+    \ParaCada{$ episode \in \{ 1, \dots, T \} $}
     {
-      $episode := episode + 1$\\  
-      $s := env.start()$\\
-      $a := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s) $\\
+      $episodeSteps := \textsc{GenerateEpisode}(env, \theta)$\\
 
-      \Enqto{$ \neg env.done() $}
+      \ParaCada{$s_t, r_t, a_t, t \in episodeSteps$}
       {
-        $s', r := env.step(a)$\\
-        $a' := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s') $\\
-        $Q(s, a) = \textsc{TimeDiff}(Q, s, a, s', a', \gamma, \alpha)$\\
-        $s := s'$ \\
-        $a := a'$ \\
+        $G := \sum_{k = t+1}^T \{ \gamma^{k-t-1} episodeSteps[k].r \}$\\
+        $ \theta := \theta + \alpha \gamma^t G \nabla \ln \pi(a_t|s_t, \theta) $
       }
     }
+}
+\end{algorithm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    \Retorna{$Q$}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\linesnumbered
+\dontprintsemicolon
+\begin{algorithm}[t!]
+{
+	\caption{\textsc{Reinforce}($ env, T, \gamma, \alpha_{\theta}, \alpha^{w} $)}
+	\label{alg:reinforce_baseline}
+    inicializa $ \theta $ e $ w $ com valores arbitrários \\
+
+    \ParaCada{$ episode \in \{ 1, \dots, T \} $}
+    {
+      $episodeSteps := \textsc{GenerateEpisode}(env, \theta)$\\
+
+      \ParaCada{$s_t, r_t, a_t, t \in episodeSteps$}
+      {
+        $G := \sum_{k = t+1}^T \{ \gamma^{k-t-1} episodeSteps[k].r \}$\\
+        $ \delta := G - \hat{v}(s_t, w) $\\
+        $ w := w + \alpha^w \delta \nabla \hat{v}(s_t, w) $\\
+        $ \theta := \theta + \alpha^{\theta} \gamma^t \delta \nabla \ln \pi(a_t|s_t, \theta) $
+      }
+    }
 }
 \end{algorithm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -259,6 +272,33 @@ bla
 bla
 % apresentação sobre algoritmos por sample efficient
 % explicação do FittQ
+
+\begin{equation} \label{eq:msbe}
+  \textsc{MSBE}(\theta, \theta') = || \hat{V}_{\theta} - \mathcal{T} \hat{V}_{\theta'} ||^2_D
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\linesnumbered
+\dontprintsemicolon
+\begin{algorithm}[t!]
+{
+	\caption{\textsc{FittQ}($ env, T, \epsilon $)}
+	\label{alg:reinforce}
+    inicializa $ w_0 $ com valores arbitrários \\
+
+    \ParaCada{$ episode \in \{ 1, \dots, T \} $}
+    {
+      $w_t := \arg \min_{w \in \mathcal{R}^k} \textsc{MSBE}(w, w_{t-1}) $ \\
+      $res := || w_t - w_{t-1} ||$ \\
+
+      \Se{$res < \epsilon$}
+      {
+        \textbf{interrompe loop}
+      }
+    }
+}
+\end{algorithm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Experimentos e Resultados}
 
