@@ -46,84 +46,235 @@
 \section{Introdução}
 \label{sec:introducao}
 
-bla
-% Na disciplina de Inteligência Artificial existe uma área chamada de Planejamento Automatizado
-% que estuda formas de como um agente pode tomar um conjunto de decisões em sequência interagindo
-% com um ambiente com o objetivo de solucionar um problema.
+Na disciplina de Inteligência Artificial existem algumas áreas que estudam formas de como um agente pode tomar um conjunto 
+de decisões em sequência interagindo com um ambiente com o objetivo de solucionar um problema da melhor forma possível.
 
-% O foco deste trabalho será em uma das subáreas do Planejamento Automatizado, o Planejamento Probabilístico, onde
-% é assumido que o resultado da interação do agente com o ambiente é incerto, e que dada uma ação realizada pelo agente
-% neste ambiente dada uma determinada situação, essa ação pode ter diferentes resultados, cuja frequência é ditada por
-% uma distribuição de probabilidades.
+Uma forma de modelar esta situação é utilizando os Processos Markovianos de Decisão (MDP, do 
+inglês \textit{Markov Decision Processes})\cite{Puterman-1994}, onde é assumido o resultado da interação do agente com o ambiente é incerto, 
+e que uma ação realizada pelo agente neste ambiente em uma situação (um estado do ambiente) pode ter diferentes resultados, cuja frequência é ditada por
+uma distribuição de probabilidades, e retorna uma recompensa para o agente.
 
-% Um arcabouço utilizado para modelar problemas de Planejamento Probabilístico são os Processos Markovianos de Decisão
-% (MDP, do inglês \textit{Markov Decision Processes})\cite{Puterman-1994} que possui diverso algoritmos conhecidos para resolve-los.
+No trabalho anterior o objeto de estudo foi a área de Planjemamento Probabilístico que busca dado o conhecimento de um MDP, busca encontrar qual é a 
+melhor forma de agir dado cada situação possível neste ambiente. Porém em algumas situações encontrar essa melhor solução pode ser complexo, seja por 
+o número de situações possíveis ser muito alto, seja por não termos muitos dados do ambiente para poder montar uma estratégia nele.
 
-% Serão analizados os algoritmos Iteração de Valor \cite{Howard-1960}, RTDP (do inglês, \textit{Real Time Dynamic Programming})
-% \cite{BartoBradtkeSingh-1995} e LRTDP (do inglês, \textit{Labeled Real Time Dynamic Programming}) \cite{BonetGeffer-2003} em relação a como eles
-% solucionam os MDPs.
+A área de Aprendizado por Reforço busca atacar esses problemas assumindo que o agente poderá interagir nesse ambiente mesmo sem um conhecimento (ilustrada pela
+figura \ref{fig:rf-agent-interaction}), de forma que ele possa executar ações nele e a medida que vá interagindo com o ambiente, vá aprendendo mais características 
+(estados, transições e recompensas) sobre ele e vá buscando encontrar melhores maneiras de agir.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{rf-agent-interaction}
+  \caption{Interação de um agente com o seu ambiente}
+  \label{fig:rf-agent-interaction}
+\end{figure}
+
+Neste trabalho, para efeito de estudo, serão feitos alguns experimentos com os algoritmos \textit{Q-Learning}, \textit{SARSA}, 
+\textit{REINFORCE com baseline} e \textit{Fitt-Q} e seus resultados serão discutidos e comparados.
 
 \section{Arcabouço Teórico}
 
+No contexto de tomada de decisões por um agente em um ambiente completamente observável, um Processo de Decisão Markoviano (MDP)
+pode ser descrito por uma tupla $\mathcal{M}=\langle S,A,R,P,\gamma \rangle$, onde:
+
+\begin{itemize}
+    \item $S$ é um conjunto de estados finitos e discretos, que definem a situação do ambiente em um determinado momento;
+    \item $A$ é um conjunto de ações que o agente pode executar;
+    \item $R : S \rightarrow \mathcal{R} $ é a função recompensa, que retorna a recompensa obtida pelo agente ao se alcançar um determinado estado;
+    \item $P : S \times A \times S \rightarrow [0, 1]$ é uma função de transição que retorna a probabilidade de um agente, dado que executou uma ação $a \in A$ em um estado $s \in S$, alcançar o estado $s' \in S$. Neste trabalho uma notação que também será usada para representar essa transição é $P(s'|s,a)$.
+\end{itemize}
+
+Neste ambiente a tomada de decisão ocorre por etapas (estágios), onde o agente executa uma ação de cada vez alterando o estado 
+do ambiente e recebendo uma recompensa ou sendo penalizado com um custo (recompensa negativa). Estes estágios são denominados pela 
+notação $t \in \{ 1, \dots, T \} $, onde caso $T$ seja um número finito, consideramos o problema como um problema de \textbf{horizonte finito}.
+
+O objetivo do agente neste MDP é encontrar uma política $\pi : S \rightarrow A$ que indique a melhor ação a ser tomada em cada estado $s$ a fim 
+de se obter a maior recompensa possível.
+
+Para identificar esta política pode-se calcular o valor dela para cada estado $s$ através do critério da recompensa esperada total. Esse critério 
+indica o quanto de recompensa um agente pode receber em média a executar uma política $\pi$ a partir do estado $s_0 = s$ até o instante $T$ dado um 
+fator de desconto $\gamma$ (limitado ao intervalo $[0, 1]$), calculada pela função valor $V : S \rightarrow \mathcal{R} $ para a política $\pi$:
+
+\begin{equation} \label{eq:total_expected_reward}
+    V_\pi(s) = E_{\pi} \left[ \sum_{t=0}^{T} \gamma^t r_t | s_0 = s \right]
+\end{equation}
+
+Uma política ótima $\pi^*$ para um MDP é aquela que tem o maior valor entre todas as outras políticas possíveis para cada estado, 
+ou seja: $V_{\pi^*}(s) \geq V_{pi'}(s), \forall s,\pi'$.
+
+O valor da política ótima $V_{\pi^*}$ pode ser encontrado a partir função valor ótima $V^* = V_{\pi^*}$ definida pela equação de Bellman \cite{Bellman-1966}, 
+que encontra uma função valor que maximize as recompensas esperadas para todo $s \in S$:
+
+\begin{equation} \label{eq:bellman_equation}
+    V^*(s) = R(s) + \max_{a \in A} \left\{ \gamma \sum_{s'\in S} P(s'|s,a)V^*(s') \right\}
+\end{equation}
+
+Existem algoritmos que trabalham com essa abordagem para se obter a política ótima, usualmente resolvendo a equação de Bellman através de algoritmos de
+programação dinâmica como o \textit{Iteração de Valor} e a \textit{Iteração de Política} \cite{Howard-1960} de forma eficiente. Entretanto esses algoritmos podem ter uma 
+aplicabilidade limitada devido ao problema da \textit{maldição da dimensionalidade}: o fato que o número de estados pode ser proibitivamente grande dependendo
+da modelagem dos estados (por exemplo, caso um estado precise modelar uma variável contínua do ambiente \cite{SuttonBarto-2018}. 
+
+% explicação sobre monte carlo
+% 113
+
+% explicar temporal difference
+% 141
+
+% explicação sobre busca de política (gradiente)
+% 343
+
+% sample efficient, explicar da lógica do dyna
+
+\section{Algoritmos}
+
+Neste trabalho foram implementados dois algoritmos \textit{value-based} que utilizam o método de diferença temporal para identificar 
+uma política ótima em um ambiente: os algoritmos \textit{Q-Learning} \cite{Watkins-Dayan-1992} e \textit{SARSA}, um algoritmo que trabalha com busca no 
+espaço de políticas, o \textit{REINFORCE com baseline} e um que trabalha com reuso de experiências (\textit{sample efficient}), o \textit{Fitt-Q} \cite{Riedmiller-2005}.
+
+\subsection{Q-Learning}
+
 bla
-% apresentação rápida sobre MDPs
+
+\begin{equation} \label{eq:epsilon_greedy_action}
+  \textsc{ChooseActionFromPolicy}(Q, \epsilon, s) = ?
+\end{equation}
+
+\begin{multline} \label{eq:time_diff_update_q_learning}
+  \textsc{TimeDiff}(Q, s, a, s', \gamma, \alpha) = \\ 
+      Q(s,a) + \alpha [r + \gamma max_a' Q(s', a') - Q(s,a)]
+\end{multline}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\linesnumbered
+\dontprintsemicolon
+\begin{algorithm}[t!]
+{
+	\caption{\textsc{Q-Learning}($ env, episodes, \gamma, \alpha, \epsilon $)}
+	\label{alg:q-learning}
+    $Q(s,a) := 0, \forall s \in S, a \in A $\\
+    $episode := 0$
+
+    \Repita {$ episode < episodes $}
+    {
+      $episode := episode + 1$\\
+      $s := env.start()$\\
+
+      \Enqto{$ \neg env.done() $}
+      {
+        $a := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s) $\\
+        $s', r := env.step(a)$\\
+        $Q(s, a) = \textsc{TimeDiff}(Q, s, a, s', \gamma, \alpha)$\\
+        $s := s'$ \\
+      }
+    }
+
+    \Retorna{$Q$}
+}
+\end{algorithm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{SARSA}
+
+bla
+
+\begin{multline} \label{eq:time_diff_update_sarsa}
+  \textsc{TimeDiff}(Q, s, a, s', \gamma, \alpha) = \\ 
+      Q(s,a) + \alpha [r + \gamma Q(s', a') - Q(s,a)]
+\end{multline}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\linesnumbered
+\dontprintsemicolon
+\begin{algorithm}[t!]
+{
+	\caption{\textsc{SARSA}($ env, episodes, \gamma, \alpha, \epsilon $)}
+	\label{alg:sarsa}
+    $Q(s,a) := 0, \forall s \in S, a \in A $\\
+    $episode := 0$
+
+    \Repita {$ episode < episodes $}
+    {
+      $episode := episode + 1$\\  
+      $s := env.start()$\\
+      $a := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s) $\\
+
+      \Enqto{$ \neg env.done() $}
+      {
+        $s', r := env.step(a)$\\
+        $a' := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s') $\\
+        $Q(s, a) = \textsc{TimeDiff}(Q, s, a, s', a', \gamma, \alpha)$\\
+        $s := s'$ \\
+        $a := a'$ \\
+      }
+    }
+
+    \Retorna{$Q$}
+}
+\end{algorithm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % apresentação sobre algoritmos clássicos e algoritmos por aproximação
 % explicação do SARSA e do Q-Learning
 
+\subsection{REINFORCE}
+
+bla
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\linesnumbered
+\dontprintsemicolon
+\begin{algorithm}[t!]
+{
+	\caption{\textsc{REINFORCE}($ env, episodes, \gamma, \alpha_{\theta}, \alpha^{b} $)}
+	\label{alg:sarsa}
+    $Q(s,a) := 0, \forall s \in S, a \in A $\\
+    $episode := 0$
+
+    \Repita {$ episode < episodes $}
+    {
+      $episode := episode + 1$\\  
+      $s := env.start()$\\
+      $a := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s) $\\
+
+      \Enqto{$ \neg env.done() $}
+      {
+        $s', r := env.step(a)$\\
+        $a' := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s') $\\
+        $Q(s, a) = \textsc{TimeDiff}(Q, s, a, s', a', \gamma, \alpha)$\\
+        $s := s'$ \\
+        $a := a'$ \\
+      }
+    }
+
+    \Retorna{$Q$}
+}
+\end{algorithm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % apresentação sobre algoritmos por policy search
 % explicação do REINFORCE
 
+\subsection{FittQ}
+
+bla
 % apresentação sobre algoritmos por sample efficient
 % explicação do FittQ
 
-
-\section{Algoritmos}
-
-Os algoritmos que buscam soluções para MDPs estudados neste artigo são algoritmos baseados em programação dinâmica com garantia de convergência. Eles podem ser divididos em dois tipos: os algoritmos síncronos, que buscam calcular o valor da execução de uma política para todos os estados e ir refinando esse valor a cada ciclo de cálculo (iteração) e os algoritmos assíncronos que buscam atualizar os estados de forma arbitrária com garantia de convergência dadas algumas premissas.
-
-O algoritmo Iteração de Valor \cite{Howard-1960} se enquadra na categoria dos algoritmos síncronos e o RTDP \cite{BartoBradtkeSingh-1995} e sua variante o LRTDP \cite{BonetGeffer-2003} se enquadram na categoria de algoritmos assíncronos.
-
-\subsection{Q-Learning aproximado}
-% explicação do SARSA e do Q-Learning
-bla
-
-\subsection{REINFORCE}
-% explicação do REINFORCE
-bla
-
-\subsection{FittQ}
-% explicação do FittQ
-bla
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \linesnumbered
-% \dontprintsemicolon
-% \begin{algorithm}[t!]
-% {
-% 	\caption{\textsc{IteraçãoDeValor}($ V^0, \epsilon $)}
-% 	\label{alg:iteracao-valor}
-%     $t := 0$\\
-%     $V^t := V^0$\\
-
-%     \Repita {$ \max_{s \in S}(\delta) < \epsilon $}
-%     {
-%         $t := t + 1$\\
-
-%         \ParaCada {$s \in S$}
-%         {
-%             $V^{t+1}(s) := \textsc{BellmanBackup}(V^{t}, s)$ \\
-%             $\delta(s) := | V^{t+1}(s) - V^t(s) | $
-%         }
-%     }
-
-%     \Retorna{$V$}
-% }
-% \end{algorithm}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Experimentos e Resultados}
+
+Uma vez implementado os algoritmos, foram elaborados alguns experimentos visando analizar a execução dos algoritmos e o comportamento deles.
+
+Os experimentos foram executados na plataforma Google Colab com o Python, na época deste relatório com 2 CPUs de 2.2 GHz e 13GB de memória.
+Parte dos algoritmos foi baseado em implementações existentes e estão disponíveis no Github\footnote{Disponível em https://github.com/danielbdias/automated-planning-and-reinforcement-learning-studies}.
+Os algoritmos base das implementações foram:
+
+\begin{itemize}
+  \item \textit{Q-Learning} e \textit{SARSA}: https://github.com/dennybritz/reinforcement-learning/tree/master/TD
+  \item \textit{REINFORCE}: https://github.com/SwamyDev/reinforcement
+  \item \textit{FittQ}: https://github.com/seungjaeryanlee/implementations-nfq
+\end{itemize}
+
+falar sobre o PoleCart problem
 
 bla
 % TODO: avaliar experimentos e resultados

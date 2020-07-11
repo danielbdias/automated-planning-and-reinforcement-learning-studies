@@ -94,24 +94,12 @@ class ParameterizedPolicy:
         self._summary_writer.add_summary(log, self._cur_episode)
         self._cur_episode += 1
 
-def _run_episode(env, episode, agent):
-    obs = env.reset()
-    done, reward = False, 0
-
-    while not done:
-        obs, r, done, _ = env.step(agent.next_action(obs))
-        agent.signal(r)
-        reward += r
-
-    agent.train()
-    return reward
-
-def _make_config(num_episodes, discount_factor):
+def _make_config(num_episodes, discount_factor, lr_policy, lr_baseline):
     Config = namedtuple("ReinforceConfig", ["episodes", "num_trajectories", "gamma", "lr_policy", "lr_baseline"])
-    return Config(episodes=num_episodes, num_trajectories=10, gamma=discount_factor, lr_policy=50, lr_baseline=0.01)
+    return Config(episodes=num_episodes, num_trajectories=10, gamma=discount_factor, lr_policy=lr_policy, lr_baseline=lr_baseline)
 
-def reinforce(env, num_episodes, discount_factor=1.0, verbose=False):
-    config = _make_config(num_episodes, discount_factor)
+def reinforce(env, num_episodes, discount_factor=1.0, lr_policy=50, lr_baseline=0.01, verbose=False):
+    config = _make_config(num_episodes, discount_factor, lr_policy, lr_baseline)
     stats = EpisodeStats(episode_lengths=np.zeros(num_episodes), episode_rewards=np.zeros(num_episodes))
 
     tf1.reset_default_graph()
