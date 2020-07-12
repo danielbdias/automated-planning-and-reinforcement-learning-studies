@@ -89,8 +89,8 @@ def neuro_fitt_q(epoch, train_env_max_steps, eval_env_max_steps, discount, init_
     logger = get_logger()
 
     # Setup environment
-    train_env = CartPoleRegulatorEnv(mode="train")
-    eval_env = CartPoleRegulatorEnv(mode="eval")
+    train_env = CartPoleRegulatorEnv(mode="train", max_steps=train_env_max_steps)
+    eval_env = CartPoleRegulatorEnv(mode="eval", max_steps=eval_env_max_steps)
 
     # Fix random seeds
     if CONFIG.RANDOM_SEED is not None:

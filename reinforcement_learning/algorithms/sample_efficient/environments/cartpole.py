@@ -48,7 +48,7 @@ class CartPoleRegulatorEnv(gym.Env):
 
     metadata = {"render.modes": ["human", "rgb_array"], "video.frames_per_second": 50}
 
-    def __init__(self, mode="train"):
+    def __init__(self, mode="train", max_steps=None):
         self.gravity = 9.8
         self.masscart = 1.0
         self.masspole = 0.1
@@ -61,7 +61,11 @@ class CartPoleRegulatorEnv(gym.Env):
 
         assert mode in ["train", "eval"]
         self.mode = mode
-        self.max_steps = 100 if mode == "train" else 3000
+        
+        if max_steps is None:
+            self.max_steps = 100 if mode == "train" else 3000
+        else:
+            self.max_steps = max_steps
 
         # Success state
         # TODO(seungjaeryanlee): Verify pole angle success state

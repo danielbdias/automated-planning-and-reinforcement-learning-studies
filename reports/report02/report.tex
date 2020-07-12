@@ -49,18 +49,11 @@
 Na disciplina de Inteligência Artificial existem algumas áreas que estudam formas de como um agente pode tomar um conjunto 
 de decisões em sequência interagindo com um ambiente com o objetivo de solucionar um problema da melhor forma possível.
 
-Uma forma de modelar esta situação é utilizando os Processos Markovianos de Decisão (MDP, do 
-inglês \textit{Markov Decision Processes})\cite{Puterman-1994}, onde é assumido o resultado da interação do agente com o ambiente é incerto, 
-e que uma ação realizada pelo agente neste ambiente em uma situação (um estado do ambiente) pode ter diferentes resultados, cuja frequência é ditada por
-uma distribuição de probabilidades, e retorna uma recompensa para o agente.
+Uma forma de modelar esta situação é utilizando os Processos Markovianos de Decisão (MDP, do inglês \textit{Markov Decision Processes})\cite{Puterman-1994}, onde é assumido o resultado da interação do agente com o ambiente é incerto, e que uma ação realizada pelo agente neste ambiente em uma situação (um estado do ambiente) pode ter diferentes resultados, cuja frequência é ditada por uma distribuição de probabilidades, e retorna uma recompensa para o agente.
 
-No trabalho anterior o objeto de estudo foi a área de Planjemamento Probabilístico que busca dado o conhecimento de um MDP, busca encontrar qual é a 
-melhor forma de agir dado cada situação possível neste ambiente. Porém em algumas situações encontrar essa melhor solução pode ser complexo, seja por 
-o número de situações possíveis ser muito alto, seja por não termos muitos dados do ambiente para poder montar uma estratégia nele.
+No trabalho anterior o objeto de estudo foi a área de Planjemamento Probabilístico que busca dado o conhecimento de um MDP, busca encontrar qual é a melhor forma de agir dado cada situação possível neste ambiente. Porém em algumas situações encontrar essa melhor solução pode ser complexo, seja por o número de situações possíveis ser muito alto, seja por não termos muitos dados do ambiente para poder montar uma estratégia nele.
 
-A área de Aprendizado por Reforço busca atacar esses problemas assumindo que o agente poderá interagir nesse ambiente mesmo sem um conhecimento (ilustrada pela
-figura \ref{fig:rf-agent-interaction}), de forma que ele possa executar ações nele e a medida que vá interagindo com o ambiente, vá aprendendo mais características 
-(estados, transições e recompensas) sobre ele e vá buscando encontrar melhores maneiras de agir.
+A área de Aprendizado por Reforço busca atacar esses problemas assumindo que o agente poderá interagir nesse ambiente mesmo sem um conhecimento (ilustrada pela figura \ref{fig:rf-agent-interaction}), de forma que ele possa executar ações nele e a medida que vá interagindo com o ambiente, vá aprendendo mais características (estados, transições e recompensas) sobre ele e vá buscando encontrar melhores maneiras de agir.
 
 \begin{figure}[t]
   \centering
@@ -69,13 +62,11 @@ figura \ref{fig:rf-agent-interaction}), de forma que ele possa executar ações 
   \label{fig:rf-agent-interaction}
 \end{figure}
 
-Neste trabalho, para efeito de estudo, serão feitos alguns experimentos com os algoritmos \textit{Q-Learning}, \textit{SARSA}, 
-\textit{REINFORCE com baseline} e \textit{Fitt-Q} e seus resultados serão discutidos e comparados.
+Neste trabalho, para efeito de estudo, serão feitos alguns experimentos com os algoritmos baseados em valor, em busca de política e com reuso de experiências.
 
 \section{Arcabouço Teórico}
 
-No contexto de tomada de decisões por um agente em um ambiente completamente observável, um Processo de Decisão Markoviano (MDP)
-pode ser descrito por uma tupla $\mathcal{M}=\langle S,A,R,P,\gamma \rangle$, onde:
+No contexto de tomada de decisões por um agente em um ambiente completamente observável, um Processo de Decisão Markoviano (MDP) pode ser descrito por uma tupla $\mathcal{M}=\langle S,A,R,P,\gamma \rangle$, onde:
 
 \begin{itemize}
     \item $S$ é um conjunto de estados finitos e discretos, que definem a situação do ambiente em um determinado momento;
@@ -84,34 +75,25 @@ pode ser descrito por uma tupla $\mathcal{M}=\langle S,A,R,P,\gamma \rangle$, on
     \item $P : S \times A \times S \rightarrow [0, 1]$ é uma função de transição que retorna a probabilidade de um agente, dado que executou uma ação $a \in A$ em um estado $s \in S$, alcançar o estado $s' \in S$. Neste trabalho uma notação que também será usada para representar essa transição é $P(s'|s,a)$.
 \end{itemize}
 
-Neste ambiente a tomada de decisão ocorre por etapas (estágios), onde o agente executa uma ação de cada vez alterando o estado 
-do ambiente e recebendo uma recompensa ou sendo penalizado com um custo (recompensa negativa). Estes estágios são denominados pela 
-notação $t \in \{ 1, \dots, T \} $, onde caso $T$ seja um número finito, consideramos o problema como um problema de \textbf{horizonte finito}.
+Neste ambiente a tomada de decisão ocorre por etapas (estágios), onde o agente executa uma ação de cada vez alterando o estado do ambiente e recebendo uma recompensa ou sendo penalizado com um custo (recompensa negativa). Estes estágios são denominados pela notação $t \in \{ 1, \dots, T \} $, onde caso $T$ seja um número finito, consideramos o problema como um problema de \textbf{horizonte finito}.
 
-O objetivo do agente neste MDP é encontrar uma política $\pi : S \rightarrow A$ que indique a melhor ação a ser tomada em cada estado $s$ a fim 
-de se obter a maior recompensa possível.
+O objetivo do agente neste MDP é encontrar uma política $\pi : S \rightarrow A$ que indique a melhor ação a ser tomada em cada estado $s$ a fim de se obter a maior recompensa possível.
 
-Para identificar esta política pode-se calcular o valor dela para cada estado $s$ através do critério da recompensa esperada total. Esse critério 
-indica o quanto de recompensa um agente pode receber em média a executar uma política $\pi$ a partir do estado $s_0 = s$ até o instante $T$ dado um 
-fator de desconto $\gamma$ (limitado ao intervalo $[0, 1]$), calculada pela função valor $V : S \rightarrow \mathcal{R} $ para a política $\pi$:
+Para identificar esta política pode-se calcular o valor dela para cada estado $s$ através do critério da recompensa esperada total. Esse critério indica o quanto de recompensa um agente pode receber em média a executar uma política $\pi$ a partir do estado $s_0 = s$ até o instante $T$ dado um fator de desconto $\gamma$ (limitado ao intervalo $[0, 1]$), calculada pela função valor $V : S \rightarrow \mathcal{R} $ para a política $\pi$:
 
 \begin{equation} \label{eq:total_expected_reward}
     V_\pi(s) = E_{\pi} \left[ \sum_{t=0}^{T} \gamma^t r_t | s_0 = s \right]
 \end{equation}
 
-Uma política ótima $\pi^*$ para um MDP é aquela que tem o maior valor entre todas as outras políticas possíveis para cada estado, 
-ou seja: $V_{\pi^*}(s) \geq V_{pi'}(s), \forall s,\pi'$.
+Uma política ótima $\pi^*$ para um MDP é aquela que tem o maior valor entre todas as outras políticas possíveis para cada estado, ou seja: $V_{\pi^*}(s) \geq V_{pi'}(s), \forall s,\pi'$.
 
-O valor da política ótima $V_{\pi^*}$ pode ser encontrado a partir função valor ótima $V^* = V_{\pi^*}$ definida pela equação de Bellman \cite{Bellman-1966}, 
-que encontra uma função valor que maximize as recompensas esperadas para todo $s \in S$:
+O valor da política ótima $V_{\pi^*}$ pode ser encontrado a partir função valor ótima $V^* = V_{\pi^*}$ definida pela equação de Bellman \cite{Bellman-1966}, que encontra uma função valor que maximize as recompensas esperadas para todo $s \in S$:
 
 \begin{equation} \label{eq:bellman_equation}
     V^*(s) = R(s) + \max_{a \in A} \left\{ \gamma \sum_{s'\in S} P(s'|s,a)V^*(s') \right\}
 \end{equation}
 
-Existem algoritmos que trabalham com essa abordagem para se obter a política ótima, usualmente resolvendo a equação de Bellman através de algoritmos de
-\textit{programação dinâmica} como o \textit{Iteração de Valor} e a \textit{Iteração de Política} \cite{Howard-1960} de forma eficiente. Neles, aplicamos um operador 
-de Bellman para cada estado, descrito pela equação \ref{eq:bellman_operator} abaixo: 
+Existem algoritmos que trabalham com essa abordagem para se obter a política ótima, usualmente resolvendo a equação de Bellman através de algoritmos de \textit{programação dinâmica} como o \textit{Iteração de Valor} e a \textit{Iteração de Política} \cite{Howard-1960} de forma eficiente. Neles, aplicamos um operador de Bellman para cada estado, descrito pela equação \ref{eq:bellman_operator} abaixo: 
 
 \begin{equation} \label{eq:bellman_operator}
   V^{t+1}(s) = (BV^t)(s) = \max_{a \in A} \left\{ Q^{t+1}(s,a) \right\}
@@ -123,49 +105,74 @@ onde $ Q^{t+1}(s,a) $ é considerado uma função qualidade, definida por:
   Q^{t+1}(s,a) = R(s) + \gamma \sum_{s'\in S} P(s'|s,a)V^t(s')
 \end{equation}
 
-Entretanto para alguns tipo de problema eles ter uma aplicabilidade limitada devido ao problema da \textit{maldição da dimensionalidade}: o fato que 
-o número de estados pode ser proibitivamente grande dependendo da modelagem dos estados (por exemplo, caso um estado precise modelar muitas variáveis com 
-diferentes combinações de valores) \cite{SuttonBarto-2018}. 
+Entretanto para alguns tipo de problema eles ter uma aplicabilidade limitada devido ao problema da \textit{maldição da dimensionalidade}: o fato que o número de estados pode ser proibitivamente grande dependendo da modelagem dos estados (por exemplo, caso um estado precise modelar muitas variáveis com diferentes combinações de valores) \cite{SuttonBarto-2018}. 
 
-Uma forma de tentar evitar o problema do crescimento do espaço de estados é ao invés de usar um conhecimento completo do ambiente para resolver-lo,
-buscar uma política ótima através do uso da experiência: a simulação ou interação de um agente agindo no ambiente em sequência, amostrando uma sequência de estados, 
-ações e recompensas. Os métodos de \textit{Monte Carlo} buscam justamente fazer isso, baseando a tomada de decisão em cima das amostragens média dessa experiência ao 
-invés de utilizar a equação de Bellman, obtendo uma estimativa da função valor $\hat{V}(s)$ e da função qualidade $\hat{Q}(s,a)$, concentrando o uso os recursos 
-computacionais nos estados e ações mais relevantes para a resolução do problema.
+Uma forma de tentar evitar o problema do crescimento do espaço de estados é ao invés de usar um conhecimento completo do ambiente para resolver-lo, buscar uma política ótima através do uso da experiência: a simulação ou interação de um agente agindo no ambiente em sequência, amostrando uma sequência de estados, ações e recompensas. Os métodos de \textit{Monte Carlo} buscam justamente fazer isso, baseando a tomada de decisão em cima das amostragens média dessa experiência ao invés de utilizar a equação de Bellman, obtendo uma estimativa da função valor $\hat{V}(s)$ e da função qualidade $\hat{Q}(s,a)$, concentrando o uso os recursos computacionais nos estados e ações mais relevantes para a resolução do problema.
 
-Esse tipo de algoritmos garante uma solução $\epsilon$-ótima independente do tamanho do espaço de estados ($|S|$) mostrando que a probabilidade de falha de convergência
-pode ser limitada segundo a desigualdade de Hoeffding \cite{Hoeffding-1994}. Nesses algoritmos é mostrando que caso haja uma quantidade suficientemente grande de episódios (amostras de um 
-agente executando uma política $\pi_{\hat{Q}}$ em um ambiente) essa probabilidade de falha de convergência tende a zero. Um algoritmo que baseia nessa idéia de convergência é 
-o UCT \cite{KocsisSzepesv-2006}.
+Esse tipo de algoritmos garante uma solução $\epsilon$-ótima independente do tamanho do espaço de estados ($|S|$) mostrando que a probabilidade de falha de convergência pode ser limitada segundo a desigualdade de Hoeffding \cite{Hoeffding-1994}. Nesses algoritmos é mostrando que caso haja uma quantidade suficientemente grande de episódios (amostras de um agente executando uma política $\pi_{\hat{Q}}$ em um ambiente) essa probabilidade de falha de convergência tende a zero. Um algoritmo que baseia nessa idéia de convergência é o UCT \cite{KocsisSzepesv-2006}.
 
-Combinando as idéias dos métodos de Monte Carlo e de programação dinâmica (baseados no cálculo do operador de Bellman) o método de \textit{diferença temporal} buscam
-calcular a função valor $V$ com base na experiência de um agente em um ambiente, que através da aproximação estocástica \cite{RobbinsMonro-1951}, estima a função valor
-para um instante $t$, estado $s_t$, recompensa recebida $r_t$ e  uma taxa de aproximação a $V(s_t)$ (também chamada de taxa de aprendizado) $\alpha \in (0, 1])$ como:
+Combinando as idéias dos métodos de Monte Carlo e de programação dinâmica (baseados no cálculo do operador de Bellman) o método de \textit{diferença temporal} buscam calcular a função valor $V$ com base na experiência de um agente em um ambiente, que através da aproximação estocástica \cite{RobbinsMonro-1951}, estima a função valor para um instante $t$, estado $s_t$, recompensa recebida $r_t$ e  uma taxa de aproximação a $V(s_t)$ (também chamada de taxa de aprendizado) $\alpha \in (0, 1])$ como:
 
 \begin{equation} \label{eq:temporal_difference}
   V(s_t) = V(s_t) + \alpha [ r_t + \gamma V(s_{t+1}) - V(s_t) ]
 \end{equation}
 
-Dado uma política $\pi$ qualquer e um horizonte $T$, pode-se aplicar este método para avaliar esta política e encontrar $V_{\pi}$, em um algoritmo com garantia de 
-convergência chamado $TD(0)$. Ele será a base para dois algoritmos que serão apresentados posteriormente, o \textit{Q-Learning} \cite{Watkins-Dayan-1992} e o 
-\textit{SARSA}.
+Dado uma política $\pi$ qualquer e um horizonte $T$, pode-se aplicar este método para avaliar esta política e encontrar $V_{\pi}$, em um algoritmo com garantia de convergência chamado $TD(0)$. Ele será a base para dois algoritmos que serão apresentados posteriormente, o \textit{SARSA} e o \textit{Q-Learning} \cite{Watkins-Dayan-1992}.
 
-Mesmo não precisando iterar por todo o espaço de estados, armazenar e calcular $V(s)$ e $Q(s,a)$ pode demandar de muitos recursos computacionais 
-(por exemplo, ao tentar armazenar um estado contínuo sem nenhuma técnica de discretização). Uma forma de resolver este problema é ao invés de trabalhar com uma 
-aproximação da função valor $ \hat{V}(s, \theta) \approx V_{\pi}(s)$, onde ao invés de se armazenar os valores de $s$ serão armazenados o vetor de 
-pesos $\theta \in \mathcal{R}^d$, onde $d$ seja menor que $|S|$. Nesta abordagem, os algoritmos se focarão em aprender os valores de $\theta$ de forma a encontrarem
-uma política ótima para a interação com o ambiente.
+Mesmo não precisando iterar por todo o espaço de estados, armazenar e calcular $V(s)$ e $Q(s,a)$ pode demandar de muitos recursos computacionais (por exemplo, ao tentar armazenar um estado contínuo sem nenhuma técnica de discretização). Uma forma de resolver este problema é ao invés de trabalhar com uma aproximação da função valor $ \hat{V}(s, \theta) \approx V_{\pi}(s)$, onde ao invés de se armazenar os valores de $s$ serão armazenados o vetor de pesos $\theta \in \mathcal{R}^d$, onde $d$ seja menor que $|S|$. Nesta abordagem, os algoritmos se focarão em aprender os valores de $\theta$ de forma a encontrarem uma política ótima para a interação com o ambiente.
 
 \section{Algoritmos}
 
-Neste trabalho foram implementados dois algoritmos \textit{value-based} que utilizam o método de diferença temporal para identificar 
-uma política ótima em um ambiente: os algoritmos \textit{Q-Learning} \cite{Watkins-Dayan-1992} e \textit{SARSA}, um algoritmo que trabalha com busca no 
-espaço de políticas, o \textit{REINFORCE com baseline} e um que trabalha com reuso de experiências (\textit{sample efficient}), o \textit{Fitt-Q} \cite{Riedmiller-2005}.
+Neste trabalho foram implementados dois algoritmos \textit{value-based} que utilizam o método de diferença temporal para identificar uma política ótima em um ambiente: os algoritmos \textit{SARSA} e \textit{Q-Learning} \cite{Watkins-Dayan-1992}, um algoritmo que trabalha com busca no espaço de políticas, o \textit{REINFORCE com baseline} e um que trabalha com reuso de experiências (\textit{sample efficient}), o \textit{Fitt-Q} \cite{Riedmiller-2005}.
+
+\subsection{SARSA}
+
+bla
+% TODO
+% apresentação sobre algoritmos clássicos e algoritmos por aproximação
+% explicação do SARSA e do Q-Learning
+% falar sobre exploitação e exploração
+
+\begin{multline} \label{eq:time_diff_update_sarsa}
+  \textsc{TimeDiff}(Q, s, a, s', \gamma, \alpha) = \\ 
+      Q(s,a) + \alpha [r + \gamma Q(s', a') - Q(s,a)]
+\end{multline}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\linesnumbered
+\dontprintsemicolon
+\begin{algorithm}[t!]
+{
+	\caption{\textsc{SARSA}($ env, T, \gamma, \alpha, \epsilon $)}
+	\label{alg:sarsa}
+    $Q(s,a) := 0, \forall s \in S, a \in A $\\
+
+    \ParaCada{$ t \in \{ 1, \dots, T \} $}
+    {
+      $s := env.start()$\\
+      $a := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s) $\\
+
+      \Enqto{$ \neg env.done() $}
+      {
+        $s', r := env.step(a)$\\
+        $a' := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s') $\\
+        $Q(s, a) = \textsc{TimeDiff}(Q, s, a, s', a', \gamma, \alpha)$\\
+        $s := s'$ \\
+        $a := a'$ \\
+      }
+    }
+
+    \Retorna{$Q$}
+}
+\end{algorithm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Q-Learning}
 
 bla
-
+% TODO
+% apresentação sobre algoritmos clássicos e algoritmos por aproximação
+% explicação do SARSA e do Q-Learning
 % falar sobre exploitação e exploração
 
 \begin{equation} \label{eq:epsilon_greedy_action}
@@ -204,53 +211,15 @@ bla
 \end{algorithm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{SARSA}
-
-bla
-
-\begin{multline} \label{eq:time_diff_update_sarsa}
-  \textsc{TimeDiff}(Q, s, a, s', \gamma, \alpha) = \\ 
-      Q(s,a) + \alpha [r + \gamma Q(s', a') - Q(s,a)]
-\end{multline}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\linesnumbered
-\dontprintsemicolon
-\begin{algorithm}[t!]
-{
-	\caption{\textsc{SARSA}($ env, T, \gamma, \alpha, \epsilon $)}
-	\label{alg:sarsa}
-    $Q(s,a) := 0, \forall s \in S, a \in A $\\
-
-    \ParaCada{$ t \in \{ 1, \dots, T \} $}
-    {
-      $s := env.start()$\\
-      $a := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s) $\\
-
-      \Enqto{$ \neg env.done() $}
-      {
-        $s', r := env.step(a)$\\
-        $a' := \textsc{ChooseActionFromPolicy}(Q, \epsilon, s') $\\
-        $Q(s, a) = \textsc{TimeDiff}(Q, s, a, s', a', \gamma, \alpha)$\\
-        $s := s'$ \\
-        $a := a'$ \\
-      }
-    }
-
-    \Retorna{$Q$}
-}
-\end{algorithm}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% apresentação sobre algoritmos clássicos e algoritmos por aproximação
-% explicação do SARSA e do Q-Learning
-
 \subsection{REINFORCE}
 
 bla
 
+% TODO
 % explicação sobre busca de política (gradiente)
 % 343
+% apresentação sobre algoritmos por policy search
+% explicação do REINFORCE
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \linesnumbered
@@ -300,14 +269,10 @@ bla
 \end{algorithm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% apresentação sobre algoritmos por policy search
-% explicação do REINFORCE
-
 \subsection{FittQ}
 
+% TODO
 % sample efficient, explicar da lógica do dyna
-
-bla
 % apresentação sobre algoritmos por sample efficient
 % explicação do FittQ
 
@@ -340,22 +305,49 @@ bla
 
 \section{Experimentos e Resultados}
 
-Uma vez implementado os algoritmos, foram elaborados alguns experimentos visando analizar a execução dos algoritmos e o comportamento deles.
-
-Os experimentos foram executados na plataforma Google Colab com o Python, na época deste relatório com 2 CPUs de 2.2 GHz e 13GB de memória.
-Parte dos algoritmos foi baseado em implementações existentes e estão disponíveis no Github\footnote{Disponível em https://github.com/danielbdias/automated-planning-and-reinforcement-learning-studies}.
-Os algoritmos base das implementações foram:
+Os experimentos foram executados na plataforma Google Colab com o Python, na época deste relatório com 2 CPUs de 2.2 GHz e 13GB de memória. Parte dos algoritmos foi baseado em implementações existentes e estão disponíveis no Github\footnote{Disponível em https://github.com/danielbdias/automated-planning-and-reinforcement-learning-studies}. Os algoritmos base das implementações foram:
 
 \begin{itemize}
   \item \textit{Q-Learning} e \textit{SARSA}: https://github.com/dennybritz/reinforcement-learning/tree/master/TD
-  \item \textit{REINFORCE}: https://github.com/SwamyDev/reinforcement
+  \item \textit{REINFORCE com baseline}: https://github.com/SwamyDev/reinforcement
   \item \textit{FittQ}: https://github.com/seungjaeryanlee/implementations-nfq
 \end{itemize}
 
-falar sobre o PoleCart problem
+\subsection{Configuração dos experimentos}
+
+O domínio utilizado foi o \textit{CartPole} \cite{SuttonBarto-2018}, que consiste em controlar um carrinho em movimento em um local delimitado que contém um espécie de alavanca anexada a ele de pé que pode cair de acordo com o movimento do carrinho. Ele possui as seguintes características:
+
+\begin{itemize}
+  \item O estado observado é composto por quatro variáveis contínuas (exemplificadas na figura \ref{fig:cart-pole}): posição do carrinho, velocidade do carrinho, ângulo da alavanca em relação ao carrinho e velocidade angular da alavanca
+  \item As ações possíveis são mover o carrinho para a esquerda ou para a direita, tentando equilibrar a alavanca de forma que ela não caia para um dos lados
+  \item O agente recebe 1 de recompensa caso a alavanca não tenha caído e o carrinho esteja em uma zona delimitada. Caso a alavanca caia ou o carrinho saia da zona delimitada, a agente não recebe mais recompensa (recompensa 0)
+\end{itemize}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{cart-pole}
+  \caption{Exemplo do domínio \textit{CartPole}}
+  \label{fig:cart-pole}
+\end{figure}
+
+Cada algoritmo foi executado 5 vezes para cada configuração de parâmetro, com as seguintes configurações: 3000 episódios, fator de desconto $\gamma = 0.9$ e os seguintes parâmetros específicos:
+
+\begin{itemize}
+  \item \textit{SARSA} e \textit{Q-Learning}: $\alpha \in [ 0.1, 0.2, 0.5, 0.8 ]$ e $epsilon \in [ 0.01, 0.05, 0.1, 0.2 ]$
+  \item \textit{REINFORCE com baseline}: $\alpha_{\theta} \in [ 0.1, 1, 10, 50 ]$ e $\alpha_{w} \in [ 0.01, 0.05, 0.1, 0.2 ]$
+  \item \textit{FittQ}: $T_{train} = 100$ e $T_{eval} = 3000$
+\end{itemize}
+
+Como resultado da execução de cada algoritmo foi medido a quantidade de passos com sucesso (tamanho do episódio) e recompensa acumulada por episódio.
+
+\subsection{Resultados}
 
 bla
-% TODO: avaliar experimentos e resultados
+% TODO:
+% resultados do q-learning
+% resultados do sarsa
+% resultados do reinforce
+% resultados do fitt-q
 
 \section{Conclusão}
 
