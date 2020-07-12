@@ -110,20 +110,51 @@ que encontra uma função valor que maximize as recompensas esperadas para todo 
 \end{equation}
 
 Existem algoritmos que trabalham com essa abordagem para se obter a política ótima, usualmente resolvendo a equação de Bellman através de algoritmos de
-programação dinâmica como o \textit{Iteração de Valor} e a \textit{Iteração de Política} \cite{Howard-1960} de forma eficiente. Entretanto esses algoritmos podem ter uma 
-aplicabilidade limitada devido ao problema da \textit{maldição da dimensionalidade}: o fato que o número de estados pode ser proibitivamente grande dependendo
-da modelagem dos estados (por exemplo, caso um estado precise modelar uma variável contínua do ambiente \cite{SuttonBarto-2018}. 
+\textit{programação dinâmica} como o \textit{Iteração de Valor} e a \textit{Iteração de Política} \cite{Howard-1960} de forma eficiente. Neles, aplicamos um operador 
+de Bellman para cada estado, descrito pela equação \ref{eq:bellman_operator} abaixo: 
 
-% explicação sobre monte carlo
-% 113
+\begin{equation} \label{eq:bellman_operator}
+  V^{t+1}(s) = (BV^t)(s) = \max_{a \in A} \left\{ Q^{t+1}(s,a) \right\}
+\end{equation}
 
-% explicar temporal difference
-% 141
+onde $ Q^{t+1}(s,a) $ é considerado uma função qualidade, definida por:
 
-% explicação sobre busca de política (gradiente)
-% 343
+\begin{equation} \label{eq:quality_function}
+  Q^{t+1}(s,a) = R(s) + \gamma \sum_{s'\in S} P(s'|s,a)V^t(s')
+\end{equation}
 
-% sample efficient, explicar da lógica do dyna
+Entretanto para alguns tipo de problema eles ter uma aplicabilidade limitada devido ao problema da \textit{maldição da dimensionalidade}: o fato que 
+o número de estados pode ser proibitivamente grande dependendo da modelagem dos estados (por exemplo, caso um estado precise modelar muitas variáveis com 
+diferentes combinações de valores) \cite{SuttonBarto-2018}. 
+
+Uma forma de tentar evitar o problema do crescimento do espaço de estados é ao invés de usar um conhecimento completo do ambiente para resolver-lo,
+buscar uma política ótima através do uso da experiência: a simulação ou interação de um agente agindo no ambiente em sequência, amostrando uma sequência de estados, 
+ações e recompensas. Os métodos de \textit{Monte Carlo} buscam justamente fazer isso, baseando a tomada de decisão em cima das amostragens média dessa experiência ao 
+invés de utilizar a equação de Bellman, obtendo uma estimativa da função valor $\hat{V}(s)$ e da função qualidade $\hat{Q}(s,a)$, concentrando o uso os recursos 
+computacionais nos estados e ações mais relevantes para a resolução do problema.
+
+Esse tipo de algoritmos garante uma solução $\epsilon$-ótima independente do tamanho do espaço de estados ($|S|$) mostrando que a probabilidade de falha de convergência
+pode ser limitada segundo a desigualdade de Hoeffding \cite{Hoeffding-1994}. Nesses algoritmos é mostrando que caso haja uma quantidade suficientemente grande de episódios (amostras de um 
+agente executando uma política $\pi_{\hat{Q}}$ em um ambiente) essa probabilidade de falha de convergência tende a zero. Um algoritmo que baseia nessa idéia de convergência é 
+o UCT \cite{KocsisSzepesv-2006}.
+
+Combinando as idéias dos métodos de Monte Carlo e de programação dinâmica (baseados no cálculo do operador de Bellman) o método de \textit{diferença temporal} buscam
+calcular a função valor $V$ com base na experiência de um agente em um ambiente, que através da aproximação estocástica \cite{RobbinsMonro-1951}, estima a função valor
+para um instante $t$, estado $s_t$, recompensa recebida $r_t$ e  uma taxa de aproximação a $V(s_t)$ (também chamada de taxa de aprendizado) $\alpha \in (0, 1])$ como:
+
+\begin{equation} \label{eq:temporal_difference}
+  V(s_t) = V(s_t) + \alpha [ r_t + \gamma V(s_{t+1}) - V(s_t) ]
+\end{equation}
+
+Dado uma política $\pi$ qualquer e um horizonte $T$, pode-se aplicar este método para avaliar esta política e encontrar $V_{\pi}$, em um algoritmo com garantia de 
+convergência chamado $TD(0)$. Ele será a base para dois algoritmos que serão apresentados posteriormente, o \textit{Q-Learning} \cite{Watkins-Dayan-1992} e o 
+\textit{SARSA}.
+
+Mesmo não precisando iterar por todo o espaço de estados, armazenar e calcular $V(s)$ e $Q(s,a)$ pode demandar de muitos recursos computacionais 
+(por exemplo, ao tentar armazenar um estado contínuo sem nenhuma técnica de discretização). Uma forma de resolver este problema é ao invés de trabalhar com uma 
+aproximação da função valor $ \hat{V}(s, \theta) \approx V_{\pi}(s)$, onde ao invés de se armazenar os valores de $s$ serão armazenados o vetor de 
+pesos $\theta \in \mathcal{R}^d$, onde $d$ seja menor que $|S|$. Nesta abordagem, os algoritmos se focarão em aprender os valores de $\theta$ de forma a encontrarem
+uma política ótima para a interação com o ambiente.
 
 \section{Algoritmos}
 
@@ -134,6 +165,8 @@ espaço de políticas, o \textit{REINFORCE com baseline} e um que trabalha com r
 \subsection{Q-Learning}
 
 bla
+
+% falar sobre exploitação e exploração
 
 \begin{equation} \label{eq:epsilon_greedy_action}
   \textsc{ChooseActionFromPolicy}(Q, \epsilon, s) = ?
@@ -216,6 +249,9 @@ bla
 
 bla
 
+% explicação sobre busca de política (gradiente)
+% 343
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \linesnumbered
 \dontprintsemicolon
@@ -244,7 +280,7 @@ bla
 \dontprintsemicolon
 \begin{algorithm}[t!]
 {
-	\caption{\textsc{Reinforce}($ env, T, \gamma, \alpha_{\theta}, \alpha^{w} $)}
+	\caption{\textsc{Reinforce}($ env, T, \gamma, \alpha_{\theta}, \alpha_{w} $)}
 	\label{alg:reinforce_baseline}
     inicializa $ \theta $ e $ w $ com valores arbitrários \\
 
@@ -256,8 +292,8 @@ bla
       {
         $G := \sum_{k = t+1}^T \{ \gamma^{k-t-1} episodeSteps[k].r \}$\\
         $ \delta := G - \hat{v}(s_t, w) $\\
-        $ w := w + \alpha^w \delta \nabla \hat{v}(s_t, w) $\\
-        $ \theta := \theta + \alpha^{\theta} \gamma^t \delta \nabla \ln \pi(a_t|s_t, \theta) $
+        $ w := w + \alpha_w \delta \nabla \hat{v}(s_t, w) $\\
+        $ \theta := \theta + \alpha_{\theta} \gamma^t \delta \nabla \ln \pi(a_t|s_t, \theta) $
       }
     }
 }
@@ -268,6 +304,8 @@ bla
 % explicação do REINFORCE
 
 \subsection{FittQ}
+
+% sample efficient, explicar da lógica do dyna
 
 bla
 % apresentação sobre algoritmos por sample efficient
