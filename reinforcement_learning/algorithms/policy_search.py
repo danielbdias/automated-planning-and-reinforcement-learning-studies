@@ -117,6 +117,7 @@ def reinforce(env, num_episodes, discount_factor=1.0, lr_policy=50, lr_baseline=
 
             obs = env.reset()
 
+            # generate episode
             for t in itertools.count():
                 obs, reward, done, _ = env.step(agent.next_action(obs))
                 agent.signal(reward)
@@ -127,6 +128,7 @@ def reinforce(env, num_episodes, discount_factor=1.0, lr_policy=50, lr_baseline=
                 if done:
                     break
 
+            # improve policy with baseline
             agent.train()
 
     return stats
