@@ -262,7 +262,7 @@ Com a equação de aproximação em mãos, o \textsc{REINFORCE} pode ser visto n
 \end{algorithm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Além da aproximação da política utilizando um $\theta$, uma outra versão do \textsc{REINFORCE}, vista no algoritmo \ref{alg:reinforce_baseline}, pode também utilizar outra função de aproximação, um baseline $b(s_t)$, que pode acelerar o aprendizado de $\theta$ (equação \ref{eq:reinforce_theta_approximation_baseline}). No caso do algoritmo \textsc{REINFORCE com baseline}, este baseline é uma estimativa da função valor $b(s_t) = \hat{v}(s, w)$, onde o parâmetro $w$ também é aprendido ao longo da execução do algoritmo.
+Além da aproximação da política utilizando um $\theta$, uma outra versão do \textsc{REINFORCE}, vista no algoritmo \ref{alg:reinforce_baseline}, pode também utilizar outra função de aproximação, um baseline $b(s_t)$, que pode acelerar o aprendizado de $\theta$ (equação \ref{eq:reinforce_theta_approximation_baseline}). No caso do algoritmo \textsc{REINFORCE-B}, este baseline é uma estimativa da função valor $b(s_t) = \hat{v}(s, w)$, onde o parâmetro $w$ também é aprendido ao longo da execução do algoritmo.
 
 \begin{equation}
   \label{eq:reinforce_theta_approximation_baseline}
@@ -296,14 +296,17 @@ Além da aproximação da política utilizando um $\theta$, uma outra versão do
 
 \subsection{Fitt-Q}
 
-% TODO
-% sample efficient, explicar da lógica do dyna
-% apresentação sobre algoritmos por sample efficient
-% explicação do FittQ
+No algoritmo \textsc{Fitt-Q} \cite{Riedmiller-2005}, assim como nos algoritmos anteriores, a idéia é aprender os vetores de peso $\theta$ de forma que seja possível minimizar o erro quadrático médio de Bellman, conforme a equação \ref{eq:msbe}:
 
 \begin{equation} \label{eq:msbe}
   \textsc{MSBE}(\theta, \theta') = || \hat{V}_{\theta} - \mathcal{T} \hat{V}_{\theta'} ||^2_D
 \end{equation}
+
+Para este otimização é preciso calcular a norma quadrática entre estimativas de $\hat{V}_{\theta}$ e $\hat{V}_{\theta'}$ aplicado ao operador de Bellman $\mathcal{T}$ considerando $D$ uma matriz diagonal contendo uma distribuição limite $d(s) = \lim_{t \rightarrow \infty} P(s_t = s)$, utilizando o algoritmo \ref{alg:fittq-theory}.
+
+Ao invés de usar uma técnica de gradiente descendente que utilize uma taxa de aprendizado $\alpha$ para encontrar uma valor de $\theta$, o trabalho de \cite{Riedmiller-2005} propõe aplicar uma rede neural que reuse experiências de interação de um agente com o ambiente (episódios) para treinar esta rede e encontrar uma estimativa $\hat{Q}(s, a)$ que o agente possa utilizar para agir no ambiente. 
+
+Neste algoritmo são considerados apenas os parâmetros $T_{train}$, o horizonte máximo de amostragem de um episódio para treinamento da rede neural, e $T_{eval}$, o horizonte máximo de amostragem de um episódio de avaliação da rede.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \linesnumbered
@@ -311,7 +314,7 @@ Além da aproximação da política utilizando um $\theta$, uma outra versão do
 \begin{algorithm}[t!]
 {
 	\caption{\textsc{Fitt-Q}($ env, T, \epsilon $)}
-	\label{alg:reinforce}
+	\label{alg:fittq-theory}
     inicializa $ w_0 $ com valores arbitrários \\
 
     \ParaCada{$ episode \in \{ 1, \dots, T \} $}
