@@ -97,8 +97,8 @@ def neuro_fitt_q(epoch, train_env_max_steps, eval_env_max_steps, discount, init_
         make_reproducible(CONFIG.RANDOM_SEED, use_numpy=True, use_torch=True)
         train_env.seed(CONFIG.RANDOM_SEED)
         eval_env.seed(CONFIG.RANDOM_SEED)
-    else:
-        logger.warning("Running without a random seed: this run is NOT reproducible.")
+    #else:
+    #    logger.warning("Running without a random seed: this run is NOT reproducible.")
 
     # Setup agent
     nfq_net = NFQNetwork()
