@@ -264,6 +264,8 @@ Com a equação de aproximação em mãos, o \textsc{REINFORCE} pode ser visto n
 
 Além da aproximação da política utilizando um $\theta$, uma outra versão do \textsc{REINFORCE}, vista no algoritmo \ref{alg:reinforce_baseline}, pode também utilizar outra função de aproximação, um baseline $b(s_t)$, que pode acelerar o aprendizado de $\theta$ (equação \ref{eq:reinforce_theta_approximation_baseline}). No caso do algoritmo \textsc{REINFORCE-B}, este baseline é uma estimativa da função valor $b(s_t) = \hat{v}(s, w)$, onde o parâmetro $w$ também é aprendido ao longo da execução do algoritmo.
 
+Neste trabalho o código do \textit{REINFORCE com baseline} utiliza redes neurais para implementar o aprendizado de $\theta$ e $w$.
+
 \begin{equation}
   \label{eq:reinforce_theta_approximation_baseline}
   \theta_{t+1} = \theta_t + \alpha (G_t - b(s_t)) \frac{\nabla_{\pi}(a_t|s_t, \theta_t)}{\pi(a_t|s_t, \theta_t)} 
@@ -366,13 +368,19 @@ Cada algoritmo foi executado 5 vezes para cada configuração de parâmetro, com
   \item \textit{Fitt-Q}: $T_{train} \in \{ 100, 200, 300 \} $ e $T_{eval} = \{ 1000, 2000, 3000 \}$
 \end{itemize}
 
-Além destas parametrizações os algoritmos SARSA e Q-Learning utilizam uma técnica para a discretização de cada variável de estado onde o domínio de cada variável foi separado em sete pontos e cada variável poderia ter apenas o valor de um desses pontos, o ponto mais próximo do valor real dela. 
+Além destas parametrizações os algoritmos \textit{SARSA} e \textit{Q-Learning} utilizam uma técnica para a discretização de cada variável de estado onde o domínio de cada variável foi separado em sete pontos e cada variável poderia ter apenas o valor de um desses pontos, o ponto mais próximo do valor real dela. 
 
-% falar do uso de NN no reinforce e no fitt-q
+Para a avaliação de cada algoritmo foi medido a quantidade de passos com sucesso (tamanho do episódio) em relação aos episódios amostrados pelos algoritmos. Em todos os gráficos dos experimentos são mostradas as trajetórias médias das execuções de cada algoritmo. Como no domínio de testes o agente recebe um de recompensa para cada momento em que ele não deixa cair o mastro, a recompensa será igual a quantidade de passos tomados com sucesso e por isso não será considerada.
 
-Para a avaliação de cada algoritmo foi medido a quantidade de passos com sucesso (tamanho do episódio). Como no domínio de testes o agente recebe um de recompensa para cada momento em que ele não deixa cair o mastro, a recompensa será igual a quantidade de passos tomados com sucesso e por isso não será considerada.
+Dois tipos de comparações serão feitos nos experimentos:
+\begin{enumerate}
+  \item Comparação de performance de cada algoritmo considerando a variação de seus hiperparâmetros
+  \item Comparação dos algoritmos considerando apenas apenas o resultado com os melhores hiperparâmetros
+\end{enumerate}
 
 \subsection{Resultados}
+
+% explicar quantas variações houve por algoritmo e quanto tempo em média foi gasto
 
 bla
 % TODO:
@@ -408,6 +416,23 @@ bla
   \caption{Tamanho de episódio - Fitt-Q}
   \label{fig:exp-fittq-episodes}
 \end{figure}
+
+% montar tabela com melhores hiperparâmetros
+
+\begin{table}[ht]
+  \caption{Métricas médias dos algoritmos - Ambiente 01}
+  \label{table:mean-performance-values-env01}
+  \begin{tabular}{llll}
+      \toprule
+      Algoritmo  &                           Hiperparâmetros & Episódio \\
+      \midrule
+      SARSA      &          $ \alpha = 0.2, \epsilon = 0.2 $ &        ? \\
+      Q-Learning &          $ \alpha = 0.1, \epsilon = 0.2 $ &        ? \\
+      Reinforce  & $ \alpha_{\theta} = 50, \alpha_w = 0.01 $ &      500 \\
+      Fitt-Q     & $ T_{train} = 100, T_{eval} = 2000 $      &        ? \\
+      \bottomrule
+  \end{tabular}
+\end{table}
 
 \begin{figure}[t]
   \centering
