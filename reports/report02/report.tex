@@ -119,7 +119,7 @@ Combinando as idéias dos métodos de Monte Carlo e de programação dinâmica (
   V(s_t) = V(s_t) + \alpha [ r_t + \gamma V(s_{t+1}) - V(s_t) ]
 \end{equation}
 
-Dado uma política $\pi$ qualquer e um horizonte $T$, pode-se aplicar este método para avaliar esta política e encontrar $V_{\pi}$, em um algoritmo com garantia de convergência chamado \textsc{TD(0)}. Ele será a base para dois algoritmos que serão apresentados posteriormente, o \textit{SARSA} e o \textit{Q-Learning} \cite{Watkins-Dayan-1992}.
+Dado uma política $\pi$ qualquer e um horizonte $T$, pode-se aplicar este método para avaliar esta política e encontrar $V_{\pi}$, em um algoritmo com garantia de convergência chamado \textsc{TD(0)}. Ele será a base para dois algoritmos que serão apresentados posteriormente, o \textit{SARSA} e o \textit{Q-Learning} \cite{Watkins-Dayan-1992}. Por necessitar armazenar os valores de $V(s)$ para cada estado, esses algoritmos tamb;em são chamados de métodos tabulares.
 
 Mesmo não precisando iterar por todo o espaço de estados, armazenar e calcular $V(s)$ e $Q(s,a)$ pode demandar de muitos recursos computacionais (por exemplo, ao tentar armazenar um estado contínuo sem nenhuma técnica de discretização). Uma forma de resolver este problema é ao invés de trabalhar com uma aproximação da função valor $ \hat{V}(s, \theta) \approx V_{\pi}(s)$, onde ao invés de se armazenar os valores de $s$ serão armazenados o vetor de pesos $\theta \in \mathcal{R}^d$, onde $d$ seja menor que $|S|$. Nesta abordagem, os algoritmos se focarão em aprender os valores de $\theta$ de forma a encontrarem uma política ótima para a interação com o ambiente. Os algorimos de busca no espaço de políticas, \textit{REINFORCE com baseline}, e o que trabalha com reuso de experiências, o \textit{Fitt-Q}, partem desses principios para o aprendizado.
 
@@ -343,6 +343,8 @@ Os experimentos foram executados na plataforma Google Colab com o Python, na ép
   \item \textit{Fitt-Q}: https://github.com/seungjaeryanlee/implementations-nfq
 \end{itemize}
 
+As implementações que utilizaram redes neurais foram implementadas com as bibliotecas Tensorflow e PyTorch.
+
 \subsection{Configuração dos experimentos}
 
 O domínio utilizado foi o \textit{CartPole} \cite{SuttonBarto-2018}, que consiste em controlar um carrinho em movimento em um local delimitado que contém um espécie de mastro anexada a ele de pé que pode cair de acordo com o movimento do carrinho. Ele possui as seguintes características:
@@ -370,81 +372,105 @@ Cada algoritmo foi executado 5 vezes para cada configuração de parâmetro, com
 
 Além destas parametrizações os algoritmos \textit{SARSA} e \textit{Q-Learning} utilizam uma técnica para a discretização de cada variável de estado onde o domínio de cada variável foi separado em sete pontos e cada variável poderia ter apenas o valor de um desses pontos, o ponto mais próximo do valor real dela. 
 
-Para a avaliação de cada algoritmo foi medido a quantidade de passos com sucesso (tamanho do episódio) em relação aos episódios amostrados pelos algoritmos. Em todos os gráficos dos experimentos são mostradas as trajetórias médias das execuções de cada algoritmo. Como no domínio de testes o agente recebe um de recompensa para cada momento em que ele não deixa cair o mastro, a recompensa será igual a quantidade de passos tomados com sucesso e por isso não será considerada.
+Para a avaliação de cada algoritmo foi medido a quantidade de passos com sucesso em relação aos episódios amostrados pelos algoritmos. Em todos os gráficos dos experimentos são mostradas as trajetórias médias das execuções de cada algoritmo. Como no domínio de testes o agente recebe um de recompensa para cada momento em que ele não deixa cair o mastro, a recompensa será igual a quantidade de passos tomados com sucesso e por isso não será considerada.
 
-Dois tipos de comparações serão feitos nos experimentos:
-\begin{enumerate}
-  \item Comparação de performance de cada algoritmo considerando a variação de seus hiperparâmetros
-  \item Comparação dos algoritmos considerando apenas apenas o resultado com os melhores hiperparâmetros
-\end{enumerate}
+Os experimentos foram divididos em duas etapas: uma onde cada algoritmo foi executado 5 vezes para cada combinação de hiperparâmetros e suas trajetórias médias foram comparadas e outro onde cada um dos quatro algoritmos são comparados entre si. Para esta última comparação é levado em conta somente a execução que teve a melhor trajetória média  (i.e., a melhor média de passos com sucesso para os episódios).
 
 \subsection{Resultados}
 
-% explicar quantas variações houve por algoritmo e quanto tempo em média foi gasto
+Ao todo foram realizadas 225 execuções de algoritmos em cerca de 4 horas, como pode ser visto na tabela \ref{table:hyperparameter-tuning-results}. Os algoritmos \textit{SARSA} e \textit{Q-Learning} tiveram tempo médio por execução parecidos com cerca de $3.2$ segundos, o \textit{Fitt-Q} foi ligeiramente mais devagar, com $4.5$ segundos de execução e o \textit{Reinforce} sendo cerca de 27 vezes mais devagar, executando em $108.92$ segundos.
 
-bla
-% TODO:
-% resultados do q-learning
-% resultados do sarsa
-% resultados do reinforce
-% resultados do fitt-q
+\begin{table}[ht]
+  \caption{Resultados das execuções para cada algoritmo}
+  \label{table:hyperparameter-tuning-results}
+  \begin{tabular}{lccc}
+      \toprule
+      Algoritmo  &  Execuções & Tempo médio      & Tempo total     \\
+      {}         &  {}        & por execução (s) & de execução (s) \\
+      \midrule
+      SARSA      &         80 &           3.2175 &            1287 \\
+      Q-Learning &         80 &           3.3275 &            1331 \\
+      REINFORCE  &         20 &           108.92 &           10892 \\
+      Fitt-Q     &         45 &             4.53 &            1020 \\
+      \bottomrule
+  \end{tabular}
+\end{table}
+
+Considerando as 5 combinações de hiperparâmetros que tiveram maior performance, pode-se ver nas Figuras \ref{fig:exp-sarsa-episodes} e \ref{fig:exp-qlearning-episodes} tanto o \textit{SARSA} quanto o \textit{Q-Learning} tiveram comportamentos parecidos, com resultados ruins nos primeiros episódios e ao longo do tempo aprendendo mais sobre o domínio e tendo melhores resultados, com mais passos com sucesso, até chegarem próximos de 100 passos com sucesso ao final dos 3000 episódios executados.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\columnwidth]{exp-sarsa-episodes}
-  \caption{Tamanho de episódio - SARSA}
+  \caption{Passos por episódio para o algoritmo SARSA}
   \label{fig:exp-sarsa-episodes}
 \end{figure}
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\columnwidth]{exp-qlearning-episodes}
-  \caption{Tamanho de episódio - Q-Learning}
+  \caption{Passos por episódio para o algoritmo Q-Learning}
   \label{fig:exp-qlearning-episodes}
 \end{figure}
+
+Devido ao tempo extensivo de execução do \textit{REINFORCE com baseline} (chamado nesta seção somente como \textit{REINFORCE}), foram executados poucas combinações de hiperparâmetros. Entretanto os seus resultados se mostraram bons em relação aos algoritmos anteriores. Como pode ser visto na Figura \ref{fig:exp-reinforce-episodes}, duas combinações de parâmetros alcançaram episódios com 500 passos executados com sucesso e as outras duas com episódios com cerca de 300 passos. Nota-se também que o valor de $\alpha_{\theta}$ (taxa de aprendizado da política) influenciou bastante nesses resultados, com ambas as execuções com $\alpha_{\theta} = 50$ aprendendo boas políticas nos primeiros 1000 episódios e já atingindo episódios com 500 passos com sucesso.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\columnwidth]{exp-reinforce-episodes}
-  \caption{Tamanho de episódio - REINFORCE}
+  \caption{Passos por episódio para o algoritmo REINFORCE}
   \label{fig:exp-reinforce-episodes}
 \end{figure}
+
+O algoritmo \textit{Fitt-Q} já apresenta uma característica que nenhum dos outros algoritmos deste trabalho tem, por ter uma checagem de convergência, ele não precisa executar muitos episódios de execução para convergir. Em um dos casos o algoritmo utiliza em somente 175 iterações para convergir, alcançando um pouco mais de 250 passos com sucesso, utilizando $T_{train} = 100$ e $T_{eval} = 2000$. Um ponto interessante a ser observar nesses resultados é que entre os 5 melhores resultados, todos apresentam alguma combinação com $T_{train} = 100$, o que pode sugerir que experiências com até episódios podem ser o suficiente para o \textit{Fitt-Q} aprender boas soluções.
+
+Entretanto a implementação deste algoritmo apresenta alguns pontos de melhoria: para rodar os experimentos ele utilizou uma versão modificada do domínio \textit{CartPole}, que considera custo ao invés de recompensa em seus cálculos e considera uma heurística de "dica" para alcançar os estados-meta e orientar o algoritmo (\textit{hint-to-goal}), o que pode ser uma das causas de número máximo de passos que este algoritmo simulou não ser tão bom quanto o \textit{REINFORCE}. 
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\columnwidth]{exp-fittq-episodes}
-  \caption{Tamanho de episódio - Fitt-Q}
+  \caption{Passos por episódio para o algoritmo Fitt-Q}
   \label{fig:exp-fittq-episodes}
 \end{figure}
 
-% montar tabela com melhores hiperparâmetros
+Para a comparação entre os algoritmos foi utilizado somente e versão do algoritmo com os melhores hiperparâmetros, que pode ser vista na Tabela \ref{table:best-hyperparameters}. 
 
 \begin{table}[ht]
-  \caption{Métricas médias dos algoritmos - Ambiente 01}
-  \label{table:mean-performance-values-env01}
-  \begin{tabular}{llll}
+  \caption{Melhores hiperparâmetros por algoritmo}
+  \label{table:best-hyperparameters}
+  \begin{tabular}{ll}
       \toprule
-      Algoritmo  &                           Hiperparâmetros & Episódio \\
+      Algoritmo  &                           Hiperparâmetros \\
       \midrule
-      SARSA      &          $ \alpha = 0.2, \epsilon = 0.2 $ &        ? \\
-      Q-Learning &          $ \alpha = 0.1, \epsilon = 0.2 $ &        ? \\
-      Reinforce  & $ \alpha_{\theta} = 50, \alpha_w = 0.01 $ &      500 \\
-      Fitt-Q     & $ T_{train} = 100, T_{eval} = 2000 $      &        ? \\
+      SARSA      &          $ \alpha = 0.2, \epsilon = 0.2 $ \\
+      Q-Learning &          $ \alpha = 0.1, \epsilon = 0.2 $ \\
+      Reinforce  & $ \alpha_{\theta} = 50, \alpha_w = 0.01 $ \\
+      Fitt-Q     &      $ T_{train} = 100, T_{eval} = 2000 $ \\
       \bottomrule
   \end{tabular}
 \end{table}
 
+Por fim, pode-se ver na Figura \ref{fig:exp-allalgs-episodes}, os resultados das melhores execuções dos algoritmos. Percebe-se que o \textit{REINFORCE} teve um bom resultado em relação ao \textit{SARSA} e \textit{Q-Learning}. Isto se deve ao fato de o REINFORCE fazer uma busca eficiente diretamente no espaço de políticas e por trabalhar com aproximação de função, lidar melhor com representações de estado contínuas, enquanto os algoritmos  baseados em métodos tabulares dependem de técnicas de discretização dos estados, podendo perder informações importantes das variáveis de estado para a obtenção de uma política ótima.
+
+Entretanto para se conseguir um bom resultado o \textit{REINFORCE} demandou de capacidade computacional que o que \textit{SARSA} e \textit{Q-Learning}, demandando em até 30 vezes mais tempo para encontrar uma boa política. Um fato que pode explicar esse comportamento é o fato de, enquanto os métodos tabulares atualizam sua estimativa da função $Q(s,a)$ com uma operação matemática mais simples para este problema a cada passo, o \textit{REINFORCE} precisa realizar um ajuste nas redes neurais que estimam $\theta$ e $w$.
+
+Apesar das ressalvas comentadas para o \textit{Fitt-Q}, ele apresenta uma boa performance em relação ao seu tempo de execução, treinando suas redes neurais internas considerando uma experiência inteira ao invés de somente um passo e obtendo melhores valores de passos sucessivos com sucesso que os algoritmos \textit{SARSA} e \textit{Q-Learning}. Entretanto, para uma comparação mais justa entre esses algoritmos, a implementação do \textit{Fitt-Q} deveria ser ajustada para usar um simulador com menos restrições que o dos outros algoritmos.
+
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\columnwidth]{exp-allalgs-episodes}
-  \caption{Tamanho de episódio - Todos algoritmos}
+  \caption{Passos por episódio para os algoritmos}
   \label{fig:exp-allalgs-episodes}
 \end{figure}
 
 \section{Conclusão}
 
-bla
-% TODO: avaliar experimentos e resultados
+Este trabalho teve como objetivo fazer uma breve revisão teórica sobre alguns algoritmos de aprendizado por reforço, bem como realizar alguns experimentos com alguns algoritmos conhecidos.
+
+Os algoritmos baseados em métodos tabulares, \textit{SARSA} e \textit{Q-Learning}, tem bases teóricas importantes para a área de aprendizado por reforço como o aprendizado baseado em métodos de Monte Carlo, onde a experiência de interação do agente é levada em consideração para a obtenção de uma política ótima e é possível se abstrair de certas características de um MDP, como o conhecimento da função de transição e de todos os estados de um problema. Nos experimentos executados esses algoritmos apresentaram limitações para aprender o domínio do simulador devido a sua modelagem considerar variáveis continuas, que mesmo delimitadas por um domínio, apresentam uma combinação muito grande de estados.
+
+Já os algoritmos baseados em aproximação de função, \textit{REINFORCE com baseline} e \textit{Fitt-Q}, apresentaram bons resultados nos experimentos fazendo que o agente conseguisse executar mais passos consectivos com sucesso, porém com uma maior complexidade de implementação (por conta dos cálculos de gradiente descentes e do uso de redes neurais).
+
+Como trabalhos futuros poderiam ser melhorados dois aspectos deste trabalho: pode-se melhorar os experimentos do \textit{SARSA} e \textit{Q-Learning} para utilizar outros métodos de discretização das variáveis de estado ou ainda implementar uma das versões destes algoritmos com aproximação de função e no \textit{Fitt-Q} pode-se melhorar sua implementação para desconsiderar as restrições utilizadas no seu simulador.
 
 \bibliography{references.bib}
 \bibliographystyle{aaai}
